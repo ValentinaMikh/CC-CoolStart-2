@@ -7,8 +7,10 @@
 <link rel="stylesheet" href="micro.css">
 <link rel="stylesheet" href="theme.css">
 <link rel="stylesheet" href="dev-theme.css">
+<link rel="stylesheet" href="v2-task.css">
 <script src="micro.js"></script>
 <script src="steps.js"></script>
+<script src="v2-task.js"></script>
 <script src="dev-theme.js" defer></script>
 <style>
 :root{--green:var(--t-primary);--accent:var(--t-accent);--ink:var(--t-text);--ink-2:var(--t-text-2);--ink-3:var(--t-text-3);--ink-4:#DFDFDF;
@@ -424,14 +426,30 @@ function ecard(it){
 
 /* Только шкала задания: вызывается и из render(), и при добавлении в корзину */
 function renderTask(){
+  if(v2()){ heroV2(); return }        /* в В1 шкала нарисована в шапке */
   document.getElementById('taskScale').innerHTML=
     Array.from({length:TASK_TOTAL},(_,i)=>`<div class="seg${i<taskDone?' on':''}"></div>`).join('');
   document.getElementById('taskDone').textContent=`Выполнено ${taskDone} из ${TASK_TOTAL}`;
 }
 
+/* Во втором варианте шапка своя: цветной блок с иллюстрацией, названием
+   задания и шкалой (9215:34590). Блок задания из белого тела при этом
+   убираем — он уже показан в шапке, а в навбаре остаётся номер шага. */
+const v2=()=>Steps.design()===2;
+function heroV2(){
+  const hero=document.getElementById('hero');
+  hero.className = 'hero '+V2Task.tone('');
+  hero.innerHTML = V2Task.hero({pic:RES+'image.png', ttl:'Купить товар из подборки хитов',
+    used:taskDone, total:TASK_TOTAL, check:RES+'ic-check.svg'});
+  const pw=document.querySelector('.main .pw'); if(pw) pw.hidden=true;
+  const n=Steps.IDS.indexOf('hits')+1;
+  if(n) document.querySelector('.nav-title').textContent=`Задание ${n}`;
+}
+
 function render(animate){
   document.getElementById('icBack').src=ICON.back;
-  document.getElementById('hero').innerHTML=HERO.filter(Boolean).map(h=>`<img src="${h}" alt="">`).join('');
+  if(v2()){ heroV2() }
+  else document.getElementById('hero').innerHTML=HERO.filter(Boolean).map(h=>`<img src="${h}" alt="">`).join('');
 
   renderTask();
 

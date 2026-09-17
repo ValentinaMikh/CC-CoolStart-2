@@ -7,8 +7,10 @@
 <link rel="stylesheet" href="micro.css">
 <link rel="stylesheet" href="theme.css">
 <link rel="stylesheet" href="dev-theme.css">
+<link rel="stylesheet" href="v2-task.css">
 <script src="micro.js"></script>
 <script src="steps.js"></script>
+<script src="v2-task.js"></script>
 <script src="dev-theme.js" defer></script>
 <style>
 :root{--green:var(--t-primary);--accent:var(--t-accent);--ink:var(--t-text);--ink-2:var(--t-text-2);--ink-3:var(--t-text-3);
@@ -304,15 +306,30 @@ function cupon(c,i){
   </div>`;
 }
 
+/* Во втором варианте шапка своя: цветной блок с иллюстрацией, названием
+   задания и шкалой (9215:38489). Блок задания из белого тела при этом
+   убираем — он уже показан в шапке, а в навбаре остаётся номер шага. */
+const v2=()=>Steps.design()===2;
+
 function render(){
   document.getElementById('icBack').src=ICON.back;
   document.getElementById('icInfo').src=ICON.info;
-  document.getElementById('hero').innerHTML=
-    `<img class="front" src="${HERO.front}" alt="">`;
   const done=Math.min(buys,TASK_TOTAL);
-  document.getElementById('taskScale').innerHTML=Array.from({length:TASK_TOTAL},(_,i)=>
-    `<div class="seg${i<done?' on':''}"></div>`).join('');
-  document.getElementById('taskDone').textContent=`Выполнено ${done} из ${TASK_TOTAL}`;
+  if(v2()){
+    const hero=document.getElementById('hero');
+    hero.className='hero '+V2Task.tone('');
+    hero.innerHTML=V2Task.hero({pic:RES+'image-1.png', ttl:'Купите товары 3 разных категорий',
+      used:done, total:TASK_TOTAL, check:RES+'ic-check.svg'});
+    const pw=document.querySelector('.main .pw'); if(pw) pw.hidden=true;
+    const n=Steps.IDS.indexOf('cats')+1;
+    if(n) document.querySelector('.nav-title').textContent=`Задание ${n}`;
+  }else{
+    document.getElementById('hero').innerHTML=
+      `<img class="front" src="${HERO.front}" alt="">`;
+    document.getElementById('taskScale').innerHTML=Array.from({length:TASK_TOTAL},(_,i)=>
+      `<div class="seg${i<done?' on':''}"></div>`).join('');
+    document.getElementById('taskDone').textContent=`Выполнено ${done} из ${TASK_TOTAL}`;
+  }
   document.getElementById('lead').innerHTML=LEAD.map(p=>`<p>${esc(p)}</p>`).join('');
   /* карусель перерисовывается на каждый выбор — держим её на том же месте,
      иначе после нажатия она отматывалась бы к первому купону */

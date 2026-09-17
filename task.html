@@ -7,8 +7,10 @@
 <link rel="stylesheet" href="micro.css">
 <link rel="stylesheet" href="theme.css">
 <link rel="stylesheet" href="dev-theme.css">
+<link rel="stylesheet" href="v2-task.css">
 <script src="micro.js"></script>
 <script src="steps.js"></script>
+<script src="v2-task.js"></script>
 <script src="dev-theme.js" defer></script>
 <style>
 :root{--green:var(--t-primary);--ink:var(--t-text);--ink-2:var(--t-text-2);--ink-3:var(--t-text-3);--ink-4:#DFDFDF;
@@ -259,7 +261,11 @@ const ICON={
   back:RES+'ic-back.svg',
   info:RES+'ic-info.svg',
   lock:RES+'ic-lock.svg',
+  check:RES+'ic-check.svg',
   gift:RES+'Gift.svg'};
+
+/* Второй вариант дизайна — как и на других экранах, по классу на <html> */
+const v2=()=>Steps.design()===2;
 
 /* Иконки акций 24×24 для плашки задания «2+1, 3+1 или 5+1»
    (макеты 8366:114405, 8366:114400, 8366:114411 — файлы из папки) */
@@ -291,6 +297,23 @@ const HERO={
  'kgl-month':{bg:'#FFE3A2',src:'Resurses%20coolstart/check-list%20image%20page%207-8.jpg'},   /* шаг 8  КгЛ      */
  'plus-one' :{bg:'#FFE3A2',src:'Resurses%20coolstart/check-list%20image%20page%209.jpg'},   /* шаг 9  монеты   */
  luch       :{bg:'#FFE3A2',src:'Resurses%20coolstart/check-list%20image%20page%2010.jpg'}};  /* шаг 10 х5 КгЛ   */
+
+/* ===== Шапка задания во втором варианте (9215:183280) =====
+   В В1 вместо фото-шапки идёт цветной блок: иллюстрация шага, название
+   задания и сегментная шкала. Иллюстрации — те же, что на карточках
+   чек-листа; тон повторяет группу шага, а названия взяты из макета,
+   поэтому они длиннее коротких подписей навбара. */
+const V2T={
+ hits       :{pic:'image.png',   tone:'',       ttl:'Купить товар из подборки хитов'},
+ cats       :{pic:'image-1.png', tone:'',       ttl:'Купите товары 3 разных категорий'},
+ delivery   :{pic:'image-2.png', tone:'',       ttl:'Оформить заказ от 700 ₽ с КуулДоставкой'},
+ weekend    :{pic:'image-3.png', tone:'',       ttl:'Совершите покупку в выходные'},
+ email      :{pic:'image-4.png', tone:'red',    ttl:'Подтвердите email'},
+ push       :{pic:'image-5.png', tone:'red',    ttl:'Включите push-уведомления'},
+ 'kgl-day'  :{pic:'image-6.png', tone:'orange', ttl:'Получите КеГЛи Дня'},
+ 'kgl-month':{pic:'image-7.png', tone:'orange', ttl:'Подписаться на КеГЛи Месяца'},
+ 'plus-one' :{pic:'image-8.png', tone:'orange', ttl:'Купите товар по акции 2+1, 3+1 или 5+1'},
+ luch       :{pic:'image-9.png', tone:'orange', ttl:'Добавьте товар в ЛУЧ'}};
 
 /* ===== 3.2.1 — 10 купонов ===== */
 const COUPONS=[
@@ -514,17 +537,37 @@ function block(b){
   return '';
 }
 
+/* ===== Шапка В1 =====
+   Цветной блок вместо фото: иллюстрация шага, название задания и
+   сегментная шкала. Числа шкалы берём из блока задания — того самого,
+   который в А1 рисуется первым в белом теле; здесь он переезжает в
+   шапку, поэтому из тела его убираем. */
+function heroV2(){
+  const V=V2T[id]; if(!V) return '';
+  const t=S.blocks.find(b=>b.t==='task') || {total:1,used:0};
+  const total=t.total;
+  const used = ((id==='email'&&emailOk) || Steps.isDone(id)) ? total : t.used;
+  return `<div class="${V2Task.tone(V.tone)}">` +
+         V2Task.hero({pic:RES+V.pic, ttl:V.ttl, used, total, check:ICON.check}) +
+         `</div>`;
+}
+
 function render(){
   document.getElementById('icBack').src=ICON.back;
-  document.getElementById('navTitle').textContent=S.nav;
+  /* В В1 в навбаре стоит номер задания, а название переехало в шапку */
+  const n=Steps.IDS.indexOf(id)+1;
+  document.getElementById('navTitle').textContent = v2() && n ? `Задание ${n}` : S.nav;
   document.title='КуулКлевер — '+S.nav;
   const H=HERO[id];
-  const hero=H
-    ? `<div class="hero" style="background:${H.bg}">${H.src?`<img src="${H.src}" alt="">`:''}</div>`
-    : `<div class="hero"></div>`;
+  const hero = v2() ? heroV2()
+    : H ? `<div class="hero" style="background:${H.bg}">${H.src?`<img src="${H.src}" alt="">`:''}</div>`
+        : `<div class="hero"></div>`;
   /* Прогресс-бар задания идёт сразу после фото, остальные блоки — в порядке ТЗ.
-     Шкалы офферов (t:'pw') это не касается: они относятся к своему блоку текста. */
-  const blocks=[...S.blocks.filter(b=>b.t==='task'), ...S.blocks.filter(b=>b.t!=='task')];
+     Шкалы офферов (t:'pw') это не касается: они относятся к своему блоку текста.
+     В В1 блок задания уже показан в шапке — второй раз не рисуем. */
+  const blocks = v2()
+    ? S.blocks.filter(b=>b.t!=='task')
+    : [...S.blocks.filter(b=>b.t==='task'), ...S.blocks.filter(b=>b.t!=='task')];
   document.getElementById('scroll').innerHTML=
     hero+`<div class="main">${blocks.map(block).join('')}</div>`;
   Micro.reveal('.main > *');
