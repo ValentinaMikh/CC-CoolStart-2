@@ -12,10 +12,13 @@
 .v2 .v2t-hero.is-red{--v2t-grad:linear-gradient(180deg,#EB5B42 0%,#BE402A 100%)}
 .v2 .v2t-hero.is-orange{--v2t-grad:linear-gradient(180deg,#EB9742 0%,#D96C00 70.25%)}
 
-/* 108px сверху — под навбар страницы: он остаётся на своём месте, но
-   ложится уже на заливку, поэтому фон у него убираем ниже. */
+/* 100px сверху — ровно высота навбара по макету (Top Navigation 375×100:
+   статус-бар 44 и строка 56). В А1 у навбара есть ещё 8px отбивки снизу,
+   но там под ним белый фон; здесь он лежит на заливке, и эти 8px только
+   сдвигали бы иллюстрацию вниз — в макете она начинается на 124 от верха
+   экрана (9215:34599: Content y=100, Trophy y=24). */
 .v2 .v2t-hero{position:relative;width:375px;flex:none;overflow:hidden;
-  border-radius:0 0 32px 32px;padding-top:108px;background:var(--v2t-grad)}
+  border-radius:0 0 32px 32px;padding-top:100px;background:var(--v2t-grad)}
 /* Размытое пятно 264 по центру (9215:34294). В макете это эллипс с
    гауссовым размытием; светлый радиальный градиент даёт тот же ореол
    на любой из трёх заливок — и его не нужно перекрашивать под тон. */
@@ -61,15 +64,44 @@
 .v2 .back{background:rgba(255,255,255,.4)}
 .v2 .back img{filter:brightness(0) invert(1)}
 .v2 .scroll{top:0}
+/* …а когда шапка уехала вверх, навбар снова непрозрачный: под ним уже
+   белое тело, и светлый заголовок на нём не читался бы. Класс ставит
+   V2Task.watchNav по прокрутке. */
+.v2 .topnav{transition:background .18s linear}
+.v2 .topnav.on-solid{background:var(--t-ground)}
+.v2 .topnav.on-solid .status,
+.v2 .topnav.on-solid .nav-title{color:var(--t-text)}
+.v2 .topnav.on-solid .back{background:var(--t-sub)}
+.v2 .topnav.on-solid .back img{filter:none}
+html.night .v2 .topnav.on-solid .back img{filter:brightness(0) invert(1)}
 
 /* Тело задания подтянуто к шапке: в макете между ними 0, а отступы
-   задаёт сам блок. */
-.v2 .main{padding:24px 16px;gap:24px}
+   задаёт сам блок — 40 сверху и снизу, 24 между блоками
+   (9215:38506: текст на y=40, дальше шаг 24, и 40 до низа). */
+.v2 .main{padding:40px 16px;gap:24px}
+
+/* ===== Плашка оффера (check-list item, 9215:34270 / 38509 / 183142) =====
+   В А1 это голый блок в белом теле: иконка с подписью и, если у оффера
+   есть счётчик, шкала под ними. В В1 макет кладёт то же самое в серую
+   карточку 343 с отступом 16 — и подпись там не заголовок, а строка 14/18.
+   Шкалу задания это не касается: в В1 она уехала в шапку. */
+.v2 .main .pw{gap:12px;padding:16px;border-radius:16px;background:var(--t-sub)}
+.v2 .main .pw .head{min-height:40px;align-items:center;gap:8px}
+.v2 .main .pw .head .h3{font-size:14px;line-height:18px;font-weight:500}
+.v2 .main .pw .progress{gap:8px}
 
 /* ===== Зелёная кнопка задания =====
    Прижата к низу экрана, в 8px над таб-баром. Лента прокрутки кончается
    ровно по верху таб-бара (86px), отсюда 94. Сам перенос кнопки из ленты
    в .screen делает V2Task.pinCta — внутри прокрутки её не удержать. */
 .v2 .v2t-cta{position:absolute;left:16px;right:16px;bottom:94px;z-index:25;width:auto}
-/* Место под кнопку в конце ленты, чтобы последний блок не оказался под ней */
-.v2 .main.has-cta{padding-bottom:88px}
+/* Место под кнопку в конце ленты, чтобы последний блок не оказался под ней.
+   Класс вешает pinCta на последний блок ленты — он не везде .main. */
+.v2 .has-cta{padding-bottom:88px}
+
+/* ===== «Хиты»: тело разбито на .main и соседние блоки =====
+   Там между шапкой и телом стоит .content со своим шагом 24, и вместе с
+   полями .main получалось 64 вместо 40 по макету. Вертикаль на этой
+   странице задаёт .content: 24 добирает он, 16 — тело. */
+.v2 .content{padding-bottom:40px}
+.v2 .content > .main{padding-top:16px;padding-bottom:0}

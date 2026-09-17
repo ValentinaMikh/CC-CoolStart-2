@@ -577,7 +577,7 @@ function render(){
     : [...S.blocks.filter(b=>b.t==='task'), ...S.blocks.filter(b=>b.t!=='task')];
   document.getElementById('scroll').innerHTML=
     hero+`<div class="main">${blocks.map(block).join('')}</div>`;
-  if(v2()) V2Task.pinCta();
+  if(v2()){ V2Task.pinCta(); V2Task.watchNav() }
   Micro.reveal('.main > *');
 
   document.getElementById('tabbar').innerHTML=

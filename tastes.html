@@ -330,6 +330,7 @@ function render(){
     const n=Steps.IDS.indexOf('cats')+1;
     if(n) document.querySelector('.nav-title').textContent=`Задание ${n}`;
     V2Task.pinCta();
+    V2Task.watchNav();
   }else{
     document.getElementById('hero').innerHTML=
       `<img class="front" src="${HERO.front}" alt="">`;

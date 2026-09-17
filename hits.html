@@ -442,6 +442,7 @@ function heroV2(){
   hero.innerHTML = V2Task.hero({pic:RES+'image.png', ttl:'Купить товар из подборки хитов',
     used:taskDone, total:TASK_TOTAL, check:RES+'ic-check.svg'});
   const pw=document.querySelector('.main .pw'); if(pw) pw.hidden=true;
+  V2Task.watchNav();
   const n=Steps.IDS.indexOf('hits')+1;
   if(n) document.querySelector('.nav-title').textContent=`Задание ${n}`;
 }

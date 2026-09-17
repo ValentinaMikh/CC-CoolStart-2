@@ -45,8 +45,9 @@ const tone = t => 'v2t-hero' + (t ? ' is-' + t : '');
    их не рвёт. */
 function pinCta(){
   const screen = document.querySelector('.screen'),
+        scroll = document.querySelector('.scroll'),
         main   = document.querySelector('.main');
-  if(!screen || !main) return;
+  if(!screen || !scroll || !main) return;
   const fresh = main.querySelector(':scope > .btn');
   /* Снимаем прошлую кнопку только когда тело перерисовалось и принесло
      новую: на «вкусах» кнопка лежит в разметке статически, её переносят
@@ -56,8 +57,34 @@ function pinCta(){
     fresh.classList.add('v2t-cta');
     screen.append(fresh);
   }
-  main.classList.toggle('has-cta', !!screen.querySelector(':scope > .v2t-cta'));
+  /* Место под кнопку резервирует последний блок ленты, а не белое тело:
+     на «вкусах» за телом идёт ещё карусель купонов, и отступ внутри
+     .main оставил бы её под кнопкой. */
+  const tail = scroll.lastElementChild;
+  scroll.querySelectorAll('.has-cta').forEach(e => e.classList.remove('has-cta'));
+  if(tail) tail.classList.toggle('has-cta', !!screen.querySelector(':scope > .v2t-cta'));
 }
 
-return {hero, tone, pinCta};
+/* ===== Навбар за пределами шапки =====
+   В В1 навбар прозрачный и светлый — он рассчитан на заливку под собой.
+   Но лента уезжает под него, и над белым телом белый заголовок пропадает,
+   а на «хитах» ещё и ложится на фото товаров. Поэтому как только низ
+   шапки уходит под навбар, возвращаем ему непрозрачный фон и тёмный текст.
+   В макетах этого состояния нет — там один кадр, непрокрученный. */
+function watchNav(){
+  const scroll = document.querySelector('.scroll'),
+        nav    = document.querySelector('.topnav');
+  if(!scroll || !nav) return;
+  const sync = () => {
+    const hero = document.querySelector('.v2t-hero');
+    nav.classList.toggle('on-solid',
+      document.documentElement.classList.contains('v2') && !!hero &&
+      hero.getBoundingClientRect().bottom <= nav.getBoundingClientRect().bottom);
+  };
+  if(!watchNav.bound){ watchNav.bound = true;
+    scroll.addEventListener('scroll', sync, {passive:true}); }
+  sync();
+}
+
+return {hero, tone, pinCta, watchNav};
 })();
