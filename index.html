@@ -484,12 +484,15 @@ const VIDEO_SRC='';   // напр. './assets/hero.mp4'
 const RES='Resurses%20coolstart/';
 const FIG={
   hero:'Resurses%20coolstart/Main%20header.jpg',
-  /* 8284:140342 — КуулСтарт, промо-карточки, «Персонально», карточки товара.
+  /* 8685:31053 — КуулСтарт, промо-карточки, «Персонально», карточки товара.
      Сторис берутся ниже из Storis 1-4; здесь — остальные фото. */
   coolBg:RES+encodeURIComponent('Banner 3.png'),
   promo1:RES+encodeURIComponent('Banner 1.png'),
   promo2:RES+encodeURIComponent('Banner 2.png'),
-  actionAva:RES+encodeURIComponent('Banner 6.png'),
+  /* Кружок «Персонально» — фото товара, а не редакционная карточка: в макете
+     там снимок того же пива, о котором сама карточка. Banner-карточки
+     вертикальные, 164×332, и в круг попадал случайный кусок текста. */
+  actionAva:RES+encodeURIComponent('Pic 02.png'),
   product:RES+encodeURIComponent('Pic 05.png')};
 
 /* Иконки — экспорт из тех же нод. В отличие от фото не прячутся тумблером «картинки». */
