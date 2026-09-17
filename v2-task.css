@@ -30,6 +30,11 @@
 
 .v2 .v2t-body{position:relative;display:flex;flex-direction:column;gap:24px;
   align-items:center;padding:24px 16px}
+/* На «хитах» и «вкусах» у .hero img своё абсолютное позиционирование под
+   фото-шапку первого варианта. Сбрасываем его для всех картинок этой
+   шапки разом — иначе на весь блок растягивается иллюстрация, а галочка
+   в подписи улетает в угол. */
+.v2 .v2t-hero img{position:static;inset:auto}
 /* 9215:34302: иллюстрация 187×187, скругление 24, вписана целиком */
 .v2 .v2t-body .pic{width:187px;height:187px;border-radius:24px;display:block;
   object-fit:contain}
