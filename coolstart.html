@@ -20,7 +20,7 @@
    пятен, на финише кубок золотой целиком. Когда КеГЛи пришли — он же
    в венке из плашек. */
 const CUPS=['Белый кубок.png','Кубок пятна 2.png','Кубок пятна 5.png',
-            'Кубок пятна 9.png','Кубок золото.png'];
+            'Кубок пятна 9.png','Goblet.png'];
 const CUP_GOLD=CUPS[4];
 window.cupSrc=function(n,paid){
   const T=Steps.TOTAL;
@@ -273,10 +273,8 @@ const ICON={
   check:RES+'ic-check.svg',
   kgl:RES+'ic-kgl.svg',
   gift:RES+'Gift.svg',
-  /* Пиктограмма пальца из подсказки удержания (9110:112292), 38×48.
-     Пока файла в папке нет, картинка снимает себя по onerror — остаётся
-     одна подпись, и подсказка не выглядит сломанной. */
-  hold:RES+'ic-hold.png'};
+  /* Пиктограмма пальца из подсказки удержания (9110:112292), 38×48 */
+  hold:RES+'Finger.png'};
 
 const PIC=[
  'Resurses%20coolstart/check-list%20image%201.jpg',  /* 0 хиты      шаг 1  */
@@ -465,7 +463,26 @@ function progressState(days){
   return '';
 }
 
-/* пустые состояния вкладок */
+/* ===== Пустые состояния вкладок (9100:111433 / 9100:111780) =====
+   В макете у каждой вкладки своя картинка, заголовок и подпись, которая
+   отправляет на соседнюю вкладку. «Доступные» пустеют, когда пройдены все
+   шаги; «Уже получили» — пока не закрыт ни один. */
+const EMPTY={
+  open:{pic:RES+'Serpantine.png', ttl:'Все 10 шагов пройдены',
+        sub:'Посмотреть выполненные задания и воспользоваться купонами '+
+            'и скидками можно на вкладке «Уже получили»'},
+  done:{pic:RES+'Capibara.png',   ttl:'Тут пока ничего нет',
+        sub:'Посмотреть задания и воспользоваться купонами и скидками '+
+            'можно на вкладке «Доступные»'}};
+function emptyBlock(){
+  const e = EMPTY[tab==='done' ? 'done' : 'open'];
+  return `<div class="v2-empty">
+      <img src="${e.pic}" alt="" width="108" height="108" decoding="async">
+      <h3>${esc(e.ttl)}</h3><p>${esc(e.sub)}</p>
+    </div>`;
+}
+
+/* пустые состояния вкладок первого варианта */
 function emptyText(days){
   if(tab==='done')
     return 'Пока здесь пусто. Сделайте первый 10 шагов, чтобы влюбиться в КуулКлевер, и забирайте награду!';
@@ -530,7 +547,9 @@ function renderList(animate){
     return `<div class="sect"><h2>${esc(ttl)}</h2>${v2()?'':intro}
       <div class="list">${items.map(it=>card(it,s.corn)).join('')}</div></div>`;
   }).join('');
-  host.innerHTML=html || `<div class="sect"><div class="stub">${esc(emptyText(days))}</div></div>`;
+  host.innerHTML=html || `<div class="sect">${v2()
+    ? emptyBlock()
+    : `<div class="stub">${esc(emptyText(days))}</div>`}</div>`;
   placeTabs();
   Micro.reveal('.sect, .item',{force:animate});
 }
@@ -586,8 +605,8 @@ function mountCup3d(){
   const hint = document.createElement('div');
   hint.id = 'v2CupHint';
   hint.className = 'v2-cup-hint';
-  hint.innerHTML = `<img src="${ICON.hold}" alt="" width="38" height="48"
-                         onerror="this.remove()"><p>${esc(HEAD.hold)}</p>`;
+  hint.innerHTML = `<img src="${ICON.hold}" alt="" width="38" height="48">`+
+                   `<p>${esc(HEAD.hold)}</p>`;
   host.parentElement.insertBefore(hint, host.nextSibling);
   holdHint(host);
 }

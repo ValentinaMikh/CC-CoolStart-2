@@ -48,8 +48,10 @@
     radial-gradient(circle closest-side,rgba(245,130,47,.95) 0%,rgba(245,130,47,.85) 25%,rgba(245,130,47,.5) 50%,rgba(245,130,47,.16) 70%,rgba(245,130,47,.03) 85%,rgba(245,130,47,0) 100%);
   transition:background-position .6s var(--mc-ease),background-size .6s var(--mc-ease)}
 /* 9010:9408: картинка 88×88 повёрнута на −30°, центр её рамки в 22.79px
-   от правого края и 14.29px от нижнего — отсюда left/bottom. */
-.v2 .cool .v2-cup{position:absolute;left:214.1px;bottom:30.4px;width:88px;height:88px;
+   от правого края и 14.29px от нижнего — значит, центр кубка в (258.1, −74.4)
+   от правого нижнего угла. Рамка, как и в шапке, увеличена под поля
+   Goblet.png (88 ÷ 487 × 604 и × 623), а left/bottom держат центр на месте. */
+.v2 .cool .v2-cup{position:absolute;left:203.5px;bottom:18.2px;width:109.2px;height:112.6px;
   transform:rotate(-30deg);pointer-events:none;
   filter:drop-shadow(0 8px 16px rgba(120,40,0,.25))}
 /* 9010:9407: 297×245, правый край на 179px за карточкой, низ на 111px ниже */
@@ -180,7 +182,12 @@
   font-size:14px;line-height:18px;font-weight:500;color:#fff}
 .v2 .award{order:1;margin-top:16px;gap:24px}
 .v2 .progress{order:3;margin-top:16px;gap:8px}
-.v2 .v2-cup-big{width:140px;height:140px;display:block;
+/* В макете кубок занимает рамку целиком, а в Goblet.png сам кубок — 487×487
+   на холсте 604×623, то есть с полями. Поэтому рамка больше макетных 140
+   ровно во столько, во сколько холст больше кубка (140 ÷ 487 × 604 и × 623),
+   а отрицательные поля возвращают блоку прежнюю высоту: на экране кубок
+   те же 140, и раскладка шапки не меняется. */
+.v2 .v2-cup-big{width:173.6px;height:179.1px;margin-block:-19.6px;display:block;
   filter:drop-shadow(0 12px 24px rgba(120,40,0,.28))}
 /* 9084:103514 — награда плашкой поверх заливки, подписи «за прохождение
    КуулСтарта» в этой версии макета нет. Разметка общая с первым вариантом,
@@ -197,6 +204,16 @@
    кончик заливки (9110:112589) */
 .v2 .bar i{height:16px;min-width:8px;border-radius:100px;background:#fff}
 .v2 .done{align-self:center}
+
+/* ===== Пустое состояние списка (9100:111433 / 9100:111780) =====
+   Вкладка без карточек: картинка 108, под ней заголовок и подпись через 8,
+   всё по центру, поля кадра 43. Отступ сверху добирает до макетных 24
+   между сегмент-контролом и картинкой — в секции он 16. */
+.v2 .v2-empty{display:flex;flex-direction:column;gap:8px;align-items:center;
+  justify-content:center;width:100%;padding:43px 0;margin-top:8px;text-align:center}
+.v2 .v2-empty img{width:108px;height:108px;display:block;object-fit:contain}
+.v2 .v2-empty h3{width:100%;font-size:20px;line-height:24px;font-weight:600;color:var(--ink)}
+.v2 .v2-empty p{width:100%;font-size:14px;line-height:18px;font-weight:500;color:var(--ink)}
 
 /* Сегмент-контрол переезжает из шапки в белый блок под ней */
 .v2 .seg{background:var(--v2-sub)}
