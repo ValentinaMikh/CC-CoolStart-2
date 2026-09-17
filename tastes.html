@@ -5,12 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>КуулКлевер — Откройте разнообразие вкусов</title>
 <link rel="stylesheet" href="micro.css">
+<link rel="stylesheet" href="theme.css">
 <script src="micro.js"></script>
 <script src="steps.js"></script>
 <style>
-:root{--green:#80BA27;--accent:#F45500;--ink:#1E1E1E;--ink-2:#4F4F4F;--ink-3:#808080;
-  --sub:#F7F7F7;--hair:#E5E5E5;--olive:#DEE99B;--special:#FFEED6;
-  --disable:#F0F1F3;--disable-txt:#BCBCBC;--myasnov:#74140D}
+:root{--green:var(--t-primary);--accent:var(--t-accent);--ink:var(--t-text);--ink-2:var(--t-text-2);--ink-3:var(--t-text-3);
+  --sub:var(--t-sub);--hair:var(--t-border);--olive:#DEE99B;--special:#FFEED6;
+  --disable:#F0F1F3;--disable-txt:var(--t-text-4);--myasnov:#74140D}
+/* Ночью серые этой страницы идут своей лестницей: в библиотеке их нет.
+   Фирменные подложки карточек при этом не трогаем — они цветные
+   в обеих темах, как Primary и Accent. */
+html.night{--disable:#2A2A2A}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
 html,body{height:100%}
@@ -22,7 +27,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .screen{position:absolute;inset:0;overflow:hidden;border-radius:44px}
 
 /* ===== Top Navigation (8284:140338) ===== */
-.topnav{position:absolute;top:0;left:0;right:0;z-index:40;background:#fff;padding-bottom:8px;
+.topnav{position:absolute;top:0;left:0;right:0;z-index:40;background:var(--t-ground);padding-bottom:8px;
   display:flex;flex-direction:column;align-items:center}
 .status{width:100%;height:44px;display:flex;align-items:center;justify-content:space-between;
   padding:0 26px;font-size:15px;font-weight:600;color:var(--ink)}
@@ -46,7 +51,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .hero .tint{position:absolute;inset:0;background:var(--olive)}
 
 /* Main content (8284:140280): белый, p16 gap16 */
-.main{background:#fff;padding:16px;display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+.main{background:var(--t-ground);padding:16px;display:flex;flex-direction:column;gap:16px;align-items:flex-start}
 .body{width:100%;font-size:16px;line-height:20px;font-weight:400;color:var(--ink)}
 .body p{margin-bottom:8px}
 .btn{width:100%;padding:14px;border:0;border-radius:12px;background:var(--green);cursor:pointer;
@@ -73,12 +78,12 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
          drop-shadow(0 0 2px rgba(0,0,0,.02)) drop-shadow(0 0 1px rgba(0,0,0,.01))}
 .cupon .cbody{position:relative;width:273px;height:432px;flex:none;overflow:hidden;
   padding:0 16px 16px;display:flex;flex-direction:column;gap:24px;justify-content:flex-end;
-  background:#fff}
+  background:var(--t-ground)}
 .cupon .lay{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .cupon .lay img{position:absolute;display:block;max-width:none}
 /* растушёвка фото в белый — из макета */
 .cupon .fade{position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(180deg,rgba(255,255,255,0) 31.287%,#fff 44.12%)}
+  background:linear-gradient(180deg,transparent 31.287%,var(--t-ground) 44.12%)}
 .cupon h3{position:relative;width:100%;font-size:20px;line-height:24px;font-weight:600;color:#000}
 .cupon .desc{position:relative;width:100%;font-size:16px;line-height:20px;font-weight:400;color:var(--ink)}
 .cupon .use{position:relative;width:100%;padding:14px;border:0;border-radius:12px;cursor:pointer;
@@ -96,7 +101,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .pw .done{font-size:14px;line-height:18px;font-weight:500;color:var(--ink)}
 /* бейдж скидки — «язычок» сверху по центру */
 .cupon .badge{position:absolute;top:0;left:calc(50% + 4.5px);transform:translateX(-50%);
-  z-index:2;background:#fff;border-radius:0 0 24px 24px;padding:8px 16px 8px 8px;
+  z-index:2;background:var(--t-ground);border-radius:0 0 24px 24px;padding:8px 16px 8px 8px;
   display:flex;gap:8px;align-items:center}
 .cupon .badge img{width:40px;height:40px;flex:none;display:block}
 .cupon .badge b{font-size:20px;line-height:24px;font-weight:600;color:var(--myasnov);white-space:nowrap}
@@ -105,18 +110,18 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .cupon .cut img{width:100%;height:100%;display:block}
 
 /* ===== Tab Bar ===== */
-.tabbar{position:absolute;left:0;right:0;bottom:0;z-index:30;background:#fff;
+.tabbar{position:absolute;left:0;right:0;bottom:0;z-index:30;background:var(--t-ground);
   display:flex;flex-direction:column;align-items:center}
-.tab-panel{display:flex;width:100%;border-top:1px solid var(--hair);background:#fff}
+.tab-panel{display:flex;width:100%;border-top:1px solid var(--hair);background:var(--t-ground)}
 .tab{flex:1;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;
   justify-content:center;gap:2px;padding:8px;position:relative;color:var(--ink-3);text-decoration:none}
 .tab img{width:20px;height:20px;display:block}
 .tab .lbl{font-size:10px;line-height:12px;font-weight:600;text-align:center;width:100%}
 .tab.active .lbl{color:var(--green)}
 .badge-cart{position:absolute;top:4px;right:12px;min-width:14px;height:14px;border-radius:60px;
-  background:var(--accent);border:2px solid #fff;color:#fff;font-size:10px;line-height:12px;
+  background:var(--accent);border:2px solid var(--t-ground);color:#fff;font-size:10px;line-height:12px;
   display:grid;place-items:center;padding:1px}
-.home-ind-wrap{width:100%;background:#fff;padding:22px 8px 8px;display:grid;place-items:center}
+.home-ind-wrap{width:100%;background:var(--t-ground);padding:22px 8px 8px;display:grid;place-items:center}
 .home-ind-wrap i{width:134px;height:5px;border-radius:100px;background:var(--ink);display:block}
 
 .note{position:absolute;left:16px;right:16px;bottom:100px;z-index:75;background:#17181A;color:#fff;

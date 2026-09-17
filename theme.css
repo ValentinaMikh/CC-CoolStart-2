@@ -1,0 +1,47 @@
+/* ===== Тема приложения =====
+   Цвета взяты из библиотеки Figma (⬛️ Design System, коллекция Themes).
+   Там у каждого цвета две версии: «[d]/…» — день и «[n]/…» — ночь; здесь
+   это :root и html.night. Класс ставит Steps.applyTheme() по настройке
+   в панели тестировщика, поэтому тема переживает переход между экранами.
+
+   Страницы не используют эти переменные напрямую: у каждой свои имена
+   (--ink, --sub, --hair и так далее), и они объявлены через токены ниже.
+   Так ночной режим включается одной подменой значений, а вёрстка страниц
+   остаётся прежней. */
+
+:root{
+  /* Фоны */
+  --t-ground:#FFFFFF;        /* Background/Main-ground — карточки, листы */
+  --t-sub:#F7F7F7;           /* Background/Sub-ground 1 — подложка страницы */
+  --t-primary-ground:#EEFCD9;/* Background/Primary-ground — зелёные плашки */
+  --t-dark-ground:#35383D;   /* Background/Dark-ground */
+  /* Текст */
+  --t-text:#1E1E1E;          /* Elements/Main-text */
+  --t-text-2:#4F4F4F;        /* Elements/Sub-text 1 */
+  --t-text-3:#808080;        /* Elements/Sub-text 2 */
+  --t-text-4:#BCBCBC;        /* Elements/Sub-text 3 */
+  --t-light:#FFFFFF;         /* Elements/Light-text — текст на цветном */
+  /* Границы */
+  --t-border:#E5E5E5;        /* Border/Main-border */
+  /* Фирменные — одни на обе темы */
+  --t-primary:#80BA27;       /* Main/Primary */
+  --t-accent:#F45500;        /* Main/Accent */
+  --t-accent-dark:#CF4A10;   /* Dark/Accent-dark */
+}
+
+/* Ночь. Подтверждённое значение из библиотеки — Main-ground: белый лист
+   становится #1E1E1E. Остальные фоны и текст идут по той же лестнице,
+   что и днём, только в обратном порядке: подложка темнее карточки,
+   а Sub-text 1 и Sub-text 3 меняются местами. */
+html.night{
+  --t-ground:#1E1E1E;
+  --t-sub:#141414;
+  --t-primary-ground:#23301A;
+  --t-text:#FFFFFF;
+  --t-text-2:#BCBCBC;
+  --t-text-4:#4F4F4F;
+  --t-border:#333333;
+}
+
+/* Подложка за «телефоном» и сам корпус остаются тёмными в обеих темах —
+   это не экран приложения, а стенд, на котором он показан. */

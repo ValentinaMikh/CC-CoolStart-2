@@ -5,11 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>КуулКлевер — задание КуулСтарта</title>
 <link rel="stylesheet" href="micro.css">
+<link rel="stylesheet" href="theme.css">
 <script src="micro.js"></script>
 <script src="steps.js"></script>
 <style>
-:root{--green:#80BA27;--ink:#1E1E1E;--ink-2:#4F4F4F;--ink-3:#808080;--ink-4:#DFDFDF;
-  --sub:#F7F7F7;--hair:#E5E5E5;--hair-2:#D6D6D6;--olive:#DEE99B;--special:#FFEED6;--special-dark:#E88A01;--disable:#F0F1F3;--brand-soft:#E8F5D8;--dur:1}
+:root{--green:var(--t-primary);--ink:var(--t-text);--ink-2:var(--t-text-2);--ink-3:var(--t-text-3);--ink-4:#DFDFDF;
+  --sub:var(--t-sub);--hair:var(--t-border);--hair-2:#D6D6D6;--olive:#DEE99B;--special:#FFEED6;--special-dark:#E88A01;--disable:#F0F1F3;--brand-soft:#E8F5D8;--dur:1}
+/* Ночью серые этой страницы идут своей лестницей: в библиотеке их нет.
+   Фирменные подложки карточек при этом не трогаем — они цветные
+   в обеих темах, как Primary и Accent. */
+html.night{--ink-4:#3A3A3A;--hair-2:#2E2E2E;--disable:#2A2A2A}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
 html,body{height:100%}
@@ -21,7 +26,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .screen{position:absolute;inset:0;overflow:hidden;border-radius:44px}
 
 /* ===== Top Navigation (8284:139670): белая, статус-бар + навбар ===== */
-.topnav{position:absolute;top:0;left:0;right:0;z-index:40;background:#fff;padding-bottom:8px;
+.topnav{position:absolute;top:0;left:0;right:0;z-index:40;background:var(--t-ground);padding-bottom:8px;
   display:flex;flex-direction:column;align-items:center}
 .status{width:100%;height:44px;display:flex;align-items:center;justify-content:space-between;
   padding:0 26px;font-size:15px;font-weight:600;color:var(--ink)}
@@ -40,7 +45,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .scroll::-webkit-scrollbar{display:none}
 .hero{width:375px;height:204px;background:var(--olive);overflow:hidden;position:relative}
 .hero img{width:100%;height:100%;object-fit:cover;object-position:bottom;display:block}
-.main{background:#fff;padding:16px;display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+.main{background:var(--t-ground);padding:16px;display:flex;flex-direction:column;gap:16px;align-items:flex-start}
 
 
 .body{width:100%;font-size:16px;line-height:20px;font-weight:400;color:var(--ink)}
@@ -95,7 +100,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 /* Карточки товаров подборки — компонент Product card UPD, как на главной */
 .grid{width:343px;display:flex;gap:10px;overflow-x:auto}
 .grid::-webkit-scrollbar{display:none}
-.pcard{flex:none;width:164px;background:#fff;border:1px solid var(--hair);border-radius:12px;
+.pcard{flex:none;width:164px;background:var(--t-ground);border:1px solid var(--hair);border-radius:12px;
   overflow:hidden;display:flex;flex-direction:column}
 .pcard .pic{position:relative;width:100%;aspect-ratio:1/1;background:#D9D9D9;overflow:hidden}
 .pcard .pic img{width:100%;height:100%;object-fit:cover;display:block}
@@ -155,9 +160,9 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .pol u{font-weight:500}
 
 /* ===== Tab Bar — как на главной ===== */
-.tabbar{position:absolute;left:0;right:0;bottom:0;z-index:30;background:#fff;
+.tabbar{position:absolute;left:0;right:0;bottom:0;z-index:30;background:var(--t-ground);
   display:flex;flex-direction:column;align-items:center}
-.tab-panel{display:flex;width:100%;border-top:1px solid var(--hair);background:#fff}
+.tab-panel{display:flex;width:100%;border-top:1px solid var(--hair);background:var(--t-ground)}
 .tab{flex:1;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;
   justify-content:center;gap:2px;padding:8px;position:relative;color:var(--ink-3);text-decoration:none}
 .tab img{width:20px;height:20px;display:block}
@@ -165,16 +170,16 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .tab span:not(.badge){font-size:10px;line-height:12px;font-weight:600;text-align:center;width:100%}
 .tab.active span{color:var(--green)}
 .badge{position:absolute;top:4px;right:12px;min-width:14px;height:14px;border-radius:60px;
-  background:#F45500;border:2px solid #fff;color:#fff;font-size:10px;line-height:12px;
+  background:#F45500;border:2px solid var(--t-ground);color:#fff;font-size:10px;line-height:12px;
   display:grid;place-items:center;padding:1px}
-.home-ind-wrap{width:100%;background:#fff;padding:22px 8px 8px;display:grid;place-items:center}
+.home-ind-wrap{width:100%;background:var(--t-ground);padding:22px 8px 8px;display:grid;place-items:center}
 .home-ind-wrap i{width:134px;height:5px;border-radius:100px;background:var(--ink);display:block}
 
 /* ===== Модалка промокода (8284:140204) ===== */
 .m-scrim{position:absolute;inset:0;background:rgba(0,0,0,.5);z-index:70;opacity:0;pointer-events:none;
   transition:.25s}
 .m-scrim.on{opacity:1;pointer-events:auto}
-.sheet{position:absolute;left:0;right:0;bottom:0;z-index:71;background:#fff;
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:71;background:var(--t-ground);
   border-radius:24px 24px 44px 44px;padding:16px 16px 34px;transform:translateY(102%);
   transition:transform .34s cubic-bezier(.2,.85,.25,1);max-height:82%;overflow-y:auto}
 .sheet.on{transform:translateY(0)}

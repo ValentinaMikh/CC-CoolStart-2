@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>КуулКлевер — КуулСтарт</title>
 <link rel="stylesheet" href="micro.css">
+<link rel="stylesheet" href="theme.css">
 <script src="micro.js"></script>
 <script src="steps.js"></script>
 <script>
@@ -29,14 +30,14 @@ if(Steps.design()===2){
 </script>
 <link rel="stylesheet" href="v2.css">
 <style>
-:root{--green:#80BA27;--ink:#1E1E1E;--ink-2:#4F4F4F;--corn:#FFE3A2;--olive:#DEE99B;--peach:#FFC9B7;--dur:1}
+:root{--green:var(--t-primary);--ink:var(--t-text);--ink-2:var(--t-text-2);--corn:#FFE3A2;--olive:#DEE99B;--peach:#FFC9B7;--dur:1}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
 html,body{height:100%}
 body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text",Inter,system-ui,sans-serif;
   display:flex;align-items:center;justify-content:center;overflow:hidden}
 #stage{transform-origin:center center}
-.phone{width:375px;height:812px;position:relative;overflow:hidden;background:#F7F7F7;border-radius:44px;
+.phone{width:375px;height:812px;position:relative;overflow:hidden;background:var(--t-sub);border-radius:44px;
   box-shadow:0 40px 90px rgba(0,0,0,.6),0 0 0 10px #111,0 0 0 11px #2A2C2E;color:var(--ink)}
 .screen{position:absolute;inset:0;overflow:hidden;border-radius:44px}
 
@@ -54,7 +55,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 /* ===== Шапка (I8284:140343;4084:123316): Nature/Corn, скругление снизу 16 ===== */
 .head{flex:none;background:var(--corn);border-radius:0 0 16px 16px;padding-top:44px}
 .navbar{position:relative;display:flex;align-items:center;padding:8px 16px;min-height:56px}
-.back{flex:none;width:40px;height:40px;border-radius:12px;background:#F7F7F7;
+.back{flex:none;width:40px;height:40px;border-radius:12px;background:var(--t-sub);
   display:grid;place-items:center;cursor:pointer;text-decoration:none}
 .back img{width:20px;height:20px;display:block}
 .nav-title{position:absolute;left:16.33%;right:16.33%;top:50%;transform:translateY(-50%);
@@ -83,11 +84,11 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .seg{width:100%;display:flex;gap:0;padding:4px;border-radius:12px;background:rgba(255,255,255,.64);overflow:hidden}
 .seg button{flex:1;min-width:0;padding:8px;border:0;border-radius:12px;background:transparent;cursor:pointer;
   font:500 14px/18px inherit;font-family:inherit;color:var(--ink-2);text-align:center}
-.seg button.on{background:#fff;color:var(--ink);
+.seg button.on{background:var(--t-ground);color:var(--ink);
   filter:drop-shadow(0 4px 6px rgba(0,0,0,.08)) drop-shadow(0 0 2px rgba(0,0,0,.04))}
 
 /* ===== Секции-контейнеры (I8284:140343;4084:123334 и далее) ===== */
-.sect{flex:none;width:375px;background:#fff;border-radius:12px;padding:24px 16px;
+.sect{flex:none;width:375px;background:var(--t-ground);border-radius:12px;padding:24px 16px;
   display:flex;flex-direction:column;gap:16px}
 .sect h2{width:100%;font-size:20px;line-height:24px;font-weight:600;color:var(--ink)}
 .list{display:flex;flex-direction:column;gap:8px}
@@ -110,7 +111,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .item h3{font-size:16px;line-height:20px;font-weight:500;color:var(--ink)}
 .item p{font-size:14px;line-height:18px;font-weight:500;color:var(--ink)}
 .offer{align-self:flex-start;display:flex;gap:8px;align-items:center;
-  padding:4px 8px 4px 4px;border-radius:12px;background:#fff}
+  padding:4px 8px 4px 4px;border-radius:12px;background:var(--t-ground)}
 .offer img{width:40px;height:24px;flex:none;display:block}
 /* в макете плашка была в одну строку; новые офферы длиннее — переносим, чтобы не резалось */
 .offer{max-width:100%}
@@ -119,7 +120,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 
 .stub{padding:24px 0;text-align:center;font-size:14px;line-height:18px;font-weight:500;color:var(--ink-2)}
 
-.home-ind{position:absolute;left:0;right:0;bottom:0;height:34px;z-index:30;background:#fff;
+.home-ind{position:absolute;left:0;right:0;bottom:0;height:34px;z-index:30;background:var(--t-ground);
   display:grid;place-items:center}
 .home-ind i{width:134px;height:5px;border-radius:100px;background:var(--ink);display:block}
 
@@ -236,6 +237,10 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
     <div class="row"><span>Вариант дизайна</span>
       <div class="dseg" id="segDesign">
         <button data-v="1">А1</button><button data-v="2">В1</button>
+      </div></div>
+    <div class="row"><span>Тема</span>
+      <div class="dseg" id="segTheme">
+        <button data-v="day">День</button><button data-v="night">Ночь</button>
       </div></div>
     <div class="row"><span>Прогресс КуулСтарта</span>
       <button class="danger" id="btnReset">Начать заново</button></div>
@@ -863,6 +868,18 @@ segDesign.onclick=e=>{
 };
 syncDesignSeg();
 
+/* Тема — общая для всех экранов, как и вариант дизайна: класс night на
+   <html>, значения цветов в theme.css. */
+const segTheme=document.getElementById('segTheme');
+const syncThemeSeg=()=>[...segTheme.children].forEach(b=>
+  b.classList.toggle('on', b.dataset.v===Steps.theme()));
+segTheme.onclick=e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  Steps.setTheme(b.dataset.v); Steps.applyTheme();
+  syncThemeSeg(); render();
+};
+syncThemeSeg();
+
 document.getElementById('swBuy').onclick=e=>{
   e.currentTarget.classList.toggle('on');
   firstBuy=e.currentTarget.classList.contains('on'); render();
@@ -888,11 +905,14 @@ document.getElementById('btnReset').onclick=e=>{
   regDate=addDays(new Date(),-1);
   tab='open';
   [...segTabs.querySelectorAll('button')].forEach(b=>b.classList.toggle('on',b.dataset.v==='open'));
-  /* сброс чистит и выбранный вариант дизайна — возвращаем оформление
-     к умолчанию, иначе класс на <html> и подсветка кнопки остались бы
-     от прежнего выбора, а разметка перерисовалась бы уже по новому */
+  /* сброс чистит и выбранный вариант дизайна с темой — возвращаем
+     оформление к умолчанию, иначе классы на <html> и подсветка кнопок
+     остались бы от прежнего выбора, а разметка перерисовалась бы уже
+     по новому */
   Steps.applyDesign();
+  Steps.applyTheme();
   syncDesignSeg();
+  syncThemeSeg();
   syncDoneSeg();
   render();
   scrollBox.scrollTo({top:0,behavior:'smooth'});

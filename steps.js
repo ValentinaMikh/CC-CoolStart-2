@@ -86,6 +86,16 @@ function applyDesign(){
   document.documentElement.classList.toggle('v2', design() === 2);
 }
 
+/* ===== Тема =====
+   День и ночь — две версии цветов из библиотеки Figma; сами значения
+   лежат в theme.css, здесь только выбор. Как и вариант дизайна, тема
+   общая для всех экранов и переживает переход между ними. */
+const theme    = () => (get('theme', 'day') === 'night' ? 'night' : 'day');
+const setTheme = t  => put('theme', t === 'night' ? 'night' : 'day');
+function applyTheme(){
+  document.documentElement.classList.toggle('night', theme() === 'night');
+}
+
 /* ===== «КеГЛи уже начислены» =====
    Последний этап шапки (макет 1144:2303) наступает не сразу: в день, когда
    закрылся десятый шаг, написано «начислятся завтра», и только на следующий
@@ -138,8 +148,10 @@ function stage(table, n){
 /* Ставим класс сразу при загрузке модуля (он подключён в <head>), иначе
    первый вариант успел бы моргнуть до первой перерисовки. */
 applyDesign();
+applyTheme();
 
 return {TOTAL, TERM, all, isDone, complete, set, takeFresh, finish,
         days, setDays, daysLeft, design, setDesign, designName, applyDesign,
+        theme, setTheme, applyTheme,
         get, put, onRestore, reset, stage, IDS};
 })();
