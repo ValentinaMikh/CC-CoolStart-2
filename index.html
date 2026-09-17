@@ -148,6 +148,18 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
   word-break:break-word}
 .prod .cap{display:none}
 
+/* Ночью сторис остаются светлыми: это карточка с фотографией на белом,
+   и подпись лежит прямо на ней. Если пустить сюда тему, подложка уйдёт
+   в тёмное вместе с подписью — и надпись пропадёт на своём же фоне.
+   Поэтому фон карточки, растворение над ним и цвет подписи берём дневные.
+   Подпись «концепта» это не трогает: она снаружи карточки, на странице,
+   и там светлый текст на тёмном — то, что нужно. */
+html.night .prod .thumb,
+html.night .concept .thumb{background:#FFF}
+html.night .prod .veil{background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,0) 30.202%,
+    rgba(255,255,255,.3) 40.215%,#FFF 59.865%,#FFF 100%)}
+html.night .prod .cap-in{color:#4F4F4F}
+
 /* ===== ШОРТКАТЫ (Figma 3974:96896) ===== */
 .hotkeys{margin-top:20px;background:var(--t-sub);height:99px;padding-top:12px}
 .hk-rail{display:flex;gap:8px;overflow-x:auto;padding:0 16px}
