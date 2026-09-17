@@ -570,6 +570,7 @@ function render(){
     : [...S.blocks.filter(b=>b.t==='task'), ...S.blocks.filter(b=>b.t!=='task')];
   document.getElementById('scroll').innerHTML=
     hero+`<div class="main">${blocks.map(block).join('')}</div>`;
+  if(v2()) V2Task.pinCta();
   Micro.reveal('.main > *');
 
   document.getElementById('tabbar').innerHTML=
@@ -720,7 +721,9 @@ function coupon(i){
 })();
 
 /* ===== события ===== */
-document.getElementById('scroll').onclick=e=>{
+/* Делегируем на весь экран, а не на ленту: во втором варианте кнопка
+   задания вынесена из прокрутки и до .scroll её клик уже не дошёл бы. */
+document.querySelector('.screen').onclick=e=>{
   const c=e.target.closest('[data-c]');
   if(c){ coupon(+c.dataset.c); return }
   const d=e.target.closest('[data-d]');
@@ -753,8 +756,8 @@ function completeTask(btn){
   }
   Steps.complete(id);
   render();
-  Micro.flash(document.querySelector('.pw .scale'));
-  Micro.bump(document.querySelector('.pw .done'));
+  Micro.flash(document.querySelector('.v2t-progress .scale, .pw .scale'));
+  Micro.bump(document.querySelector('.v2t-progress .done, .pw .done'));
   Micro.bump(btn);
   showNote(id==='push'
     ? '<b>Уведомления разрешены</b><br>Задание засчитано — шаг отмечен в КуулСтарте.'

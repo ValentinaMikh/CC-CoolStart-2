@@ -32,5 +32,32 @@ function hero(o){
 /* Класс тона на блоке шапки: пустой — зелёный, как в макете по умолчанию */
 const tone = t => 'v2t-hero' + (t ? ' is-' + t : '');
 
-return {hero, tone};
+/* ===== Кнопка задания =====
+   Зелёная кнопка — постоянный призыв к действию, и по макету она стоит
+   внизу экрана, а не в конце текста. Внутри ленты этого не добиться:
+   абсолютный блок в прокручиваемом контейнере уезжает вместе с ним,
+   а sticky держит кнопку только пока виден её собственный блок.
+   Поэтому переносим её в .screen — там она вне прокрутки.
+
+   Переносим только прямых детей белого тела: кнопка «Добавить в
+   корзину» внутри шторки на «хитах» остаётся на месте.
+   Обработчики у кнопки делегированные, на .screen, так что перенос
+   их не рвёт. */
+function pinCta(){
+  const screen = document.querySelector('.screen'),
+        main   = document.querySelector('.main');
+  if(!screen || !main) return;
+  const fresh = main.querySelector(':scope > .btn');
+  /* Снимаем прошлую кнопку только когда тело перерисовалось и принесло
+     новую: на «вкусах» кнопка лежит в разметке статически, её переносят
+     один раз, и безусловная уборка убила бы её на второй отрисовке. */
+  if(fresh){
+    screen.querySelectorAll(':scope > .v2t-cta').forEach(b => b.remove());
+    fresh.classList.add('v2t-cta');
+    screen.append(fresh);
+  }
+  main.classList.toggle('has-cta', !!screen.querySelector(':scope > .v2t-cta'));
+}
+
+return {hero, tone, pinCta};
 })();

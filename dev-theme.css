@@ -6,9 +6,9 @@
    Цвета панели намеренно свои, не из темы: это инструмент поверх
    прототипа, а не часть экрана, и он тёмный в обеих темах. */
 
-/* Выше таб-бара: на внутренних экранах он занимает низ, и кнопка на
-   50px, как в большой панели, легла бы прямо на «Профиль». */
-.dt-fab{position:absolute;right:16px;bottom:100px;z-index:50;display:flex;gap:6px;align-items:center;
+/* Выше таб-бара и прижатой к нему кнопки задания: на 100px кнопка DEV
+   легла бы на «В каталог», а на 50px — прямо на «Профиль». */
+.dt-fab{position:absolute;right:16px;bottom:160px;z-index:50;display:flex;gap:6px;align-items:center;
   height:36px;padding:0 12px;border:0;border-radius:18px;background:#17181A;color:#fff;cursor:pointer;
   font:600 12px/1 ui-monospace,"SF Mono",Menlo,monospace;letter-spacing:1px;
   box-shadow:0 6px 18px rgba(0,0,0,.35)}

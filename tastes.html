@@ -323,6 +323,7 @@ function render(){
     const pw=document.querySelector('.main .pw'); if(pw) pw.hidden=true;
     const n=Steps.IDS.indexOf('cats')+1;
     if(n) document.querySelector('.nav-title').textContent=`Задание ${n}`;
+    V2Task.pinCta();
   }else{
     document.getElementById('hero').innerHTML=
       `<img class="front" src="${HERO.front}" alt="">`;
