@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>КуулКлевер — задание КуулСтарта</title>
+<link rel="stylesheet" href="micro.css">
+<script src="micro.js"></script>
+<script src="steps.js"></script>
+<style>
+:root{--green:#80BA27;--ink:#1E1E1E;--ink-2:#4F4F4F;--ink-3:#808080;--ink-4:#DFDFDF;
+  --sub:#F7F7F7;--hair:#E5E5E5;--hair-2:#D6D6D6;--olive:#DEE99B;--special:#FFEED6;--special-dark:#E88A01;--disable:#F0F1F3;--brand-soft:#E8F5D8;--dur:1}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text",Inter,system-ui,sans-serif;
+  display:flex;align-items:center;justify-content:center;overflow:hidden}
+#stage{transform-origin:center center}
+.phone{width:375px;height:812px;position:relative;overflow:hidden;background:var(--sub);border-radius:44px;
+  box-shadow:0 40px 90px rgba(0,0,0,.6),0 0 0 10px #111,0 0 0 11px #2A2C2E;color:var(--ink)}
+.screen{position:absolute;inset:0;overflow:hidden;border-radius:44px}
+
+/* ===== Top Navigation (8284:139670): белая, статус-бар + навбар ===== */
+.topnav{position:absolute;top:0;left:0;right:0;z-index:40;background:#fff;padding-bottom:8px;
+  display:flex;flex-direction:column;align-items:center}
+.status{width:100%;height:44px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 26px;font-size:15px;font-weight:600;color:var(--ink)}
+.status .right{display:flex;align-items:center;gap:5px}
+#devTap{padding:8px 4px 8px 12px;cursor:pointer}
+.navbar{position:relative;width:100%;display:flex;align-items:center;padding:8px 16px;min-height:56px}
+.back{flex:none;width:40px;height:40px;border-radius:12px;background:var(--sub);
+  display:grid;place-items:center;cursor:pointer;text-decoration:none}
+.back img{width:20px;height:20px;display:block}
+.nav-title{position:absolute;left:16.33%;right:16.33%;top:50%;transform:translateY(-50%);
+  font-size:16px;line-height:20px;font-weight:600;color:var(--ink);text-align:center;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ===== Promo page (8284:139648): скролл между шапкой 108 и таббаром 86 ===== */
+.scroll{position:absolute;inset:108px 0 86px 0;overflow-y:auto;overflow-x:hidden}
+.scroll::-webkit-scrollbar{display:none}
+.hero{width:375px;height:204px;background:var(--olive);overflow:hidden;position:relative}
+.hero img{width:100%;height:100%;object-fit:cover;object-position:bottom;display:block}
+.main{background:#fff;padding:16px;display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+
+
+.body{width:100%;font-size:16px;line-height:20px;font-weight:400;color:var(--ink)}
+.body b{font-weight:700}
+.body p+p{margin-top:8px}
+.h3{width:100%;font-size:18px;line-height:22px;font-weight:600;color:var(--ink)}
+.bullets{width:100%;display:flex;flex-direction:column;gap:8px}
+.bullets li{list-style:none;font-size:16px;line-height:20px;font-weight:400;color:var(--ink)}
+.bullets li b{font-weight:600}
+
+/* progress widget (8284:139656): заголовок + сегменты + подпись */
+.pw{width:100%;display:flex;flex-direction:column;gap:16px}
+.pw .head{width:100%;display:flex;gap:8px;align-items:flex-start}
+.pw .head img{width:40px;height:24px;flex:none;display:block}
+.pw .head .h3{flex:1;min-width:0}
+.pw .progress{width:100%;display:flex;flex-direction:column;gap:8px;border-radius:8px}
+.pw .scale{width:100%;display:flex;gap:8px;align-items:flex-start}
+.pw .seg{flex:1;min-width:0;height:6px;border-radius:24px;background:var(--ink-4);overflow:hidden}
+.pw .seg.on{background:var(--green)}
+.pw .done{font-size:14px;line-height:18px;font-weight:500;color:var(--ink)}
+
+/* Info Banner (8284:140293) */
+.banner{width:343px;display:flex;gap:12px;align-items:center;padding:12px 16px;
+  border-radius:12px;background:var(--special)}
+.banner img{width:24px;height:24px;flex:none;display:block}
+.banner p{flex:1;min-width:0;font-size:16px;line-height:20px;font-weight:500;color:var(--ink)}
+/* Иконки акций внутри текста плашки (8366:114405, 114400, 114411).
+   Иконка 24px выше строки 16/20, поэтому у плашки с иконками интерлиньяж чуть больше. */
+.banner p .pi{width:24px;height:24px;display:inline-block;vertical-align:middle;margin-right:4px}
+.banner p .pi:last-of-type{margin-right:0}
+.banner p .pig{display:inline-block;white-space:nowrap}   /* тройка иконок не разрывается */
+.banner.icons p{line-height:26px}
+
+/* Second button (8284:139668) */
+.btn{width:100%;display:flex;gap:8px;align-items:center;justify-content:center;padding:14px;
+  border:0;border-radius:12px;background:var(--green);cursor:pointer;
+  font-family:inherit;font-size:16px;line-height:20px;font-weight:500;color:#fff}
+
+/* Купоны (8284:140294): строка с иконкой завода и разделителем */
+.coupons{width:343px;display:flex;flex-direction:column;gap:8px}
+.coupon{width:343px;display:flex;gap:8px;align-items:center;padding:8px 12px 9px 8px;
+  border-bottom:1px solid var(--hair-2);overflow:hidden;cursor:pointer;background:none;
+  font-family:inherit;text-align:left}
+.coupon .logo{width:40px;height:40px;flex:none;display:block}
+.coupon .txt{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
+.coupon .txt b{font-size:14px;line-height:18px;font-weight:500;color:var(--ink)}
+.coupon .txt span{font-size:14px;line-height:18px;font-weight:400;color:var(--ink-2);
+  height:18px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.coupon .st{width:20px;height:20px;flex:none;display:grid;place-items:center;color:var(--ink-3)}
+.coupon.used{opacity:.55}
+
+/* Карточки товаров подборки — компонент Product card UPD, как на главной */
+.grid{width:343px;display:flex;gap:10px;overflow-x:auto}
+.grid::-webkit-scrollbar{display:none}
+.pcard{flex:none;width:164px;background:#fff;border:1px solid var(--hair);border-radius:12px;
+  overflow:hidden;display:flex;flex-direction:column}
+.pcard .pic{position:relative;width:100%;aspect-ratio:1/1;background:#D9D9D9;overflow:hidden}
+.pcard .pic img{width:100%;height:100%;object-fit:cover;display:block}
+.pcard .pbody{padding:12px;display:flex;flex-direction:column;gap:6px}
+.pcard .ttl{display:flex;gap:4px;align-items:flex-start;
+  font-size:12px;line-height:14px;font-weight:500;color:var(--ink)}
+.pcard .ttl i{flex:none;width:14px;height:14px;border-radius:50%;border:1px solid var(--ink-3);
+  color:var(--ink-3);font-style:normal;font-size:10px;line-height:12px;text-align:center;cursor:pointer}
+.pcard .old{font-size:12px;line-height:14px;color:var(--ink-2);text-decoration:line-through}
+.pcard .cur{font-size:18px;line-height:22px;font-weight:600;color:#F45500}
+.pcard .add{width:100%;min-height:32px;border:0;border-radius:8px;background:var(--green);
+  font-family:inherit;font-size:12px;line-height:14px;font-weight:600;color:#fff;cursor:pointer}
+
+/* Подарок на выбор (8364:31679): текст + карусель карточек 120×156 */
+.gcont{width:343px;display:flex;flex-direction:column;gap:24px;align-items:center;padding:16px 0}
+.gcont .tbox{width:100%;display:flex;flex-direction:column;gap:8px}
+.gcont .tbox h4{font-family:Ubuntu,inherit;font-size:18px;line-height:1.4;font-weight:500;color:var(--ink)}
+.gcont .tbox p{font-size:16px;line-height:20px;font-weight:400;color:var(--ink)}
+.grail{width:359px;margin:0 -8px;padding:0 8px;display:flex;gap:12px;align-items:center;
+  overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;cursor:grab}
+.grail::-webkit-scrollbar{display:none}
+.grail.dragging{cursor:grabbing;scroll-behavior:auto}
+.grail.dragging *{pointer-events:none}
+.gcard{flex:none;width:120px;border:2px solid transparent;border-radius:12px;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;background:var(--disable);
+  font-family:inherit;cursor:pointer}
+.gcard .pic{position:relative;width:100%;height:120px;overflow:hidden;background:var(--disable)}
+.gcard .pic img{width:100%;height:100%;object-fit:cover;display:block}
+.gcard .veil{position:absolute;inset:0;background:rgba(255,255,255,.3);display:grid;place-items:center}
+.gcard .veil img{width:24px;height:24px;object-fit:contain}
+.gcard .cap{width:100%;padding:8px 4px;background:var(--disable);text-align:center;
+  font-family:Ubuntu,inherit;font-size:14px;line-height:1.4;font-weight:500;color:var(--ink)}
+.gcard.on{border-color:var(--green)}
+.gcard.on .cap{background:var(--brand-soft)}
+.gcard.off{cursor:default}
+
+/* Модалка «Ваш подарок» (8364:113504) */
+.gwin{display:flex;flex-direction:column;gap:24px;align-items:center;padding-top:8px}
+.gh{font-family:Ubuntu,inherit;font-size:24px;line-height:1.2;font-weight:500;color:var(--ink);
+  display:flex;gap:4px;align-items:center;text-align:center}
+.gh .lab{background:var(--green);color:#fff;border-radius:8px;padding:2px 8px;
+  transform:rotate(-2deg);font-weight:500}
+.gbig{width:240px;border-radius:16px;overflow:hidden;background:var(--brand-soft);
+  display:flex;flex-direction:column}
+.gbig img{width:240px;height:240px;object-fit:cover;opacity:.8;display:block}
+.gbig .cap{padding:12px 8px;text-align:center;font-family:Ubuntu,inherit;
+  font-size:18px;line-height:1.4;font-weight:500;color:var(--ink)}
+
+/* Модалка «Ваш Email» (8364:101368). Клавиатуру не рисуем — её показывает система. */
+.fld{width:100%;padding:12px 16px;border:0;border-radius:12px;background:var(--sub);
+  font-family:inherit;font-size:16px;line-height:20px;color:var(--ink)}
+.fld::placeholder{color:var(--ink-3)}
+.row2{display:flex;gap:8px;padding:16px 0}
+.row2 .btn{flex:1}
+.pol{font-size:14px;line-height:18px;font-weight:400;color:var(--ink-3)}
+.pol u{font-weight:500}
+
+/* ===== Tab Bar — как на главной ===== */
+.tabbar{position:absolute;left:0;right:0;bottom:0;z-index:30;background:#fff;
+  display:flex;flex-direction:column;align-items:center}
+.tab-panel{display:flex;width:100%;border-top:1px solid var(--hair);background:#fff}
+.tab{flex:1;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:2px;padding:8px;position:relative;color:var(--ink-3);text-decoration:none}
+.tab img{width:20px;height:20px;display:block}
+/* :not(.badge) — иначе width:100% растягивает счётчик корзины на всю вкладку */
+.tab span:not(.badge){font-size:10px;line-height:12px;font-weight:600;text-align:center;width:100%}
+.tab.active span{color:var(--green)}
+.badge{position:absolute;top:4px;right:12px;min-width:14px;height:14px;border-radius:60px;
+  background:#F45500;border:2px solid #fff;color:#fff;font-size:10px;line-height:12px;
+  display:grid;place-items:center;padding:1px}
+.home-ind-wrap{width:100%;background:#fff;padding:22px 8px 8px;display:grid;place-items:center}
+.home-ind-wrap i{width:134px;height:5px;border-radius:100px;background:var(--ink);display:block}
+
+/* ===== Модалка промокода (8284:140204) ===== */
+.m-scrim{position:absolute;inset:0;background:rgba(0,0,0,.5);z-index:70;opacity:0;pointer-events:none;
+  transition:.25s}
+.m-scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:71;background:#fff;
+  border-radius:24px 24px 44px 44px;padding:16px 16px 34px;transform:translateY(102%);
+  transition:transform .34s cubic-bezier(.2,.85,.25,1);max-height:82%;overflow-y:auto}
+.sheet.on{transform:translateY(0)}
+.sheet::-webkit-scrollbar{display:none}
+.sheet .nav{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.sheet .nav h4{flex:1;text-align:center;font-size:16px;line-height:20px;font-weight:600;padding-left:36px}
+.sheet .close{flex:none;width:36px;height:36px;border:0;border-radius:12px;background:var(--sub);
+  display:grid;place-items:center;cursor:pointer}
+/* билет купона: светлый верх, зубчатый разрез, оранжевый низ */
+.ticket{border-radius:12px;overflow:hidden;margin-bottom:16px}
+.ticket .top{background:var(--special);padding:16px;display:flex;gap:12px;align-items:flex-start}
+.ticket .top img{width:40px;height:40px;flex:none;display:block}
+.ticket .top b{font-size:18px;line-height:22px;font-weight:600;color:var(--ink)}
+.ticket .top span{display:block;font-size:14px;line-height:18px;color:var(--ink-2)}
+.ticket .cut{height:10px;background:var(--special-dark);
+  -webkit-mask:radial-gradient(6px at 50% 0,transparent 98%,#000) 0 0/12px 10px repeat-x;
+  mask:radial-gradient(6px at 50% 0,transparent 98%,#000) 0 0/12px 10px repeat-x}
+.ticket .bottom{background:var(--special-dark);padding:4px 16px 16px;text-align:center}
+.ticket .till{font-size:12px;line-height:16px;color:#fff;opacity:.9;margin-bottom:8px}
+.ticket .code{display:flex;gap:8px;align-items:center;justify-content:center;
+  border:1.5px dashed #fff;border-radius:24px;padding:10px;
+  font-size:18px;line-height:22px;font-weight:700;color:#fff;letter-spacing:.5px}
+.sheet .hint{font-size:14px;line-height:18px;color:var(--ink-2)}
+.sheet .hint p+p{margin-top:8px}
+.sheet .btns{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.btn.soft{background:var(--sub);color:var(--ink)}
+.btn.off{background:var(--sub);color:var(--ink-4);cursor:default}
+
+/* тост-аннотация — как в index.html */
+.note{position:absolute;left:16px;right:16px;bottom:100px;z-index:75;background:#17181A;color:#fff;
+  border-radius:14px;padding:12px 14px;font-size:12px;line-height:1.45;
+  font-family:ui-monospace,"SF Mono",Menlo,monospace;opacity:0;transform:translateY(10px);
+  transition:.25s;pointer-events:none}
+.note.on{opacity:1;transform:translateY(0)}
+.note b{color:#A8E649}
+</style>
+</head>
+<body>
+<div id="stage">
+<div class="phone">
+<div class="screen">
+
+  <div class="topnav">
+    <div class="status">
+      <div>9:41</div>
+      <div class="right">
+        <svg width="18" height="11" viewBox="0 0 18 11" fill="currentColor"><rect y="7" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="6" rx="1"/><rect x="10" y="2.5" width="3" height="8.5" rx="1"/><rect x="15" width="3" height="11" rx="1"/></svg>
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><path d="M8.5 11.2 6.1 8.7a3.4 3.4 0 0 1 4.8 0zM3.6 6.2 2 4.5a9.2 9.2 0 0 1 13 0l-1.6 1.7a6.9 6.9 0 0 0-9.8 0zM5.2 7.8 3.8 6.4a7 7 0 0 1 9.4 0l-1.4 1.4a5 5 0 0 0-6.6 0z"/></svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.2" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="18" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2.1 2.1 0 0 0 0-4z" fill="currentColor" opacity=".45"/></svg>
+      </div>
+    </div>
+    <div class="navbar">
+      <a class="back" href="coolstart.html" title="Назад к КуулСтарту"><img id="icBack" alt=""></a>
+      <div class="nav-title" id="navTitle"></div>
+    </div>
+  </div>
+
+  <div class="scroll" id="scroll"></div>
+
+  <div class="tabbar" id="tabbar"></div>
+
+  <div class="m-scrim" id="mScrim"></div>
+  <div class="sheet" id="sheet"></div>
+  <div class="note" id="note"></div>
+
+</div>
+</div>
+</div>
+
+<script>
+/* ===== Ассеты из Figma (App Talk 26 → внутренние разделы КуулСтарта).
+   URL живут ~7 дней; локально: curl -L -o assets/<имя> "<url>" и подменить путь ниже. ===== */
+const RES='Resurses%20coolstart/';
+const ICON={
+  back:RES+'ic-back.svg',
+  info:RES+'ic-info.svg',
+  lock:RES+'ic-lock.svg',
+  gift:RES+'Gift.svg'};
+
+/* Иконки акций 24×24 для плашки задания «2+1, 3+1 или 5+1»
+   (макеты 8366:114405, 8366:114400, 8366:114411 — файлы из папки) */
+const PROMO_ICONS=[
+ ['2+1','Resurses%20coolstart/2%2B1.png'],
+ ['3+1','Resurses%20coolstart/3%2B1.png'],
+ ['+1', 'Resurses%20coolstart/%2B1.png']];
+
+const TABI=[
+ ['Главная',RES+'ic-tab-home.svg'],
+ ['Каталог',RES+'ic-tab-catalog.svg'],
+ ['Акции',  RES+'ic-tab-promo.svg'],
+ ['Корзина',RES+'ic-tab-cart.svg'],
+ ['Профиль',RES+'ic-tab-profile.svg']];
+
+/* Иконки заводов для строк купонов (в макете их 6, в ТЗ 10 категорий — циклим) */
+const FACTORY=[1,2,3,4,5,6].map(n=>RES+'ic-cat-'+n+'.svg');
+
+/* Фото-шапки внутренних страниц — файлы из папки «Resurses coolstart»,
+   номер файла = номер шага чек-листа. У «КеГЛей Дня» и «КеГЛей Месяца»
+   шапка общая (page 7-8). «Хиты» и «Разнообразие вкусов» живут на своих
+   страницах: hits.html и tastes.html. Подложка — цвет секции чек-листа. */
+const HERO={
+ delivery   :{bg:'#DEE99B',src:'Resurses%20coolstart/check-list%20image%20page%203.jpg'},   /* шаг 3  курьер   */
+ weekend    :{bg:'#DEE99B',src:'Resurses%20coolstart/check-list%20image%20page%204.jpg'},   /* шаг 4  подарок  */
+ email      :{bg:'#FFC9B6',src:'Resurses%20coolstart/check-list%20image%20page%205.jpg'},   /* шаг 5  конверт  */
+ push       :{bg:'#FFC9B6',src:'Resurses%20coolstart/check-list%20image%20page%206.jpg'},   /* шаг 6  колокольчик */
+ 'kgl-day'  :{bg:'#FFE3A2',src:'Resurses%20coolstart/check-list%20image%20page%207-8.jpg'},   /* шаг 7  КгЛ      */
+ 'kgl-month':{bg:'#FFE3A2',src:'Resurses%20coolstart/check-list%20image%20page%207-8.jpg'},   /* шаг 8  КгЛ      */
+ 'plus-one' :{bg:'#FFE3A2',src:'Resurses%20coolstart/check-list%20image%20page%209.jpg'},   /* шаг 9  монеты   */
+ luch       :{bg:'#FFE3A2',src:'Resurses%20coolstart/check-list%20image%20page%2010.jpg'}};  /* шаг 10 х5 КгЛ   */
+
+/* ===== 3.2.1 — 10 купонов ===== */
+const COUPONS=[
+ ['Скидка 15% на мясо и блюда для запекания','Мясо без шприцевания и натуральные маринады собственного приготовления и домашние рецепты. А главное — всё почти готово! Просто отправьте блюдо в духовку и отдыхайте в ожидании вкусного ужина.'],
+ ['Скидка 25% на сосиски, сардельки и шпикачки','По ГОСТу и традиционным советским рецептам. Много свежего качественного мяса, натуральные специи и привычный вкус, который любят уже несколько поколений.'],
+ ['Скидка 50% на пельмени, вареники и хинкали','Много сочной начинки и домашние рецепты. Каждое блюдо готовим с любовью, чтобы радовать вас натуральным вкусом!'],
+ ['Скидка 30% на молочку от Молзавода МясновЪ Хлевное','Из молока высшего сорта без заменителей молочного жира. Бережная пастеризация сохраняет натуральный вкус и максимум белка в составе.'],
+ ['Скидка 30% на ремесленный хлеб и выпечку','Хлеб длительной ферментации на живой закваске, выпечка на сливочном масле. Настоящий вкус, который начинается с качественных ингредиентов.'],
+ ['Скидка 30% на пирожные, десерты и торты от Кондитерской МясновЪ','Натуральные сливки, сливочное масло и шоколад вместо заменителей. Десерты ручной работы, от которых невозможно отказаться!'],
+ ['Скидка 30% на итальянскую пиццу для запекания','Тесто длительной ферментации, натуральная моцарелла и щедрая начинка. Пиццерий много, итальянская пицца — в КуулКлевер!'],
+ ['Скидка 50% на всю готовую еду (кроме пиццы)','Свежие блюда без длительного хранения и с понятным составом. Домашняя классика и блюда мировой кухни, когда хочется вкусно и без готовки.'],
+ ['Скидка 30% на продукты коллекции МясновЪ Гурмэ (бакалея)','Яркий вкус жизни! От честных партнёров со всего мира: паста, соусы, масла и деликатесы, которые открывают привычные блюда по-новому.'],
+ ['Скидка 30% на тихие вина Коллекций СОМЕЛЬЕ','Коллекция вин, отобранная профессиональными сомелье. Проверенные винодельни, яркие вкусы и бутылки, которые хочется открывать снова.']];
+
+/* Подарки на выбор — карусель из макета 8364:31683. У круассана в макете
+   есть отдельное фото 240×240 для модалки, у остальных берём фото карточки. */
+const GIFTS=[
+ {n:'Пирожное', pic:RES+encodeURIComponent('Pic 02.png')},
+ {n:'Тархун',   pic:RES+encodeURIComponent('Pic 03.png')},
+ {n:'Мороженое',pic:RES+encodeURIComponent('Pic 04.png')},
+ {n:'Круассан', pic:RES+encodeURIComponent('Pic 05.png'),
+                big:RES+encodeURIComponent('Pic 06.png')},
+ {n:'Кофе',     pic:RES+encodeURIComponent('Pic 01.png')}];
+const GLOCK='';
+
+/* состояние задания: подтверждён ли email, что выбрано, забрано ли в корзину */
+/* emailOk поднимается из чек-листа: если шаг уже засчитан, при возврате
+   на экран подарки должны остаться открытыми, а не проситься заново */
+let emailOk=Steps.isDone('email'), giftPick=null, giftChosen=false, giftInCart=false;
+
+/* ===== Экраны заданий =====
+   Заголовки, повторявшие подпись прогресс-бара задания или заголовок в шапке
+   экрана, убраны: на экране остаётся заголовок из прогресс-бара. */
+const SCREENS={
+
+ /* 3.1.1 */
+ hits:{nav:'Попробуйте наши Хиты',blocks:[
+  {t:'h3',v:'Первый шаг, чтобы влюбиться'},
+  {t:'text',v:['Предлагаем начать с наших «хитов»: товаров, которые искренне любим мы и уже успели полюбить наши гости.']},
+  {t:'h3',v:'Хиты Куулклевер'},
+  {t:'products'},
+  {t:'btn',v:'Открыть подборку'},
+  {t:'task',v:'Купить товар из подборки хитов 0/1',total:1,used:0}]},
+
+ /* 3.2.1 */
+ cats:{nav:'Откройте разнообразие вкусов',blocks:[
+  {t:'text',v:[
+   'У нас 7 собственных заводов, и каждый создаёт продукты со своим характером и традициями. А то, что мы не производим сами, привозим напрямую от проверенных производителей со всего мира: пасту — из Италии, паприку пиментон — из Испании, а выдержанные сыры — из Швейцарии. Так каждый поход в КуулКлевер становится маленьким гастрономическим путешествием!',
+   'С 2003 года мы вместе с виноделами и производителями собираем три уникальные коллекции напитков — Somelie, Somelie Grand, Somelie Grand Prix. Сегодня это более 1 500 напитков из 25 стран мира, подобранных для самых разных вкусов и поводов.',
+   'Мы подготовили для вас купоны на скидку в любимых категориях — чтобы знакомство с нашим ассортиментом было не только интересным, но и выгодным. Начните открывать новые вкусы уже сегодня!']},
+  {t:'banner',v:'1 покупка = 1 купон'},
+  {t:'pw',v:'Открыто категорий',total:3,used:0,done:'Открыто категорий 0 из 3'},
+  {t:'coupons'},
+  {t:'btn',v:'В каталог'}]},
+
+ /* 3.3.1 */
+ delivery:{nav:'Воспользоваться доставкой',blocks:[
+  {t:'text',v:[
+   '**Выбирайте удобный способ:**',
+   '**Экспресс-доставка 24/7** — привезём продукты, когда нужно, хоть ночью.',
+   '**Предзаказ** — оформите заранее, и мы доставим продукты напрямую с наших заводов. Так вам доступен расширенный ассортимент, включая эксклюзивы, которых нет на полках магазинов.',
+   'Первые три доставки от 700 ₽ — бесплатно!']},
+  {t:'pw',v:'Первые три доставки от 700 ₽ — бесплатно!',icon:'gift',total:3,used:0,done:'Использовано 0 из 3'},
+  {t:'task',v:'Оформить заказ от 700 ₽. с КуулДоставкой 0/1',total:1,used:0},
+  {t:'btn',v:'В каталог',done:true}]},
+
+ /* 3.4.1 */
+ weekend:{nav:'Совершите покупку в выходные',blocks:[
+  {t:'text',v:[
+   'В КуулКлевер выходные — это ещё один повод порадовать вас. Если вы уже совершили первую покупку, каждую субботу и воскресенье вас будет ждать подарок. Просто в знак благодарности, что выбираете нас.',
+   'После первой покупки мы откроем для вас этот бонус. По выходным будем напоминать о подарке в push-уведомлении, а найти его в любой момент можно в разделе «Персональные акции».']},
+  {t:'banner',v:'Доступно к выполнению после 1-ой покупки'},
+  {t:'task',v:'Совершить покупку в выходные 0/1',total:1,used:0},
+  {t:'btn',v:'В каталог',done:true}]},
+
+ /* 4.1.1 */
+ email:{nav:'Подтвердите email',blocks:[
+  {t:'task',v:'Подтвердите email 0/1',total:1,used:0},
+  {t:'text',v:['А мы отправим на почту сразу 5 подарков на выбор — останется только забрать тот, который понравится больше всего.']},
+  {t:'banner',v:'1 из 5 подарков на выбор'},
+  {t:'giftbox'},
+  {t:'giftbtn'}]},
+
+ /* 4.2.1 — макет 8366:114226 */
+ push:{nav:'Включите пуши',blocks:[
+  {t:'task',v:'Включите push-уведомления 0/1',total:1,used:0},
+  {t:'text',v:['Будем присылать статусы заказов и персональные предложения — только то, что актуально для вас.']},
+  {t:'gift',v:'200 КгЛ'},
+  {t:'btn',v:'Разрешить уведомления',done:true}]},
+
+ /* 5.1.1 */
+ 'kgl-day':{nav:'КеГЛи каждый день',blocks:[
+  {t:'text',v:['Покупайте как удобно и получайте дополнительные КеГЛи. Мы суммируем покупки за день и начисляем бонусы за общую сумму. Отличный способ быстрее накопить на бесплатные продукты и напитки.']},
+  {t:'bullets',v:[
+   '✔ 500 КеГЛей — за заказ от 3000 рублей',
+   '+ 250 КеГЛей за каждые дополнительные 1500 рублей.',
+   'За заказы на самовывоз и покупки в магазине:',
+   '✔ 250 КеГЛей — за каждые 1500 рублей']},
+  {t:'task',v:'Получить Кегли Дня 0/1',total:1,used:0},
+  {t:'btn',v:'Посмотреть прогресс',done:true}]},
+
+ /* 5.2.1 */
+ 'kgl-month':{nav:'Подписаться на КеГЛи Месяца',blocks:[
+  {t:'text',v:['Покупайте в течение месяца так, как вам удобно: в магазине, на самовывозе или с доставкой. Мы учтём все покупки и начислим до 8 000 дополнительных КеГЛей. Ещё один приятный бонус за то, что вы выбираете КуулКлевер.']},
+  {t:'task',v:'Подписаться на КеГЛи месяца 0/1',total:1,used:0},
+  {t:'btn',v:'Посмотреть прогресс',done:true}]},
+
+ /* 5.3.1 */
+ 'plus-one':{nav:'Купите товар по акции 2+1, 3+1 или 5+1',blocks:[
+  {t:'text',v:['Любите покупать с запасом? Для вас мы регулярно запускаем предложения 2+1, 3+1 или 5+1 — просто выбирайте нужное количество товаров, а ещё один получите в подарок. При этом в рамках линейки можно сочетать разные вкусы!']},
+  {t:'banner',v:'Ищите на товарах иконку [изображение иконок], кладите в корзину и забирайте бесплатно!'},
+  {t:'task',v:'Купить товар по акции 2+1, 3+1 или 5+1 0/1',total:1,used:0},
+  {t:'btn',v:'Подборка действующих акций →',done:true}]},
+
+ /* 5.4.1 */
+ luch:{nav:'Станьте ЛУЧшим покупателем',blocks:[
+  {t:'text',v:['У каждого есть свои фавориты: кто-то не начинает утро без кофе с круассаном, кто-то не представляет стол без любимых сыров и колбас. Для таких покупок мы придумали сервис «ЛУЧ».']},
+  {t:'banner',v:'Добавьте от 3-х любимых продуктов в ЛУЧ — и получайте за них в 5 раз больше КеГЛей.'},
+  {t:'btn',v:'Выбрать любимое',done:true},
+  {t:'task',v:'Добавить товары в ЛУЧ 0/3',total:3,used:0}]}
+};
+
+/* Подборка хитов — состав карточки по ТЗ 3.1.1 (фото, название, иконка описания, цена, цена со скидкой) */
+const HIT_PRODUCTS=[
+ {n:'Сосиски советские классические',old:'112,00',c:'67,00',d:'Из охлаждённого мяса по ГОСТу, без заменителей.'},
+ {n:'Круассан Французский на сливочном масле',old:'99,00',c:'69,00',d:'Ферментация 24 часа, только сливочное масло.'},
+ {n:'Сыр Кавказский мягкий 40% с паприкой',old:'149,00',c:'104,00',d:'Молоко высшего сорта, выдержка по классической технологии.'}];
+
+/* ===== утилиты ===== */
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+const note=document.getElementById('note');
+let noteT;
+function showNote(html){note.innerHTML=html;note.classList.add('on');
+  clearTimeout(noteT);noteT=setTimeout(()=>note.classList.remove('on'),4200)}
+
+const fit=()=>{
+  /* телефон — во весь экран, без мокапа; десктоп — макет в рамке */
+  if(Micro.fitFull(375)) return;
+  const s=Math.min(innerWidth/415,innerHeight/852,1.35);
+  document.getElementById('stage').style.transform=`scale(${s})`};
+addEventListener('resize',fit);fit();
+
+const id=new URLSearchParams(location.search).get('id')||'hits';
+/* «Хиты» собраны по своим макетам отдельной страницей */
+if(id==='hits'){ location.replace('hits.html'); }
+if(id==='cats'){ location.replace('tastes.html'); }
+const S=SCREENS[id]||SCREENS.cats;
+
+/* использованные купоны — чтобы было видно, что купон уже применён (ТЗ 3.2.1) */
+const usedCoupons=new Set();
+
+/* ===== блоки ===== */
+function scale(total,used){
+  return `<div class="scale">${Array.from({length:total},(_,i)=>
+    `<div class="seg${i<used?' on':''}"></div>`).join('')}</div>`;
+}
+function pw(title,total,used,done,icon){
+  /* Счётчик из ТЗ («… 0/1», «… 0/3») в заголовке не показываем — под ним
+     и так стоит шкала с подписью. В данных формулировка остаётся дословной. */
+  const t=String(title).replace(/\s+\d+\/\d+\s*$/,'');
+  const head = icon
+    ? `<div class="head"><img src="${icon}" alt=""><p class="h3">${esc(t)}</p></div>`
+    : `<p class="h3">${esc(t)}</p>`;
+  return `<div class="pw">${head}
+    <div class="progress">${scale(total,used)}<div class="done">${esc(done)}</div></div></div>`;
+}
+function coupons(){
+  return `<div class="coupons">${COUPONS.map((c,i)=>{
+    const on=usedCoupons.has(i);
+    return `<button class="coupon${on?' used':''}" data-c="${i}">
+      <img class="logo" src="${FACTORY[i%FACTORY.length]}" alt="">
+      <span class="txt"><b>${esc(c[0])}</b><span>${esc(c[1])}</span></span>
+      <span class="st">${on
+        ? '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#80BA27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 8 14.5 16 6"/></svg>'
+        : `<img src="${ICON.lock}" alt="" style="width:20px;height:20px;display:block">`}</span>
+    </button>`}).join('')}</div>`;
+}
+function products(){
+  return `<div class="grid">${HIT_PRODUCTS.map((p,i)=>
+    `<div class="pcard">
+       <div class="pic"></div>
+       <div class="pbody">
+         <div class="ttl">${esc(p.n)}<i data-d="${i}" title="Описание товара">i</i></div>
+         <div class="old">${esc(p.old)} ₽/шт</div>
+         <div class="cur">${esc(p.c)} ₽/шт</div>
+         <button class="add" data-add="${i}">В корзину</button>
+       </div>
+     </div>`).join('')}</div>`;
+}
+
+function block(b){
+  switch(b.t){
+    case 'h3':      return `<p class="h3">${esc(b.v)}</p>`;
+    case 'text':    return `<div class="body">${b.v.map(p=>
+                      `<p>${esc(p).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>')}</p>`).join('')}</div>`;
+    case 'bullets': return `<ul class="bullets">${b.v.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+    case 'banner': {
+      if(id==='email'&&giftChosen) return '';
+      /* «[изображение иконок]» в ТЗ — это место под иконки акций, подставляем их */
+      const txt=esc(b.v).replace('[изображение иконок]',
+        '<span class="pig">'+PROMO_ICONS.map(([n,src])=>
+          `<img class="pi" src="${src}" alt="${n}">`).join('')+'</span>');
+      const cls=txt.includes('class="pi"') ? 'banner icons' : 'banner';
+      return `<div class="${cls}"><img src="${ICON.info}" alt=""><p>${txt}</p></div>`;
+    }
+    case 'pw':      return pw(b.v,b.total,b.used,b.done,b.icon?ICON[b.icon]:'');
+    case 'gift':    return `<div class="pw"><div class="head">`+
+                      `<img src="${ICON.gift}" alt=""><p class="h3">${esc(b.v)}</p></div></div>`;
+    case 'task': {
+      /* задание засчитано — шкала заполнена целиком */
+      const u = ((id==='email'&&emailOk) || Steps.isDone(id)) ? b.total : b.used;
+      return pw(b.v,b.total,u,`Выполнено ${u} из ${b.total}`);
+    }
+    case 'coupons': return coupons();
+    case 'products':return products();
+    case 'giftbox': return giftbox();
+    case 'giftbtn': return giftbtn();
+    case 'btn':     return `<button class="btn" data-btn="${esc(b.v)}"`+
+                             `${b.done?' data-done="1"':''}>${esc(b.v)}</button>`;
+  }
+  return '';
+}
+
+function render(){
+  document.getElementById('icBack').src=ICON.back;
+  document.getElementById('navTitle').textContent=S.nav;
+  document.title='КуулКлевер — '+S.nav;
+  const H=HERO[id];
+  const hero=H
+    ? `<div class="hero" style="background:${H.bg}">${H.src?`<img src="${H.src}" alt="">`:''}</div>`
+    : `<div class="hero"></div>`;
+  /* Прогресс-бар задания идёт сразу после фото, остальные блоки — в порядке ТЗ.
+     Шкалы офферов (t:'pw') это не касается: они относятся к своему блоку текста. */
+  const blocks=[...S.blocks.filter(b=>b.t==='task'), ...S.blocks.filter(b=>b.t!=='task')];
+  document.getElementById('scroll').innerHTML=
+    hero+`<div class="main">${blocks.map(block).join('')}</div>`;
+  Micro.reveal('.main > *');
+
+  document.getElementById('tabbar').innerHTML=
+    `<div class="tab-panel">${TABI.map(([t,src],i)=>
+      `<a class="tab${i===0?' active':''}" href="${i===0?'index.html':'#'}">
+         <img src="${src}" alt=""><span>${t}</span>
+         ${t==='Корзина'?'<span class="badge">13</span>':''}
+       </a>`).join('')}</div>
+     <div class="home-ind-wrap"><i></i></div>`;
+}
+
+/* ===== модалка промокода (3.2.2) ===== */
+const mScrim=document.getElementById('mScrim'), sheet=document.getElementById('sheet');
+const openSheet=v=>{mScrim.classList.toggle('on',v);sheet.classList.toggle('on',v)};
+mScrim.onclick=()=>{openSheet(false);render()};
+
+/* Блок подарков. Состояния из макетов 8364:114196:
+   задание не выполнено → карточки закрыты; выполнено → можно выбрать;
+   выбрано → «Ваш подарок»; забрано → без кнопки. */
+function giftbox(){
+  const head = !emailOk ? ['Подарок на выбор','Откроется после выполнения задания']
+    : !giftChosen       ? ['Подарок на выбор','Успейте выбрать в течении 14 дней']
+    : !giftInCart       ? ['Ваш подарок','Успейте добавить в корзину в течении 14 дней']
+    :                     ['Ваш подарок',''];
+  const cards=GIFTS.map((g,i)=>{
+    const on  = giftPick===i;
+    const off = !emailOk || giftChosen;
+    return `<button class="gcard${on?' on':''}${off?' off':''}" data-gift="${i}"${off?' disabled':''}>
+      <span class="pic">${g.pic?`<img src="${g.pic}" alt="">`:''}${
+        !emailOk&&GLOCK?`<span class="veil"><img src="${GLOCK}" alt=""></span>`:''}</span>
+      <span class="cap">${esc(g.n)}</span></button>`}).join('');
+  return `<div class="gcont">
+    <div class="tbox"><h4>${esc(head[0])}</h4>${head[1]?`<p>${esc(head[1])}</p>`:''}</div>
+    <div class="grail">${cards}</div></div>`;
+}
+
+/* Нижняя кнопка меняет подпись и активность вместе с состоянием */
+function giftbtn(){
+  if(giftInCart) return '';
+  if(!emailOk)   return `<button class="btn" data-email>Добавить Email</button>`;
+  if(!giftChosen) return `<button class="btn${giftPick===null?' off':''}" data-pick${
+    giftPick===null?' disabled':''}>Выбрать</button>`;
+  return `<button class="btn" data-cart>Добавить в корзину</button>`;
+}
+
+/* Модалка ввода email (8364:101368) */
+function emailSheet(){
+  sheet.innerHTML=`
+    <div class="nav"><h4>Ваш Email</h4>
+      <button class="close" id="sheetClose" aria-label="Закрыть">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="#1E1E1E" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button></div>
+    <input class="fld" id="emFld" type="email" inputmode="email" autocomplete="email" placeholder="Email">
+    <div class="row2">
+      <button class="btn" data-emok>Готово</button>
+      <button class="btn soft" data-emno>Отмена</button>
+    </div>
+    <p class="pol">Подтверждая Email, Вы принимаете <u>Политику в отношении обработки персональных</u> данных и даете согласие на обработку своих персональных данных в соответствии с ней.</p>`;
+  document.getElementById('sheetClose').onclick=()=>openSheet(false);
+  openSheet(true);
+  setTimeout(()=>document.getElementById('emFld').focus(),260);
+}
+
+/* Модалка «Ваш подарок» (8364:113504) */
+function giftSheet(i){
+  const g=GIFTS[i];
+  sheet.innerHTML=`
+    <div class="nav"><h4>Ваш подарок</h4>
+      <button class="close" id="sheetClose" aria-label="Закрыть">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="#1E1E1E" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button></div>
+    <div class="gwin">
+      <p class="gh">Отличный выбор !</p>
+      <p class="gh">Это о-o-oчень <span class="lab">вкусно!</span></p>
+      <div class="gbig"><img src="${g.big||g.pic}" alt=""><div class="cap">${esc(g.n)}</div></div>
+      <button class="btn" data-cart>Добавить в корзину</button>
+    </div>`;
+  /* Закрыли крестиком — подарок уже выбран, экран переходит в «Ваш подарок»
+     с кнопкой «Добавить в корзину» (макет 8364:113849). */
+  document.getElementById('sheetClose').onclick=()=>{giftChosen=true;openSheet(false);render()};
+  openSheet(true);
+}
+
+function coupon(i){
+  const c=COUPONS[i], code='ПИРОГ';
+  sheet.innerHTML=`
+    <div class="nav"><h4>Промокод</h4>
+      <button class="close" id="sheetClose" aria-label="Закрыть">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="#1E1E1E" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button></div>
+    <div class="ticket">
+      <div class="top"><img src="${FACTORY[i%FACTORY.length]}" alt="">
+        <span><b>${esc(c[0])}</b><span>${esc(c[1])}</span></span></div>
+      <div class="cut"></div>
+      <div class="bottom">
+        <div class="till">до 21 июля 2026 по промокоду</div>
+        <div class="code">${code}</div>
+      </div>
+    </div>
+    <div class="hint">
+      <p>Покажите QR-код на кассе или примените купон при оформлении заказа в приложении — скидка на выбранную категорию товаров применится автоматически.</p>
+      <p>За одну покупку можно использовать только один купон. Следующий купон станет доступен через 12 часов после покупки, в которой был использован предыдущий.</p>
+    </div>
+    <div class="btns">
+      <button class="btn" data-apply="${i}">Применить к онлайн-заказу</button>
+      <button class="btn soft" data-qr="${i}">Получить QR-код для кассы</button>
+    </div>`;
+  document.getElementById('sheetClose').onclick=()=>openSheet(false);
+  openSheet(true);
+}
+
+/* Горизонтальная прокрутка карусели подарков: свайп на тачскрине работает сам,
+   на десктопе добавляем колесо и перетаскивание мышью. Карусель пересоздаётся
+   при каждом render(), поэтому слушаем на общем контейнере. */
+(function(){
+  const box=document.getElementById('scroll');
+  const rail=e=>e.target.closest('.grail');
+  box.addEventListener('wheel',e=>{
+    const el=rail(e); if(!el) return;
+    if(Math.abs(e.deltaY)<=Math.abs(e.deltaX)) return;          /* уже горизонтальный жест */
+    const max=el.scrollWidth-el.clientWidth;
+    if((e.deltaY<0&&el.scrollLeft===0)||(e.deltaY>0&&el.scrollLeft>=max-1)) return; /* край — отдаём странице */
+    el.scrollLeft+=e.deltaY; e.preventDefault();
+  },{passive:false});
+
+  let el=null,id=null,x0=0,s0=0,moved=0;
+  box.addEventListener('pointerdown',e=>{
+    if(e.pointerType==='touch') return;                         /* нативный свайп не трогаем */
+    el=rail(e); if(!el) return;
+    id=e.pointerId; x0=e.clientX; s0=el.scrollLeft; moved=0;
+  });
+  box.addEventListener('pointermove',e=>{
+    if(!el||e.pointerId!==id) return;
+    const dx=e.clientX-x0;
+    if(!moved&&Math.abs(dx)<4) return;
+    if(!moved){ moved=1; el.classList.add('dragging'); el.setPointerCapture(id) }
+    el.scrollLeft=s0-dx; e.preventDefault();
+  });
+  const stop=e=>{
+    if(!el||e.pointerId!==id) return;
+    if(moved) el.releasePointerCapture(id);
+    el.classList.remove('dragging'); el=null; id=null;
+  };
+  box.addEventListener('pointerup',stop);
+  box.addEventListener('pointercancel',stop);
+  /* клик после перетаскивания не должен выбирать подарок */
+  box.addEventListener('click',e=>{ if(moved){ e.stopPropagation(); moved=0 } },true);
+})();
+
+/* ===== события ===== */
+document.getElementById('scroll').onclick=e=>{
+  const c=e.target.closest('[data-c]');
+  if(c){ coupon(+c.dataset.c); return }
+  const d=e.target.closest('[data-d]');
+  if(d){ showNote(`<b>Описание товара</b><br>${HIT_PRODUCTS[+d.dataset.d].d}`); return }
+  if(e.target.closest('[data-add]')){ showNote('<b>Товар добавлен в корзину</b><br>Задание засчитывается после оплаты покупки.'); return }
+  const g=e.target.closest('[data-gift]');
+  if(g && !g.disabled){ giftPick=+g.dataset.gift; render(); return }
+  if(e.target.closest('[data-email]')){ emailSheet(); return }
+  const pk=e.target.closest('[data-pick]');
+  if(pk && !pk.disabled){ giftSheet(giftPick); return }
+  if(e.target.closest('[data-cart]')){
+    giftChosen=true; giftInCart=true; render();
+    showNote(`<b>${esc(GIFTS[giftPick].n)} в корзине</b><br>Подарок добавлен к заказу.`); return }
+  const b=e.target.closest('[data-btn]');
+  if(b){
+    if(b.dataset.done) completeTask(b);
+    else showNote(id==='push'
+      ? '<b>Системный запрос на push-уведомления</b><br>Диалог показывает ОС — в прототипе заглушка.'
+      : `<b>→ ${esc(b.dataset.btn)}</b><br>Целевой раздел приложения. В прототипе — заглушка.`);
+  }
+};
+
+/* ===== Кнопка засчитывает задание =====
+   Шкала задания заполняется, шаг уходит в общее состояние чек-листа —
+   вернувшись в КуулСтарт, увидите его во вкладке «Выполненные». */
+function completeTask(btn){
+  if(Steps.isDone(id)){
+    showNote('<b>Задание уже выполнено</b><br>Шаг отмечен в чек-листе КуулСтарта.');
+    return;
+  }
+  Steps.complete(id);
+  render();
+  Micro.flash(document.querySelector('.pw .scale'));
+  Micro.bump(document.querySelector('.pw .done'));
+  Micro.bump(btn);
+  showNote(id==='push'
+    ? '<b>Уведомления разрешены</b><br>Задание засчитано — шаг отмечен в КуулСтарте.'
+    : `<b>Задание засчитано</b><br>Шаг отмечен в КуулСтарте. Дальше — ${esc(btn.dataset.btn)}.`);
+}
+sheet.onclick=e=>{
+  if(e.target.closest('[data-emok]')){
+    const v=document.getElementById('emFld').value.trim();
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){ showNote('<b>Проверьте адрес</b><br>Нужен email вида name@mail.ru'); return }
+    /* адрес подтверждён — задание засчитано и уходит в чек-лист КуулСтарта */
+    emailOk=true; Steps.complete('email'); openSheet(false); render();
+    Micro.flash(document.querySelector('.pw .scale'));
+    Micro.bump(document.querySelector('.pw .done'));
+    showNote(`<b>Email подтверждён</b><br>${esc(v)} — задание засчитано, подарки открыты.`); return }
+  if(e.target.closest('[data-emno]')){ openSheet(false); return }
+  if(e.target.closest('[data-cart]')){
+    giftChosen=true; giftInCart=true; openSheet(false); render();
+    showNote(`<b>${esc(GIFTS[giftPick].n)} в корзине</b><br>Подарок добавлен к заказу.`); return }
+  const a=e.target.closest('[data-apply]');
+  if(a){ usedCoupons.add(+a.dataset.apply); openSheet(false); render();
+    showNote('<b>Купон применён к онлайн-заказу</b><br>Следующий купон станет доступен через 12 часов.'); return }
+  const q=e.target.closest('[data-qr]');
+  if(q) showNote('<b>QR-код для кассы</b><br>Экран QR в макете не задан — заглушка.');
+};
+
+render();
+
+/* Возврат из bfcache: шаг могли засчитать или сбросить на другом экране */
+Steps.onRestore(()=>{
+  emailOk=Steps.isDone(id);
+  render();
+});
+</script>
+</body>
+</html>

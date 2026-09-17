@@ -1,0 +1,81 @@
+/* ===== Микро-анимации прототипа =====
+   Подключается на всех экранах. Три части:
+   1) отклик на нажатие — чистый CSS, работает и для перерисованной разметки;
+   2) появление блоков при скролле — класс вешает micro.js, анимация через WAAPI;
+   3) перелёт выполненного шага во вкладку «Выполненные» — тоже micro.js.
+   Всё уважает prefers-reduced-motion: там micro.js просто ничего не анимирует. */
+
+:root{
+  --mc-fast:.18s;
+  /* Выкат без резкого старта: прежняя кривая стартовала рывком (0.2/0.8),
+     из-за чего короткие анимации читались дёрганными. */
+  --mc-ease:cubic-bezier(.22,.61,.36,1);
+}
+
+/* ===== 1. Отклик на нажатие =====
+   Мелкие управляющие элементы жмутся заметно, крупные карточки — едва-едва:
+   на карточке 343×n даже 3% выглядят как прыжок. */
+.back,.tab,.fav,.add,.btn,.use,.plus,.profile-btn,
+.seg button,.seg2 button,.dseg button,.coupon,.gcard,.sheet .btn{
+  transition:transform var(--mc-fast) var(--mc-ease),
+             filter var(--mc-fast) var(--mc-ease)}
+.back:active,.tab:active,.fav:active,.add:active,.btn:active,.use:active,.plus:active,
+.profile-btn:active,.seg button:active,.seg2 button:active,.dseg button:active,
+.coupon:active,.gcard:active,.sheet .btn:active{transform:scale(.94)}
+
+.item,.pcard,.ecard,.card-guest,.cupon,.cool{
+  transition:transform var(--mc-fast) var(--mc-ease)}
+.item:active,.pcard:active,.ecard:active,.card-guest:active,.cupon:active,
+.cool:active{transform:scale(.985)}
+
+/* Карточка товара не должна дёргаться, когда жмут сердечко внутри неё */
+.pcard:has(.fav:active){transform:none}
+
+/* ===== Прокрутка =====
+   Инерция на старых iOS; contain не даёт прокрутке «протекать» наружу —
+   на телефоне это и pull-to-refresh посреди списка, и увод страницы назад
+   свайпом по горизонтальной карусели. */
+.scroll{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.rail,.grid,.cupons,.grail,.minis,.promos{overscroll-behavior-x:contain}
+
+/* ===== 2. Появление блоков =====
+   Класс снимается в тот же кадр, в котором стартует WAAPI-анимация, поэтому
+   мигания нет. Без JS класс не появляется вовсе — контент виден сразу. */
+.mc-rv{opacity:0;will-change:opacity,transform}
+
+/* ===== 3. Перелёт карточки =====
+   Клон живёт внутри .screen, чтобы попадать в систему координат макета
+   (у него свой transform: scale) и обрезаться по краям «телефона». */
+.mc-fly{position:absolute;inset:auto;z-index:70;margin:0;pointer-events:none;
+  will-change:transform,opacity;
+  /* inset:auto сбрасывает inset:0 клонируемого элемента — координаты задаются инлайном */
+  box-shadow:0 14px 32px rgba(0,0,0,.22)}
+
+/* ===== Бегунок сегмент-контрола =====
+   Белая плашка активной вкладки едет между кнопками вместо мгновенной перекраски.
+   Отступ 4px повторяет padding самого контрола. */
+.mc-has-pill{position:relative}
+/* Кнопки контрола равной ширины (flex:1), поэтому ширина плашки постоянна:
+   анимируем только transform. Раньше в переходе была и width — то есть
+   пересчёт раскладки на каждом кадре вместо чистой композиции. */
+.mc-has-pill>.mc-pill{position:absolute;left:0;top:4px;bottom:4px;width:0;
+  border-radius:12px;background:#fff;pointer-events:none;will-change:transform;
+  filter:drop-shadow(0 4px 6px rgba(0,0,0,.08)) drop-shadow(0 0 2px rgba(0,0,0,.04));
+  transition:transform .3s var(--mc-ease)}
+.mc-has-pill>.mc-pill.mc-jump{transition:none}   /* первая установка — без проезда */
+.mc-has-pill>button{position:relative;z-index:1;background:transparent!important;
+  filter:none!important;transition:color .2s var(--mc-ease),transform var(--mc-fast) var(--mc-ease)}
+
+/* ===== Полноэкранный режим на телефоне =====
+   Рамка, тень и тёмная подложка — это мокап, он нужен только на десктопе.
+   На сенсорном экране прототип разворачивается во весь экран; масштаб
+   и высоту «телефона» пересчитывает Micro.fitFull(). */
+.mc-full body{background:#fff}
+.mc-full .phone{border-radius:0;box-shadow:none}
+.mc-full .screen{border-radius:0}
+
+@media (prefers-reduced-motion:reduce){
+  .mc-rv{opacity:1}
+  .mc-has-pill>.mc-pill{transition:none}
+  *{scroll-behavior:auto!important}
+}

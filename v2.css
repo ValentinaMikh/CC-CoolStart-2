@@ -1,0 +1,191 @@
+/* ===== Вариант дизайна 2 — «Start Main 2» (Figma 1113:3866 / 1113:3850) =====
+   Подключается на главной и в чек-листе; включается классом v2 на <html>,
+   который ставит Steps.applyDesign() по настройке в панели тестировщика.
+   Первый вариант при этом остаётся нетронутым — ни одно правило отсюда
+   не действует без класса v2. */
+
+:root{
+  /* Фирменный градиент КуулСтарта. В макете это картинка поверх белого
+     в режиме multiply; здесь — CSS-градиент: то же самое без лишнего файла,
+     который к тому же тянулся бы с figma.com. */
+  --v2-grad:
+    radial-gradient(88% 58% at 100% 0%, #FCC63F 0%, rgba(252,198,63,0) 56%),
+    linear-gradient(138deg, #F35CA0 0%, #F87A3B 44%, #F4693C 100%);
+  --v2-grad-w:
+    radial-gradient(85% 135% at 100% 8%, #FBC142 0%, rgba(251,193,66,0) 66%),
+    linear-gradient(96deg, #F2568F 0%, #F56C33 55%, #F8912A 100%);
+  --v2-chip:#DC692D;      /* плашка счётчика на виджете */
+  --v2-sub:#F7F7F7;       /* фон карточки чек-листа */
+}
+
+/* Серпантин. В макете это не фон, а отдельные слои с точными координатами
+   и отражением по вертикали, поэтому размеры и позиции заданы числами из
+   Figma, а не подогнаны на глаз. Картинка полупрозрачная — лежит поверх
+   градиента как есть. */
+.v2 .v2-conf{position:absolute;pointer-events:none;max-width:none}
+
+/* ===== Виджет КуулСтарта на главной (1113:3850) ===== */
+.v2 .cool{position:relative;display:block;width:343px;min-height:142px;
+  border:0;border-radius:24px;overflow:hidden;background:var(--v2-grad-w);
+  color:#fff;text-decoration:none}
+.v2 .cool .bg,.v2 .cool .sk{display:none}          /* фото и скелетон — из первого варианта */
+/* 1113:3847: картинка 95×95 повёрнута на −30°, центр в (269.3, 62.3)
+   карточки 343×142 — отсюда left/top. */
+.v2 .cool .v2-cup{position:absolute;left:221.8px;top:14.8px;width:95px;height:95px;
+  transform:rotate(-30deg);pointer-events:none;
+  filter:drop-shadow(0 8px 16px rgba(120,40,0,.25))}
+/* 1113:4660: 297×245 от левого края 225, отражён по вертикали */
+.v2 .cool .v2-conf{left:225px;top:0;width:297px;height:245px;transform:scaleY(-1)}
+.v2 .cool .v2-body{position:relative;display:flex;flex-direction:column;gap:24px;padding:16px}
+.v2 .cool .v2-time{display:flex;gap:4px;align-items:center}
+.v2 .cool .v2-time img{width:16px;height:16px;display:block}
+.v2 .cool .v2-time span{font-size:14px;line-height:18px;font-weight:400}
+.v2 .cool .v2-row{display:flex;gap:24px;align-items:flex-end}
+.v2 .cool .v2-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+.v2 .cool .v2-txt b{font-size:20px;line-height:24px;font-weight:600}
+.v2 .cool .v2-txt span{font-size:14px;line-height:18px;font-weight:500}
+.v2 .cool .v2-chip{flex:none;display:flex;gap:4px;align-items:center;
+  padding:8px;border-radius:12px;background:var(--v2-chip)}
+.v2 .cool .v2-chip img{width:18px;height:18px;display:block}
+.v2 .cool .v2-chip span{font-size:14px;line-height:18px;font-weight:500;white-space:nowrap}
+
+/* ===== Шапка чек-листа (1113:3867) ===== */
+.v2 .head{position:relative;background:#fff;
+  border-radius:0 0 24px 24px;overflow:hidden}
+/* Содержимое шапки поднимаем над серпантином и кругом. Сами слои исключаем:
+   правило идёт ниже и с той же специфичностью, иначе оно вернуло бы им
+   position:relative — они встали бы в поток и раздвинули шапку. */
+.v2 .head>*:not(.v2-conf):not(.v2-glow){position:relative}
+
+/* ===== Этапы прохождения (1144:2370) =====
+   Шапка белая, а фирменный градиент проявляется кругом вокруг кубка и растёт
+   вместе с прогрессом: в макете 137 → 245 → 411 → 691 px на 2, 5, 9 и 10
+   шагах. Градиент при этом никуда не едет — жёлтый угол в макете остаётся
+   на месте во всех состояниях, — поэтому растёт не сам слой, а вырез маски.
+   Центр выреза — середина кубка: 44px под статус-бар, 56px навбара,
+   40px отступа группы и половина картинки 119px.
+   Размеры объявлены через @property: иначе браузер считает их просто текстом
+   и переход между этапами получился бы скачком. */
+@property --v2-r{syntax:'<length>';inherits:false;initial-value:0px}
+@property --v2-p{syntax:'<percentage>';inherits:false;initial-value:0%}
+@property --v2-h{syntax:'<percentage>';inherits:false;initial-value:50%}
+
+.v2 .head .v2-glow{position:absolute;inset:0;pointer-events:none;
+  background:var(--v2-grad);--v2-r:0px;
+  -webkit-mask-image:var(--v2-hole);mask-image:var(--v2-hole);
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  opacity:var(--v2-a,1);
+  transition:--v2-r .6s var(--mc-ease),--v2-p .6s var(--mc-ease),
+             --v2-h .6s var(--mc-ease),opacity .6s var(--mc-ease)}
+/* В макете это эллипс с размытием в 75px — одинаковым на всех этапах,
+   поэтому у маленького круга размытым оказывается почти всё, и градиент
+   едва проступает из белого, а у большого мягкий только самый край. */
+.v2 .head .v2-glow{--v2-hole:radial-gradient(circle var(--v2-r) at 50% 199px,
+    #000 0%, #000 var(--v2-p), rgba(0,0,0,.5) var(--v2-h), rgba(0,0,0,0) 100%)}
+
+/* Серпантин в макете появляется только на финише: до него шапка спокойная.
+   Сами слои до этого момента не создаются (иначе картинка скачалась бы
+   впустую) — правило страхует момент перерисовки. */
+.v2 .head:not(.is-full) .v2-conf{display:none}
+
+/* Пока чек-лист не закрыт, текст и полоса прогресса тёмные — на белом.
+   На финише шапка залита градиентом, и всё в ней становится белым. */
+.v2 .head:not(.is-full) .bar{background:var(--v2-sub)}
+.v2 .head.is-full .nav-title,
+.v2 .head.is-full .lead,
+.v2 .head.is-full .done span,
+.v2 .head.is-full .pstate{color:#fff}
+.v2 .head.is-full .done img,
+.v2 .head.is-full .back img{filter:brightness(0) invert(1)}
+/* Плашка награды до финиша чуть прозрачная (1144:2056) */
+.v2 .head:not(.is-full) .award .kgl{background:rgba(220,105,45,.8)}
+
+/* ===== Последний этап: КеГЛи уже начислены (1144:2303) =====
+   Плашки с суммой больше нет — вместо неё заголовок, а кубок стоит
+   в венке из КеГЛей. Картинка выше остальных этапов, поэтому отрицательные
+   поля возвращают блоку прежнюю высоту: шапка не прыгает при переходе. */
+.v2 .head.is-paid .award .kgl{display:none}
+.v2 .head.is-paid .award .cap{display:block;width:343px;
+  font-size:20px;line-height:24px;font-weight:600;color:#fff}
+/* Кубок на двух картинках стоит в разных местах холста: в «Image 5» его
+   центр в (58, 62) от угла, в «KGL Image» — в (124, 127). При подмене он
+   уезжал на 30px вниз и 7px вправо — это и был скачок. Трансформ возвращает
+   его на место; раскладку он не трогает, так что высота блока прежняя. */
+.v2 .v2-cup-big.is-kgl{width:237px;height:190px;margin-block:-35px;
+  transform:translate(-7px,-30px)}
+/* 1113:4657: 375×309 от верха 62, перевёрнут, приглушён до 20% */
+.v2 .head .v2-conf1{left:0;top:62px;width:375px;height:309px;
+  transform:rotate(180deg);opacity:.2}
+/* 1113:4659: тот же кадр, что на виджете — 297×245, левый край 56.9, верх −57.
+   В макете этот слой лежит внутри группы с кубком, а не всей шапки, поэтому
+   и здесь он вложен в .group: так ленты оказываются вокруг кубка независимо
+   от высоты навбара. */
+.v2 .group{position:relative}
+.v2 .group>*:not(.v2-conf){position:relative}
+.v2 .group .v2-conf2{left:56.9px;top:-57px;width:297px;height:245px;transform:scaleY(-1)}
+.v2 .back{background:rgba(255,255,255,.4)}
+.v2 .group{gap:16px;padding:40px 16px 24px}
+/* В макете 2 шапка идёт кубок → награда → подсказка → прогресс, а счётчика
+   дней в ней нет: он остался только на виджете главной. Разметка общая
+   с первым вариантом, поэтому переставляем порядком, а не перерисовкой. */
+.v2 .timeout{display:none}
+.v2 #v2Cup,.v2 #v2Cup3d{order:0}
+/* Трёхмерный кубок стоит на месте картинки, но площадь ему нужна больше:
+   в 119px пальцем не повращаешь. Отрицательные поля возвращают блоку
+   прежнюю высоту, поэтому остальная шапка не едет. */
+.v2 .v2-cup-3d{width:208px;height:208px;margin-block:-44px;flex:none;
+  touch-action:none}
+.v2 .v2-cup-3d canvas{display:block;width:100%;height:100%}
+/* Просмотрщик сам вставляет кнопку-подсказку «Удерживайте кубок 2 секунды».
+   В шапке на 208px она перекрывает и кубок, и плашку награды, поэтому
+   прячем: удержание работает и по самому кубку. */
+.v2 .v2-cup-3d>button{display:none!important}
+/* Подпись вместо неё. Отрицательный отступ съедает зазор колонки, и
+   подпись встаёт вплотную под основание кубка — в нижнем свесе холста,
+   где и так пусто. На залитой градиентом шапке серый не читается,
+   там подпись светлая. */
+.v2 .v2-cup-hint{order:0;margin-top:-2px;width:100%;text-align:center;
+  font-size:12px;line-height:16px;font-weight:500;color:rgba(30,30,30,.45)}
+.v2 .head.is-full .v2-cup-hint{color:rgba(255,255,255,.75)}
+.v2 .award{order:1;margin-top:16px}
+.v2 .progress{order:3;margin-top:16px}
+.v2 .v2-cup-big{width:119px;height:119px;display:block;
+  filter:drop-shadow(0 12px 24px rgba(120,40,0,.28))}
+.v2 .award{gap:16px}
+/* 1133:5304 — обновлённая шапка: награда вынесена в плашку того же цвета,
+   что счётчик на виджете, а подписи «за прохождение КуулСтарта» в этой
+   версии макета нет. Разметка общая с первым вариантом, поэтому подпись
+   не удаляем, а скрываем. */
+.v2 .award .kgl{gap:8px;padding:8px 16px;border-radius:16px;background:var(--v2-chip)}
+.v2 .award .kgl b{font-size:28px;line-height:36px;font-weight:800;color:#fff}
+.v2 .award .cap{display:none}
+.v2 .lead{order:2;font-size:14px;line-height:18px;font-weight:500}
+
+/* Сегмент-контрол переезжает из шапки в белый блок под ней */
+.v2 .seg{background:var(--v2-sub)}
+
+/* ===== Карточка чек-листа (1113:4166) ===== */
+.v2 .sect{gap:16px}
+.v2 .list{gap:8px}
+.v2 .item{position:relative;width:343px;padding:16px;border-radius:24px;
+  background:var(--v2-sub);gap:12px}
+.v2 .item.corn,.v2 .item.peach{background:var(--v2-sub)}   /* цветных вариантов во 2-м нет */
+.v2 .item .top{gap:12px;align-items:flex-start}
+.v2 .thumb{width:64px;height:64px;border-radius:12px;background:none}
+.v2 .thumb img.fill{object-fit:contain}
+.v2 .item .content{width:auto;flex:1;min-width:0;gap:8px}
+.v2 .item h3{font-size:16px;line-height:20px;font-weight:700}
+/* Пунктирный разделитель перед строкой оффера — в макете это Vector 1 */
+.v2 .item .offer{width:100%;align-self:stretch;background:none;border-radius:0;
+  padding:8px 0 0;gap:8px;border-top:1px dashed #BCBCBC;margin-top:4px}
+.v2 .item .lock{padding-top:4px}
+
+/* Номер шага. В макете кружок белый с тем же градиентом в multiply —
+   берём градиент напрямую, чтобы цифра читалась на любом фоне. */
+.v2 .item .v2-num{position:absolute;left:10px;top:9px;width:23px;height:23px;
+  border-radius:40px;background:var(--v2-grad-w);display:grid;place-items:center;
+  font-size:16px;line-height:20px;font-weight:700;color:#fff}
+
+@media (prefers-reduced-motion:reduce){
+  .v2 .head .v2-glow{transition:none}
+}

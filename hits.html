@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>КуулКлевер — Попробуй один из хитов</title>
+<link rel="stylesheet" href="micro.css">
+<script src="micro.js"></script>
+<script src="steps.js"></script>
+<style>
+:root{--green:#80BA27;--accent:#F45500;--ink:#1E1E1E;--ink-2:#4F4F4F;--ink-3:#808080;--ink-4:#DFDFDF;
+  --sub:#F7F7F7;--hair:#E5E5E5;--olive:#DEE99B}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text",Inter,system-ui,sans-serif;
+  display:flex;align-items:center;justify-content:center;overflow:hidden}
+#stage{transform-origin:center center}
+.phone{width:375px;height:812px;position:relative;overflow:hidden;background:var(--sub);border-radius:44px;
+  box-shadow:0 40px 90px rgba(0,0,0,.6),0 0 0 10px #111,0 0 0 11px #2A2C2E;color:var(--ink)}
+.screen{position:absolute;inset:0;overflow:hidden;border-radius:44px}
+
+/* ===== Top Navigation (8330:60409) ===== */
+.topnav{position:absolute;top:0;left:0;right:0;z-index:40;background:#fff;padding-bottom:8px;
+  display:flex;flex-direction:column;align-items:center}
+.status{width:100%;height:44px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 26px;font-size:15px;font-weight:600;color:var(--ink)}
+.status .right{display:flex;align-items:center;gap:5px}
+.navbar{position:relative;width:100%;display:flex;align-items:center;padding:8px 16px;min-height:56px}
+.back{flex:none;width:40px;height:40px;border-radius:12px;background:var(--sub);
+  display:grid;place-items:center;cursor:pointer;text-decoration:none}
+.back img{width:20px;height:20px;display:block}
+.nav-title{position:absolute;left:16.33%;right:16.33%;top:50%;transform:translateY(-50%);
+  font-size:16px;line-height:20px;font-weight:600;color:var(--ink);text-align:center;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.scroll{position:absolute;inset:108px 0 86px 0;overflow-y:auto;overflow-x:hidden;background:#fff}
+.scroll::-webkit-scrollbar{display:none}
+/* Content (8330:60279): белый, gap 24 */
+.content{display:flex;flex-direction:column;gap:24px;align-items:flex-start;padding-bottom:24px}
+
+.hero{position:relative;width:375px;height:204px;background:var(--olive);overflow:hidden;flex:none}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:bottom;display:block}
+
+/* Main content (8330:60282): p16 gap16 */
+.main{width:100%;padding:16px;display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+.lead{width:100%;font-size:16px;line-height:20px;font-weight:400;color:var(--ink)}
+.h3{width:100%;font-size:18px;line-height:22px;font-weight:600;color:var(--ink)}
+
+/* progress widget (8330:60286) */
+.pw{width:100%;display:flex;flex-direction:column;gap:16px}
+.pw .progress{width:100%;display:flex;flex-direction:column;gap:8px;border-radius:8px}
+.pw .scale{width:100%;display:flex;gap:8px}
+.pw .seg{flex:1;min-width:0;height:6px;border-radius:24px;background:var(--ink-4)}
+.pw .seg.on{background:var(--green)}
+.pw .done{font-size:14px;line-height:18px;font-weight:500;color:var(--ink)}
+
+/* mini-card list (8330:60293): px16 gap12 */
+.minis{width:100%;padding:0 16px;display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+/* Segmented-control (8330:60295) */
+.seg2{width:343px;display:flex;padding:4px;border-radius:12px;background:var(--sub);overflow:hidden}
+.seg2 button{flex:1;min-width:0;padding:8px;border:0;border-radius:12px;background:transparent;cursor:pointer;
+  font-family:inherit;font-size:14px;line-height:18px;font-weight:500;color:var(--ink-2);text-align:center}
+.seg2 button.on{background:#fff;color:var(--ink);
+  filter:drop-shadow(0 4px 6px rgba(0,0,0,.08)) drop-shadow(0 0 2px rgba(0,0,0,.04))}
+.row{width:100%;display:flex;gap:12px;align-items:flex-start}
+
+/* ===== Product card UPD (8330:60297) ===== */
+.pcard{flex:none;width:164px;height:332px;background:#fff;border:1px solid var(--hair);
+  border-radius:12px;overflow:hidden;display:flex;flex-direction:column;cursor:pointer}
+.pcard .pic{position:relative;width:100%;height:160px;flex:none;padding:4px;overflow:hidden;
+  display:flex;align-items:flex-end;justify-content:flex-end}
+.pcard .pic .ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  display:block;pointer-events:none}
+.fav{position:relative;flex:none;padding:8px;border:0;border-radius:12px;background:rgba(0,0,0,.4);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;cursor:pointer}
+.fav img{width:20px;height:20px;display:block}
+.pcard .pbody{flex:1;min-height:0;width:100%;padding:12px;display:flex;flex-direction:column;
+  gap:6px;align-items:center;justify-content:center}
+.pcard .badge-row{width:100%;display:flex;align-items:center}
+.pcard .badge-row img{height:24px;width:auto;max-width:100%;display:block}
+.pcard .ttl{width:100%;flex:1;min-height:0;overflow:hidden;text-overflow:ellipsis;
+  font-size:12px;line-height:14px;font-weight:500;color:var(--ink)}
+.prices{width:100%;display:flex;flex-direction:column}
+.price{width:100%;display:flex;align-items:center;gap:4px;border-radius:3px}
+.price.cur{justify-content:space-between}
+.price .val{position:relative;display:flex;gap:2px;align-items:flex-start;white-space:nowrap}
+.price .val b{font-size:18px;line-height:22px;font-weight:600}
+.price .val i{font-size:12px;line-height:14px;font-weight:400;font-style:normal}
+.price .units{font-size:12px;line-height:14px;font-weight:400;white-space:nowrap}
+.price .grp{display:flex;gap:4px;align-items:center}
+.price.old{color:var(--ink)}
+.price.old .strike{position:absolute;top:4px;bottom:6px;left:0;right:0}
+.price.old .strike svg{width:100%;height:100%;display:block;stroke:#808080}
+.price.new{color:var(--accent)}
+.price .info{width:16px;height:16px;flex:none;display:block}
+.add{width:100%;height:34px;flex:none;padding:7px;border:0;border-radius:8px;background:var(--green);
+  display:flex;gap:8px;align-items:center;justify-content:center;cursor:pointer;font-family:inherit}
+.add img{width:16px;height:16px;flex:none;display:block}
+.add span{font-size:12px;line-height:14px;font-weight:500;color:#fff;white-space:nowrap}
+
+/* ===== Редакционная карточка (8330:60330) ===== */
+.ecard{flex:none;position:relative;width:164px;height:332px;border:1px solid var(--hair);
+  border-radius:12px;overflow:hidden;cursor:pointer;background:#b88d5a}
+.ecard .banner{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+
+/* ===== Tab Bar ===== */
+.tabbar{position:absolute;left:0;right:0;bottom:0;z-index:30;background:#fff;
+  display:flex;flex-direction:column;align-items:center}
+.tab-panel{display:flex;width:100%;border-top:1px solid var(--hair);background:#fff}
+.tab{flex:1;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:2px;padding:8px;position:relative;color:var(--ink-3);text-decoration:none}
+.tab img{width:20px;height:20px;display:block}
+.tab .lbl{font-size:10px;line-height:12px;font-weight:600;text-align:center;width:100%}
+.tab.active .lbl{color:var(--green)}
+.badge{position:absolute;top:4px;right:12px;min-width:14px;height:14px;border-radius:60px;
+  background:var(--accent);border:2px solid #fff;color:#fff;font-size:10px;line-height:12px;
+  display:grid;place-items:center;padding:1px}
+.home-ind-wrap{width:100%;background:#fff;padding:22px 8px 8px;display:grid;place-items:center}
+.home-ind-wrap i{width:134px;height:5px;border-radius:100px;background:var(--ink);display:block}
+
+/* ===== Modal / Bottom Sheet (8330:60807) ===== */
+.m-scrim{position:absolute;inset:0;background:rgba(0,0,0,.5);z-index:70;opacity:0;pointer-events:none;
+  transition:.25s}
+.m-scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:71;background:#fff;
+  border-radius:12px 12px 44px 44px;padding:16px 16px 0;transform:translateY(102%);
+  transition:transform .34s cubic-bezier(.2,.85,.25,1);max-height:86%;
+  display:flex;flex-direction:column}
+.sheet.on{transform:translateY(0)}
+.sheet .nav{position:relative;width:100%;display:flex;gap:8px;align-items:center;justify-content:center;
+  min-height:40px;flex:none}
+.sheet .nav h4{position:absolute;left:16.33%;right:16.33%;top:50%;transform:translateY(-50%);
+  font-size:16px;line-height:20px;font-weight:600;text-align:center;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sheet .nav .sp{flex:1}
+.sheet .close{flex:none;width:40px;height:40px;padding:10px;border:0;border-radius:12px;
+  background:var(--sub);display:grid;place-items:center;cursor:pointer}
+.sheet .close img{width:20px;height:20px;display:block}
+.sheet .body{flex:1;min-height:0;overflow-y:auto;padding-top:16px;
+  display:flex;flex-direction:column;gap:24px}
+.sheet .body::-webkit-scrollbar{display:none}
+.mhero{position:relative;width:100%;height:184px;flex:none;border-radius:12px;overflow:hidden}
+.mhero img{position:absolute;display:block;max-width:none}
+.mhero .lum{position:absolute;inset:0;overflow:hidden;border-radius:12px;mix-blend-mode:luminosity}
+.sheet .desc{font-size:16px;line-height:20px;font-weight:400;color:var(--ink)}
+.sheet .panel{flex:none;padding:16px 0;display:flex;flex-direction:column;gap:8px}
+.btn{width:100%;padding:14px;border:0;border-radius:12px;background:var(--green);cursor:pointer;
+  font-family:inherit;font-size:16px;line-height:20px;font-weight:500;color:#fff}
+
+.note{position:absolute;left:16px;right:16px;bottom:100px;z-index:75;background:#17181A;color:#fff;
+  border-radius:14px;padding:12px 14px;font-size:12px;line-height:1.45;
+  font-family:ui-monospace,"SF Mono",Menlo,monospace;opacity:0;transform:translateY(10px);
+  transition:.25s;pointer-events:none}
+.note.on{opacity:1;transform:translateY(0)}
+.note b{color:#A8E649}
+</style>
+</head>
+<body>
+<div id="stage">
+<div class="phone">
+<div class="screen">
+
+  <div class="topnav">
+    <div class="status">
+      <div>9:41</div>
+      <div class="right">
+        <svg width="18" height="11" viewBox="0 0 18 11" fill="currentColor"><rect y="7" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="6" rx="1"/><rect x="10" y="2.5" width="3" height="8.5" rx="1"/><rect x="15" width="3" height="11" rx="1"/></svg>
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><path d="M8.5 11.2 6.1 8.7a3.4 3.4 0 0 1 4.8 0zM3.6 6.2 2 4.5a9.2 9.2 0 0 1 13 0l-1.6 1.7a6.9 6.9 0 0 0-9.8 0zM5.2 7.8 3.8 6.4a7 7 0 0 1 9.4 0l-1.4 1.4a5 5 0 0 0-6.6 0z"/></svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.2" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="18" height="8" rx="2" fill="currentColor"/><path d="M23 4v4a2.1 2.1 0 0 0 0-4z" fill="currentColor" opacity=".45"/></svg>
+      </div>
+    </div>
+    <div class="navbar">
+      <a class="back" href="coolstart.html" title="Назад к КуулСтарту"><img id="icBack" alt=""></a>
+      <div class="nav-title">Попробуй один из хитов</div>
+    </div>
+  </div>
+
+  <div class="scroll">
+    <div class="content">
+      <div class="hero" id="hero"></div>
+      <div class="main">
+        <div class="pw">
+          <p class="h3">Купить товар из подборки хитов</p>
+          <div class="progress">
+            <div class="scale" id="taskScale"></div>
+            <div class="done" id="taskDone"></div>
+          </div>
+        </div>
+        <p class="lead">Предлагаем начать с наших «хитов»: товаров, которые искренне любим мы и уже успели полюбить наши гости.</p>
+      </div>
+      <div class="minis">
+        <p class="h3">Наши Хиты</p>
+        <div class="seg2" id="seg">
+          <button data-v="myasnov">МясновЪ</button>
+          <button data-v="otdohni">Отдохни</button>
+        </div>
+        <div id="rows" style="width:100%;display:flex;flex-direction:column;gap:12px"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tabbar" id="tabbar"></div>
+
+  <div class="m-scrim" id="mScrim"></div>
+  <div class="sheet" id="sheet"></div>
+  <div class="note" id="note"></div>
+
+</div>
+</div>
+</div>
+
+<script>
+/* ===== Ассеты из Figma (App Talk 26 → «Попробуй один из хитов», 8330:59580 / 8330:60278).
+   URL живут ~7 дней; локально: curl -L -o assets/<имя> "<url>" и подменить путь ниже. ===== */
+const A='https://www.figma.com/api/mcp/asset/';
+const RES='Resurses%20coolstart/';
+/* текстура-подложка шторки — одна и та же геометрия во всех шести макетах */
+const TEX='left:-170.15%;top:-47.44%;width:349.33%;height:342.44%';
+const COVER='inset:0;width:100%;height:100%;object-fit:cover';
+const ICON={
+  back:      RES+'ic-back.svg',
+  fav:       RES+'ic-heart.svg',
+  cart:      RES+'ic-cart.svg',
+  info:      RES+'ic-info.svg',
+  arrow:     RES+'ic-arrow.svg',
+  close:     RES+'ic-close.svg',
+  ellipse1:  RES+'ic-ellipse1.svg',
+  ellipse2:  RES+'ic-ellipse2.svg',
+  ellipse3:  RES+'ic-ellipse3.svg'};
+
+/* Шапка 204px — готовый кадр из папки «Resurses coolstart» (шаг 1) */
+const HERO=['Resurses%20coolstart/check-list%20image%20page%201.jpg'];
+
+const TABI=[
+ ['Главная',RES+'ic-tab-home.svg'],
+ ['Каталог',RES+'ic-tab-catalog.svg'],
+ ['Акции',  RES+'ic-tab-promo.svg'],
+ ['Корзина',RES+'ic-tab-cart.svg'],
+ ['Профиль',RES+'ic-tab-profile.svg']];
+
+/* ===== Подборки. pic — готовый кадр товара 164×160, ed — редакционная карточка справа ===== */
+const TABS={
+ myasnov:{label:'МясновЪ',items:[
+  {id:'pelmeni',
+   title:'пельмени МясновЪ По-царски Завод МясновЪ',
+   badge:RES+encodeURIComponent('2+1.png'),
+   price:{v:'59',c:'00',u:'₽/100 г'},
+   pic:'Resurses%20coolstart/Pic%2006.png',
+   ed:{img:'Resurses%20coolstart/Banner%202.png',
+       bg:'#b88d5a',
+       layers:[{src:'',
+                css:'inset:0;width:100%;height:100%;object-fit:cover'},
+               {src:ICON.ellipse2,css:'left:-77px;top:-96px;width:269px;height:269px'}],
+       text:'Эти пельмени были в продаже в день открытия первого магазина МясновЪ в 2003 году и стали хитом уже тогда!'},
+   mhero:{bg:'#e5c054',tex:'',layers:[
+     {src:'',css:COVER},
+     {src:'',css:'left:31.5px;top:-275px;width:198px;height:198px'}]},
+   modal:{title:'пельмени МясновЪ По-царски Завод МясновЪ',
+     text:'Эти пельмени были в продаже в день открытия первого магазина МясновЪ в 2003 году и стали хитом уже тогда! Секрет их неизменной популярности — бережно приготовленный сочный фарш из мяса ручной разделки без шприцевания. В каждой пельмешке его целых 60% веса!'}},
+
+  {id:'pirozhok',
+   title:'Пирожок Домашний с мясом 65г',
+   price:{v:'89',c:'00',u:'₽/1 шт'},
+   pic:'Resurses%20coolstart/Pic%2005.png',
+   ed:{img:'Resurses%20coolstart/Banner%204.png',
+       bg:'#b88d5a',
+       layers:[{src:'',
+                css:'left:-7.49%;top:0;width:129.55%;height:129.55%'},
+               {src:'',
+                css:'left:-66.78%;top:0.02%;width:264.68%;height:130.75%'},
+               {src:ICON.ellipse2,css:'left:-85.5px;top:-140px;width:269px;height:269px'}],
+       grad:'linear-gradient(165.74deg, rgba(87,60,34,.5) 23.06%, rgba(77,80,65,0) 40.44%)',
+       text:'В этом пирожке всё своё. Мы испекли его в нашей ремесленной пекарне из натуральных ингредиентов.'},
+   mhero:{bg:'#e5c054',tex:'',layers:[
+     {src:'',css:COVER},
+     {src:'',css:COVER},
+     {src:'',css:'left:31.5px;top:-275px;width:198px;height:198px'}]},
+   modal:{title:'Пирожок Домашний с мясом 65г',
+     text:'В этом пирожке всё своё. Мы испекли его в нашей ремесленной пекарне из натуральных ингредиентов. Фарш — из охлаждённого мяса ручной разделки без шприцевания, а тесто — на опаре из молока с нашего собственного молзавода. Именно поэтому пирожок получился точно такой, как у мамы или бабушки.'}},
+
+  {id:'chiabatta',
+   title:'Чиабатта Итальянская на закваске 210г, ферментация 24ч',
+   price:{v:'82',c:'00',u:'₽/1 шт'},
+   pic:'Resurses%20coolstart/Pic%2004.png',
+   ed:{img:'Resurses%20coolstart/Banner%206.png',
+       bg:'#b88d5a',
+       layers:[{src:'',
+                css:'left:-15.34%;top:0;width:144.22%;height:110.36%'},
+               {src:ICON.ellipse3,css:'left:-88.5px;top:-139px;width:257px;height:257px'}],
+       text:'Мы научились готовить её у пекаря, работавшего с самим изобретателем чиабатты Арнальдо Каваллари!',
+       size:14},
+   mhero:{bg:'#e5c054',tex:'',layers:[
+     {src:'',css:COVER},
+     {src:'',css:COVER},
+     {src:'',css:'left:0;top:-130.54%;width:100%;height:288.76%'},
+     {src:'',css:'left:31.5px;top:-275px;width:198px;height:198px'}]},
+   modal:{title:'Чиабатта Итальянская на закваске 210г, ферментация 24ч',
+     text:'Наша чиабатта — родная «внучка» первой чиабатты в мире: мы научились готовить её у пекаря, работавшего с самим изобретателем чиабатты Арнальдо Каваллари! Это самый первый хлеб, с которого началась история нашей ремесленной пекарни, и с тех пор правила остаются незыблемыми: тесто для чиабатты «созревает» почти сутки без ускорителей — только так получаются её неповторимые крупные поры.'}}]},
+
+ otdohni:{label:'Отдохни',items:[
+  {id:'moravochka',
+   title:'пиво МОРАВОЧКА ПРЕМИУМ 5% 0.5 ж/б, светлое, Чехия',
+   badge:RES+encodeURIComponent('3+1.png'),
+   price:{v:'219',c:'00',u:'₽/1 шт'},
+   pic:'Resurses%20coolstart/Pic%2002.png',
+   ed:{img:'Resurses%20coolstart/Banner%201.png',
+       bg:'#e5c054',dark:true,
+       layers:[{src:'',
+                css:'left:-445.95%;top:-10.8%;width:594.29%;height:195.97%;mix-blend-mode:luminosity'},
+               {src:ICON.ellipse1,css:'left:-34.5px;top:-134px;width:198px;height:198px'},
+               {src:ICON.ellipse1,css:'left:-17.5px;top:154px;width:198px;height:198px'},
+               {src:'',
+                css:'left:-8.5px;top:158px;width:193px;height:169px;object-fit:cover'}],
+       text:'Чешская классика с ярким солодовым вкусом, прозиводится «королевской» пивоварней Литовель — одной из старейших в Чехии!'},
+   mhero:{bg:'#e5c054',tex:'',layers:[
+     {src:'',css:'left:48.5px;top:13px;width:198px;height:198px'},
+     {src:'',css:'left:31.5px;top:-275px;width:198px;height:198px'},
+     {src:'',css:'left:50%;top:50%;transform:translate(-50%,-50%);width:192px;height:168px;object-fit:cover'}]},
+   modal:{title:'пиво МОРАВОЧКА ПРЕМИУМ 5% 0.5 ж/б, светлое, Чехия',
+     text:'Чешская классика с ярким солодовым вкусом, которая прозиводится «королевской» пивоварней Литовель — одной из старейших в Чехии! Почему королевская? По легенде, в 1291 году король Вацлав II разрешил жителям Литовеля варить пиво и поставлять его ко двору, присвоив ему звание «Královské pivo — королевское пиво».'}},
+
+  {id:'kolombar',
+   title:'вино ВАН ЛОФЕРЕН КОЛОМБАР 11-14% 0.75, белое, сухое, ЮАР',
+   price:{v:'939',c:'00',u:'₽/1 шт'},
+   old:{v:'1 150',c:'00',u:'₽/1 шт'},
+   pic:'Resurses%20coolstart/Pic%2001.png',
+   ed:{img:'Resurses%20coolstart/Banner%203.png',
+       bg:'#b88d5a',
+       layers:[{src:'',
+                css:'inset:0;width:100%;height:100%;object-fit:cover'},
+               {src:ICON.ellipse1,css:'left:-34.5px;top:-134px;width:198px;height:198px'}],
+       text:'Ароматный коломбар от компании Ван Лоферен, крупнейшей семейной винодельни Южной Африки.'},
+   mhero:{bg:'#e5c054',tex:'',layers:[
+     {src:'',css:COVER},
+     {src:'',css:'left:31.5px;top:-275px;width:198px;height:198px'}]},
+   modal:{title:'вино ВАН ЛОФЕРЕН КОЛОМБАР 11-14% 0.75, белое, сухое, ЮАР',
+     text:'Ароматный коломбар от компании Ван Лоферен, крупнейшей семейной винодельни Южной Африки, известной по всему Новому свету. Неизменный хит наших гостей! «Тёплый» тропический букет с нотками маракуйи, персика, сочной травы и минеральными нюансами.'}},
+
+  {id:'einbecker',
+   title:'пиво АЙНБЕКЕР БРАУХЕРРЕН ПИЛС 4.9% 0.33, светлое, Германия',
+   price:{v:'249',c:'00',u:'₽/1 шт'},
+   pic:'Resurses%20coolstart/Pic%2003.png',
+   ed:{img:'Resurses%20coolstart/Banner%205.png',
+       bg:'#b88d5a',
+       layers:[{src:'',
+                css:'inset:0;width:100%;height:100%;object-fit:cover'},
+               {src:ICON.ellipse1,css:'left:-34.5px;top:-134px;width:198px;height:198px'}],
+       text:'Традиционный пилснер, который мы привезли прямиком из Нижней Саксонии.'},
+   mhero:{bg:'#e5c054',tex:'',layers:[
+     {src:'',css:COVER},
+     {src:'',css:'left:0;top:-29.1%;width:100%;height:152.82%'},
+     {src:'',css:'left:31.5px;top:-275px;width:198px;height:198px'}]},
+   modal:{title:'пиво АЙНБЕКЕР БРАУХЕРРЕН ПИЛС 4.9% 0.33, светлое, Германия',
+     text:'Традиционный пилснер, который мы привезли прямиком из Нижней Саксонии. Айнбекер Браухаус — один из культовых брендов севера Германии, а форма бутылки остаётся неизменной уже более 170 лет. Но главное — внутри: здесь и цитрусовые тона, и хорошая хмелевая горчинка, и яркая дрожжевая нотка!'}}]}
+};
+
+/* ===== состояние ===== */
+let tab='otdohni';         /* активная вкладка — в макете 8330:59580 открыта «Отдохни» */
+let taskDone=0;            /* «Выполнено 0 из 1» */
+const TASK_TOTAL=1;
+if(Steps.isDone('hits')) taskDone=TASK_TOTAL;   /* задание уже засчитано ранее */
+
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+const note=document.getElementById('note');
+let noteT;
+function showNote(html){note.innerHTML=html;note.classList.add('on');
+  clearTimeout(noteT);noteT=setTimeout(()=>note.classList.remove('on'),4200)}
+
+const fit=()=>{
+  /* телефон — во весь экран, без мокапа; десктоп — макет в рамке */
+  if(Micro.fitFull(375)) return;
+  const s=Math.min(innerWidth/415,innerHeight/852,1.35);
+  document.getElementById('stage').style.transform=`scale(${s})`};
+addEventListener('resize',fit);fit();
+
+/* Тонкая линия зачёркнутой цены: рисуем сами, чтобы толщина не зависела
+   от размера цены — vector-effect держит штрих ровно в 1px */
+const STRIKE='<svg viewBox="0 0 100 100" preserveAspectRatio="none" fill="none">'
+  +'<line x1="0" y1="100" x2="100" y2="0" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>';
+
+/* ===== рендер ===== */
+function pcard(it){
+  const badge=it.badge?`<div class="badge-row"><img src="${it.badge}" alt=""></div>`:'';
+  const old=it.old?`<div class="price old">
+      <div class="grp"><span class="val"><b>${esc(it.old.v)}</b><i>${esc(it.old.c)}</i>
+        <span class="strike">${STRIKE}</span></span>
+        <span class="units">${esc(it.old.u)}</span></div>
+    </div>`:'';
+  const cur=`<div class="price cur ${it.old?'new':''}">
+      <div class="grp"><span class="val"><b>${esc(it.price.v)}</b><i>${esc(it.price.c)}</i></span>
+        <span class="units">${esc(it.price.u)}</span></div>
+      ${it.old?`<img class="info" src="${ICON.info}" alt="">`:''}
+    </div>`;
+  return `<div class="pcard" data-open="${it.id}">
+    <div class="pic">
+      <img class="ph" src="${it.pic}" alt="">
+      <button class="fav" data-fav="${it.id}" aria-label="В избранное"><img src="${ICON.fav}" alt=""></button>
+    </div>
+    <div class="pbody">
+      ${badge}
+      <div class="ttl">${esc(it.title)}</div>
+      <div class="prices">${old}${cur}</div>
+      <button class="add" data-add="${it.id}"><img src="${ICON.cart}" alt=""><span>Добавить</span></button>
+    </div>
+  </div>`;
+}
+
+function ecard(it){
+  const e=it.ed;
+  /* Баннер приходит готовой картинкой из папки «Resurses coolstart»:
+     текст и стрелка впечатаны в неё, отдельные слои больше не собираем. */
+  return `<div class="ecard" data-open="${it.id}" style="background:${e.bg}">
+    <img class="banner" src="${e.img}" alt="${esc(e.text)}">
+  </div>`;
+}
+
+/* Только шкала задания: вызывается и из render(), и при добавлении в корзину */
+function renderTask(){
+  document.getElementById('taskScale').innerHTML=
+    Array.from({length:TASK_TOTAL},(_,i)=>`<div class="seg${i<taskDone?' on':''}"></div>`).join('');
+  document.getElementById('taskDone').textContent=`Выполнено ${taskDone} из ${TASK_TOTAL}`;
+}
+
+function render(animate){
+  document.getElementById('icBack').src=ICON.back;
+  document.getElementById('hero').innerHTML=HERO.filter(Boolean).map(h=>`<img src="${h}" alt="">`).join('');
+
+  renderTask();
+
+  [...segTabs.querySelectorAll('button')].forEach(b=>b.classList.toggle('on',b.dataset.v===tab));
+  document.getElementById('rows').innerHTML=TABS[tab].items
+    .map(it=>`<div class="row">${pcard(it)}${ecard(it)}</div>`).join('');
+  Micro.reveal('.pw, .lead, .minis > .h3, .seg2, .row',{force:animate});
+
+  document.getElementById('tabbar').innerHTML=
+    `<div class="tab-panel">${TABI.map(([t,src,href],i)=>
+      `<a class="tab${i===0?' active':''}" href="${href}">
+         <img src="${src}" alt=""><span class="lbl">${t}</span>
+         ${t==='Корзина'?'<span class="badge">13</span>':''}
+       </a>`).join('')}</div>
+     <div class="home-ind-wrap"><i></i></div>`;
+}
+
+/* ===== модалка описания товара (8330:60807) ===== */
+const mScrim=document.getElementById('mScrim'), sheet=document.getElementById('sheet');
+const openSheet=v=>{mScrim.classList.toggle('on',v);sheet.classList.toggle('on',v)};
+mScrim.onclick=()=>openSheet(false);
+
+function openProduct(id){
+  const it=TABS[tab].items.find(x=>x.id===id); if(!it) return;
+  sheet.innerHTML=`
+    <div class="nav"><h4>${esc(it.modal.title)}</h4><div class="sp"></div>
+      <button class="close" id="sheetClose" aria-label="Закрыть"><img src="${ICON.close}" alt=""></button>
+    </div>
+    <div class="body">
+      <div class="mhero" style="background:${it.mhero.bg}">
+        ${it.mhero.tex?`<span class="lum"><img src="${it.mhero.tex}" style="${TEX}" alt=""></span>`:''}
+        ${it.mhero.layers.filter(l=>l.src).map(l=>`<img src="${l.src}" style="${l.css}" alt="">`).join('')}
+      </div>
+      <p class="desc">${esc(it.modal.text)}</p>
+      <div class="panel"><button class="btn" data-add="${it.id}">Добавить в корзину</button></div>
+    </div>`;
+  document.getElementById('sheetClose').onclick=()=>openSheet(false);
+  openSheet(true);
+}
+
+/* ===== события ===== */
+const segTabs=document.getElementById('seg');
+Micro.pill(segTabs);
+segTabs.onclick=e=>{
+  const b=e.target.closest('button'); if(!b || b.classList.contains('on')) return;
+  tab=b.dataset.v;
+  Micro.swap(document.getElementById('rows'), ()=>render(true));
+};
+document.getElementById('rows').onclick=e=>{
+  const f=e.target.closest('[data-fav]');
+  if(f){ Micro.bump(f,'pop'); showNote('<b>Добавлено в избранное</b>'); return }
+  const a=e.target.closest('[data-add]');
+  if(a){ addToCart(a.dataset.add); return }
+  const o=e.target.closest('[data-open]');
+  if(o) openProduct(o.dataset.open);
+};
+sheet.onclick=e=>{
+  const a=e.target.closest('[data-add]');
+  if(a){ openSheet(false); addToCart(a.dataset.add) }
+};
+
+/* покупка засчитывает задание — «Выполнено 1 из 1» */
+function addToCart(id){
+  const it=TABS[tab].items.find(x=>x.id===id);
+  /* фото товара улетает в «Корзину», следом заполняется шкала задания */
+  const pic=document.querySelector(`.pcard[data-open="${id}"] .ph`);
+  const cart=[...document.querySelectorAll('#tabbar .tab')].find(t=>/Корзина/.test(t.textContent));
+  if(pic&&cart) Micro.flyTo(pic,cart,{duration:520});
+  setTimeout(()=>{
+    const first=taskDone!==TASK_TOTAL;
+    taskDone=TASK_TOTAL; Steps.complete('hits'); renderTask();
+    if(first){ Micro.bump(document.getElementById('taskDone'));
+               Micro.flash(document.getElementById('taskScale')) }
+    showNote(`<b>${esc(it.title)}</b><br>Товар в корзине — задание засчитывается после оплаты.`);
+  }, pic&&cart&&!Micro.reduced()?440:0);
+}
+
+render();
+
+/* Возврат из bfcache: задание могли засчитать или сбросить на другом экране */
+Steps.onRestore(()=>{
+  taskDone=Steps.isDone('hits')?TASK_TOTAL:0;
+  renderTask();
+});
+</script>
+</body>
+</html>
