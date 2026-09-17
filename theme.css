@@ -29,19 +29,46 @@
   --t-accent-dark:#CF4A10;   /* Dark/Accent-dark */
 }
 
-/* Ночь. Подтверждённое значение из библиотеки — Main-ground: белый лист
-   становится #1E1E1E. Остальные фоны и текст идут по той же лестнице,
-   что и днём, только в обратном порядке: подложка темнее карточки,
-   а Sub-text 1 и Sub-text 3 меняются местами. */
+/* Ночь. Значения сняты с тёмных макетов (9211:34357, 9211:33014) — они
+   собраны в ночном режиме, поэтому отдают «[n]/…» напрямую. Обратите
+   внимание: Sub-ground ночью светлее Main-ground, а не темнее, — карточки
+   всплывают над подложкой, а не утопают в ней. */
 html.night{
-  --t-ground:#1E1E1E;
-  --t-sub:#141414;
-  --t-primary-ground:#23301A;
-  --t-text:#FFFFFF;
-  --t-text-2:#BCBCBC;
-  --t-text-4:#4F4F4F;
-  --t-border:#333333;
+  --t-ground:#1E1E1E;        /* [n]/Background/Main-ground */
+  --t-sub:#2C2D2E;           /* [n]/Background/Sub-ground 1 */
+  --t-text:#FFFFFF;          /* [n]/Elements/Main-text */
+  --t-text-2:#D6D6D6;        /* [n]/Elements/Sub-text 1 */
+  --t-text-4:#808080;        /* [n]/Elements/Sub-text 3 */
+  /* Ниже — три токена, которых на тёмных макетах нет, поэтому значения
+     достроены по той же лестнице: Sub-text 2 — между Sub-text 1 и 3,
+     граница на ступень светлее карточки, зелёная подложка приглушена.
+     Их стоит сверить с библиотекой. */
+  --t-text-3:#A6A6A6;        /* Elements/Sub-text 2 */
+  --t-border:#3A3B3C;        /* Border/Main-border */
+  --t-primary-ground:#23301A;/* Background/Primary-ground */
 }
 
 /* Подложка за «телефоном» и сам корпус остаются тёмными в обеих темах —
    это не экран приложения, а стенд, на котором он показан. */
+
+/* ===== Монохромные иконки =====
+   Часть иконок лежит в ресурсах отдельными файлами с зашитым чёрным
+   контуром (#1E1E1E) и вставляется тегом img — перекрасить их через
+   currentColor нельзя, поэтому ночью инвертируем. Перечисляем поимённо:
+   цветные иконки (КгЛ, подарок, категории, сердце, процент, тег) и те,
+   что уже белые (CheckCircle, Time), трогать нельзя.
+   Внутри залитой градиентом шапки чек-листа действует своё правило из
+   v2.css — оно специфичнее, так что инверсия не удваивается. */
+html.night img[src*="ic-back"],
+html.night img[src*="ic-arrow"],
+html.night img[src*="ic-check.svg"],
+html.night img[src*="ic-clock"],
+html.night img[src*="ic-close"],
+html.night img[src*="ic-cup"],
+html.night img[src*="ic-info"],
+html.night img[src*="ic-lock"],
+html.night img[src*="ic-plus"],
+html.night img[src*="ic-cart.svg"],
+html.night img[src*="ic-cube"],
+html.night img[src*="ic-heart.svg"],
+html.night img[src*="ic-tab-"]{filter:brightness(0) invert(1)}

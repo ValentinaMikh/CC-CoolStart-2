@@ -1,0 +1,40 @@
+/* ===== Мини-панель тестировщика для внутренних экранов =====
+   На главной и в чек-листе панель своя и большая; здесь нужен один
+   переключатель темы, поэтому оформление повторяет ту же панель, но
+   собирается скриптом (dev-theme.js) и лежит одним файлом на три
+   страницы — задание, хиты, вкусы.
+   Цвета панели намеренно свои, не из темы: это инструмент поверх
+   прототипа, а не часть экрана, и он тёмный в обеих темах. */
+
+/* Выше таб-бара: на внутренних экранах он занимает низ, и кнопка на
+   50px, как в большой панели, легла бы прямо на «Профиль». */
+.dt-fab{position:absolute;right:16px;bottom:100px;z-index:50;display:flex;gap:6px;align-items:center;
+  height:36px;padding:0 12px;border:0;border-radius:18px;background:#17181A;color:#fff;cursor:pointer;
+  font:600 12px/1 ui-monospace,"SF Mono",Menlo,monospace;letter-spacing:1px;
+  box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.dt-fab svg{width:16px;height:16px;display:block;flex:none}
+.dt-fab:active{transform:scale(.96)}
+
+.dt-scrim{position:absolute;inset:0;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;
+  transition:.25s;z-index:60}
+.dt-scrim.on{opacity:1;pointer-events:auto}
+
+.dt-panel{position:absolute;left:0;right:0;bottom:0;z-index:61;background:#17181A;color:#fff;
+  border-radius:24px 24px 44px 44px;padding:10px 18px 34px;transform:translateY(102%);
+  transition:transform .34s cubic-bezier(.2,.85,.25,1);
+  font-family:ui-monospace,"SF Mono",Menlo,monospace}
+.dt-panel.on{transform:translateY(0)}
+.dt-panel .grab{width:36px;height:4px;border-radius:2px;background:#3A3C40;margin:2px auto 12px}
+.dt-panel h3{font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:#8A8D94;margin-bottom:10px}
+.dt-panel .row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 0;
+  border-top:1px solid #232529;font-size:13px}
+.dt-panel .hint{font-size:11px;color:#63666C;margin-top:12px;line-height:1.5}
+
+.dt-seg{display:flex;background:#232529;border-radius:9px;padding:2px;flex:none}
+.dt-seg button{border:0;background:transparent;color:#8A8D94;font:inherit;font-size:12px;padding:5px 12px;
+  border-radius:7px;cursor:pointer}
+.dt-seg button.on{background:var(--t-primary);color:#fff;font-weight:700}
+
+@media (prefers-reduced-motion:reduce){
+  .dt-panel{transition:none}
+}
