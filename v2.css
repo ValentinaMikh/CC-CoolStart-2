@@ -165,13 +165,19 @@
    В шапке она перекрывает и кубок, и плашку награды, поэтому прячем:
    удержание работает и по самому кубку. */
 .v2 .v2-cup-3d>button{display:none!important}
-/* Подпись вместо неё. В макете (9110:112295) она стоит слева от кубка и
-   приглушена до 60%, поэтому вынесена из потока: иначе растянула бы
-   колонку и сдвинула всё, что ниже. Отступ сверху — 40 до верха блока
-   подсказки и 56 на пиктограмму с зазором. */
-.v2 .v2-cup-hint{position:absolute;left:27px;top:96px;z-index:1;
-  width:86px;text-align:center;
-  font-size:14px;line-height:18px;font-weight:500;color:rgba(255,255,255,.6)}
+/* Подсказка вместо неё. В макете (9110:112295) она стоит слева от кубка:
+   пиктограмма пальца 38×48, под ней подпись через 8, весь блок приглушён
+   до 60%. Вынесена из потока — иначе растянула бы колонку и сдвинула всё,
+   что ниже; события ей не нужны, удержание ловит сам кубок.
+   Появляется, только когда кубок держат дольше секунды (holdHint
+   в coolstart.html): до касания подсказывать нечего. */
+.v2 .v2-cup-hint{position:absolute;left:27px;top:40px;z-index:1;
+  display:flex;flex-direction:column;gap:8px;align-items:center;width:86px;
+  opacity:0;pointer-events:none;transition:opacity .2s var(--mc-ease)}
+.v2 .v2-cup-hint.is-on{opacity:.6}
+.v2 .v2-cup-hint img{width:38px;height:48px;display:block}
+.v2 .v2-cup-hint p{width:100%;text-align:center;white-space:nowrap;
+  font-size:14px;line-height:18px;font-weight:500;color:#fff}
 .v2 .award{order:1;margin-top:16px;gap:24px}
 .v2 .progress{order:3;margin-top:16px;gap:8px}
 .v2 .v2-cup-big{width:140px;height:140px;display:block;
@@ -218,5 +224,7 @@
   font-size:16px;line-height:20px;font-weight:700;color:#fff}
 
 @media (prefers-reduced-motion:reduce){
-  .v2 .head .v2-glow{transition:none}
+  .v2 .head .v2-glow,
+  .v2 .cool .v2-glow,
+  .v2 .v2-cup-hint{transition:none}
 }

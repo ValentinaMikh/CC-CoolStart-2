@@ -272,7 +272,11 @@ const ICON={
   time:RES+'ic-clock.svg',
   check:RES+'ic-check.svg',
   kgl:RES+'ic-kgl.svg',
-  gift:RES+'Gift.svg'};
+  gift:RES+'Gift.svg',
+  /* Пиктограмма пальца из подсказки удержания (9110:112292), 38×48.
+     Пока файла в папке нет, картинка снимает себя по onerror — остаётся
+     одна подпись, и подсказка не выглядит сломанной. */
+  hold:RES+'ic-hold.png'};
 
 const PIC=[
  'Resurses%20coolstart/check-list%20image%201.jpg',  /* 0 хиты      шаг 1  */
@@ -576,14 +580,38 @@ function mountCup3d(){
   host.animate([{opacity:0},{opacity:1}], {duration:CUP_FADE, easing:'ease-out'});
 
   /* Свою кнопку-подсказку просмотрщик рисует поверх кубка и перекрывает
-     ею плашку награды — она спрятана в v2.css. Вместо неё ставим подпись
-     слева от кубка, как в макете (9110:112295): удержание работает по
-     самому кубку, кнопка для этого не нужна. */
-  const hint = document.createElement('p');
+     ею плашку награды — она спрятана в v2.css. Вместо неё ставим подсказку
+     слева от кубка, как в макете (9110:112295): пиктограмма пальца и
+     подпись. Удержание работает по самому кубку, кнопка для этого не нужна. */
+  const hint = document.createElement('div');
   hint.id = 'v2CupHint';
   hint.className = 'v2-cup-hint';
-  hint.textContent = HEAD.hold;
+  hint.innerHTML = `<img src="${ICON.hold}" alt="" width="38" height="48"
+                         onerror="this.remove()"><p>${esc(HEAD.hold)}</p>`;
   host.parentElement.insertBefore(hint, host.nextSibling);
+  holdHint(host);
+}
+
+/* ===== Подсказка удержания =====
+   Показываем её не сразу: пока человек не тронул кубок, подсказывать нечего,
+   а поверх шапки она только шумит. Считаем секунду с касания — если палец
+   всё ещё на кубке, жест начат, и подсказка помогает довести его до конца:
+   зарядка кубка занимает две секунды.
+   Отпускание ловим на окне: просмотрщик забирает указатель себе
+   (setPointerCapture), и до самого кубка pointerup уже не доходит. */
+const HINT_HOLD = 1000;
+function holdHint(host){
+  let timer = 0;
+  const show = on => {
+    const hint = document.getElementById('v2CupHint');
+    clearTimeout(timer); timer = 0;
+    if(!hint) return;
+    if(on) timer = setTimeout(()=>hint.classList.add('is-on'), HINT_HOLD);
+    else hint.classList.remove('is-on');
+  };
+  host.addEventListener('pointerdown', ()=>show(true));
+  addEventListener('pointerup',     ()=>show(false));
+  addEventListener('pointercancel', ()=>show(false));
 }
 
 /* ===== Подмена кубка: растворение =====
