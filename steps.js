@@ -112,11 +112,27 @@ function reset(){
   }catch(e){}
 }
 
+/* ===== Этап оформления по числу закрытых шагов =====
+   Градиент шапки чек-листа и виджета на главной задан в макетах для 0, 2,
+   4, 6, 8 и 10 шагов. Между ними интерполируем: прогресс меняется по шагу,
+   а не рывками от макета к макету. Таблица — строки [шагов, ...числа];
+   возвращаются те же числа без первого, посчитанные для n. */
+function stage(table, n){
+  let a = table[0], b = table[0];
+  for(let i = 1; i < table.length; i++){
+    b = table[i];
+    if(n <= b[0]) break;
+    a = b;
+  }
+  const t = b[0] === a[0] ? 0 : (Math.min(n, b[0]) - a[0]) / (b[0] - a[0]);
+  return a.slice(1).map((v, i) => v + (b[i + 1] - v) * t);
+}
+
 /* Ставим класс сразу при загрузке модуля (он подключён в <head>), иначе
    первый вариант успел бы моргнуть до первой перерисовки. */
 applyDesign();
 
 return {TOTAL, TERM, all, isDone, complete, set, takeFresh, finish,
         days, setDays, daysLeft, design, setDesign, designName, applyDesign,
-        get, put, onRestore, reset};
+        get, put, onRestore, reset, stage};
 })();

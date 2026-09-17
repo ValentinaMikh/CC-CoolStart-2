@@ -340,17 +340,6 @@ const BLOBS=[
   [8,       406,372,734,     52,358,680,       260,522,640],
   [TOTAL,   375,176,740,     71,418,680,       339,514,640]
 ];
-/* Девять чисел состояния на нужном числе шагов */
-function blobs(n){
-  let a=BLOBS[0], b=BLOBS[0];
-  for(let i=1;i<BLOBS.length;i++){
-    b=BLOBS[i];
-    if(n<=b[0]) break;
-    a=b;
-  }
-  const t = b[0]===a[0] ? 0 : (Math.min(n,b[0])-a[0])/(b[0]-a[0]);
-  return a.slice(1).map((v,i)=>v+(b[i+1]-v)*t);
-}
 
 /* ===== Шаги КуулСтарта: 4 + 2 + 4 ===== */
 const SECTIONS=[
@@ -698,7 +687,7 @@ function mountV2Head(n, full, paid){
   /* Пятна поднимаются вместе с прогрессом. Слои перечислены в том же
      порядке, что в CSS: жёлтое, оранжевое, красное. Позиция в CSS — левый
      верхний угол квадрата, а в макете задан центр, отсюда половина стороны. */
-  const b=blobs(n), size=[], pos=[];
+  const b=Steps.stage(BLOBS,n), size=[], pos=[];
   for(let i=0;i<9;i+=3){
     const x=b[i], y=b[i+1], d=b[i+2];
     size.push(`${d.toFixed(1)}px ${d.toFixed(1)}px`);

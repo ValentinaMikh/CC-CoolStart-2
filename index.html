@@ -606,6 +606,32 @@ const V2={
   time:RES+'Time.svg',
   check:RES+'CheckCircle.svg'};
 const coolDone=()=>`Выполнено ${Steps.all().length} из ${Steps.TOTAL}`;
+
+/* ===== Пятна градиента виджета (9010:9738) =====
+   В макете шесть состояний — 0, 2, 4, 6, 8 и 10 шагов, — и в каждом у двух
+   пятен свой центр: с прогрессом они наползают справа налево. Числа —
+   смещение центра пятна от центра карточки и сторона его квадрата. В макете
+   это эллипс с гауссовым размытием, поэтому сторона больше самого эллипса
+   на два радиуса размытия: на нуле оба пятна 200+2×90, дальше жёлтое
+   199+2×90, оранжевое 278+2×150. */
+const COOL_BLOBS=[
+  /* шагов  жёлтое dx,dy,d      оранжевое dx,dy,d */
+  [0,        161.5, 73,   380,   243.5,    0, 380],
+  [2,         95,   78.5, 379,   221.5, -102, 578],
+  [4,         71,   78.5, 379,   197.5, -102, 578],
+  [6,          5,   78.5, 379,   165.5, -102, 578],
+  [8,        -37,   78.5, 379,   132.5, -102, 578],
+  [Steps.TOTAL, -86, 78.5, 379,  111.5, -102, 578]
+];
+/* Слои перечислены в том же порядке, что в v2.css: жёлтое, оранжевое.
+   Позиция — от центра карточки, поэтому calc(50% + …). */
+function coolGlow(){
+  const b=Steps.stage(COOL_BLOBS, Steps.all().length);
+  const layer=i=>`calc(50% + ${b[i].toFixed(1)}px) calc(50% + ${b[i+1].toFixed(1)}px)`;
+  const side =i=>`${b[i].toFixed(1)}px ${b[i].toFixed(1)}px`;
+  return `background-size:${side(2)},${side(5)};`+
+         `background-position:${layer(0)},${layer(3)}`;
+}
 const coolLeft=()=>{const d=Steps.daysLeft();
   return d ? `еще ${d} ${plural(d,['день','дня','дней'])}` : 'срок истёк'};
 
@@ -691,16 +717,18 @@ function render(){
   const coolSlot=document.getElementById('coolSlot');
   coolSlot.style.display=(authed&&coolStart)?'':'none';
   coolSlot.innerHTML = !(authed&&coolStart) ? '' : Steps.design()===2 ?
-    /* 1113:3850 — градиент, кубок, счётчик плашкой */
+    /* 9010:9738 — заливка с пятнами, кубок, счётчик плашкой. Пока не закрыт
+       ни один шаг, плашки в макете нет: считать там нечего. */
     `<a class="cool" href="coolstart.html">
+       <i class="v2-glow" style="${coolGlow()}"></i>
        <img class="v2-conf" src="${V2.conf}" alt="">
        <img class="v2-cup" src="${V2.cup}" alt="">
        <div class="v2-body">
          <div class="v2-time"><img src="${V2.time}" alt=""><span>${coolLeft()}</span></div>
          <div class="v2-row">
            <div class="v2-txt"><b>${COOL.ttl}</b><span>${COOL.sub}</span></div>
-           <div class="v2-chip"><img src="${V2.check}" alt="">
-             <span>${Steps.all().length} из ${Steps.TOTAL}</span></div>
+           ${Steps.all().length ? `<div class="v2-chip"><img src="${V2.check}" alt="">
+             <span>${Steps.all().length} из ${Steps.TOTAL}</span></div>` : ''}
          </div>
        </div>
      </a>` :

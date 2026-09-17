@@ -29,28 +29,43 @@
    градиента как есть. */
 .v2 .v2-conf{position:absolute;pointer-events:none;max-width:none}
 
-/* ===== Виджет КуулСтарта на главной (1113:3850) ===== */
-.v2 .cool{position:relative;display:block;width:343px;min-height:142px;
-  border:0;border-radius:24px;overflow:hidden;background:var(--v2-grad-w);
+/* ===== Виджет КуулСтарта на главной (9010:9738) ===== */
+.v2 .cool{position:relative;display:block;width:341px;min-height:134px;
+  border:0;border-radius:24px;overflow:hidden;background:var(--v2-head);
   color:#fff;text-decoration:none}
 .v2 .cool .bg,.v2 .cool .sk{display:none}          /* фото и скелетон — из первого варианта */
-/* 1113:3847: картинка 95×95 повёрнута на −30°, центр в (269.3, 62.3)
-   карточки 343×142 — отсюда left/top. */
-.v2 .cool .v2-cup{position:absolute;left:221.8px;top:14.8px;width:95px;height:95px;
+/* Этапы прохождения: два размытых пятна, как в шапке чек-листа, только
+   здесь они с прогрессом наползают справа налево. Центры взяты из шести
+   состояний макета (COOL_BLOBS в index.html) и заданы от центра карточки —
+   calc(50% + …): так пятна не разъезжаются, если подпись перенесётся на
+   третью строку и карточка станет выше.
+   В макете это эллипсы с гауссовым размытием; радиальный градиент
+   повторяет тот же профиль без filter: blur. */
+.v2 .cool .v2-glow{position:absolute;inset:0;pointer-events:none;
+  background-repeat:no-repeat;
+  background-image:
+    radial-gradient(circle closest-side,rgba(252,198,63,.95) 0%,rgba(252,198,63,.85) 25%,rgba(252,198,63,.5) 50%,rgba(252,198,63,.16) 70%,rgba(252,198,63,.03) 85%,rgba(252,198,63,0) 100%),
+    radial-gradient(circle closest-side,rgba(245,130,47,.95) 0%,rgba(245,130,47,.85) 25%,rgba(245,130,47,.5) 50%,rgba(245,130,47,.16) 70%,rgba(245,130,47,.03) 85%,rgba(245,130,47,0) 100%);
+  transition:background-position .6s var(--mc-ease),background-size .6s var(--mc-ease)}
+/* 9010:9408: картинка 88×88 повёрнута на −30°, центр её рамки в 22.79px
+   от правого края и 14.29px от нижнего — отсюда left/bottom. */
+.v2 .cool .v2-cup{position:absolute;left:214.1px;bottom:30.4px;width:88px;height:88px;
   transform:rotate(-30deg);pointer-events:none;
   filter:drop-shadow(0 8px 16px rgba(120,40,0,.25))}
-/* 1113:4660: 297×245 от левого края 225, отражён по вертикали */
-.v2 .cool .v2-conf{left:225px;top:0;width:297px;height:245px;transform:scaleY(-1)}
-.v2 .cool .v2-body{position:relative;display:flex;flex-direction:column;gap:24px;padding:16px}
+/* 9010:9407: 297×245, правый край на 179px за карточкой, низ на 111px ниже */
+.v2 .cool .v2-conf{right:-179px;bottom:-111px;width:297px;height:245px;transform:scaleY(-1)}
+.v2 .cool .v2-body{position:relative;display:flex;flex-direction:column;gap:16px;padding:16px}
 .v2 .cool .v2-time{display:flex;gap:4px;align-items:center}
 .v2 .cool .v2-time img{width:16px;height:16px;display:block}
 .v2 .cool .v2-time span{font-size:14px;line-height:18px;font-weight:400}
-.v2 .cool .v2-row{display:flex;gap:24px;align-items:flex-end}
-.v2 .cool .v2-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+.v2 .cool .v2-row{display:flex;gap:8px;align-items:flex-end;justify-content:space-between}
+.v2 .cool .v2-txt{flex:1;min-width:0;max-width:190px;display:flex;flex-direction:column;gap:8px}
 .v2 .cool .v2-txt b{font-size:20px;line-height:24px;font-weight:600}
 .v2 .cool .v2-txt span{font-size:14px;line-height:18px;font-weight:500}
-.v2 .cool .v2-chip{flex:none;display:flex;gap:4px;align-items:center;
-  padding:8px;border-radius:12px;background:var(--v2-chip)}
+/* 9010:10023 — плашка счётчика: свой цвет, gap 8 и размытие подложки */
+.v2 .cool .v2-chip{flex:none;display:flex;gap:8px;align-items:flex-start;
+  padding:8px;border-radius:12px;background:var(--v2-badge);
+  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
 .v2 .cool .v2-chip img{width:18px;height:18px;display:block}
 .v2 .cool .v2-chip span{font-size:14px;line-height:18px;font-weight:500;white-space:nowrap}
 
