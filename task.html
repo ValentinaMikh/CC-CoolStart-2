@@ -75,6 +75,13 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .banner{width:343px;display:flex;gap:12px;align-items:center;padding:12px 16px;
   border-radius:12px;background:var(--special)}
 .banner img{width:24px;height:24px;flex:none;display:block}
+/* Иконка баннера — оранжевая (Special-dark из библиотеки, 9215:183246).
+   Файл в ресурсах с зашитым тёмным контуром, поэтому красим маской:
+   форма берётся из svg, цвет — из токена. Тегом img так не сделать —
+   растр самой картинки лёг бы поверх заливки. */
+.banner .bi{width:24px;height:24px;flex:none;background:var(--special-dark);
+  -webkit-mask:url("Resurses%20coolstart/ic-info.svg") center/contain no-repeat;
+  mask:url("Resurses%20coolstart/ic-info.svg") center/contain no-repeat}
 .banner p{flex:1;min-width:0;font-size:16px;line-height:20px;font-weight:500;color:var(--ink)}
 /* Иконки акций внутри текста плашки (8366:114405, 114400, 114411).
    Иконка 24px выше строки 16/20, поэтому у плашки с иконками интерлиньяж чуть больше. */
@@ -517,7 +524,7 @@ function block(b){
         '<span class="pig">'+PROMO_ICONS.map(([n,src])=>
           `<img class="pi" src="${src}" alt="${n}">`).join('')+'</span>');
       const cls=txt.includes('class="pi"') ? 'banner icons' : 'banner';
-      return `<div class="${cls}"><img src="${ICON.info}" alt=""><p>${txt}</p></div>`;
+      return `<div class="${cls}"><i class="bi"></i><p>${txt}</p></div>`;
     }
     case 'pw':      return pw(b.v,b.total,b.used,b.done,b.icon?ICON[b.icon]:'');
     case 'gift':    return `<div class="pw"><div class="head">`+

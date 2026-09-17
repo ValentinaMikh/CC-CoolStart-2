@@ -14,7 +14,7 @@
 <script src="dev-theme.js" defer></script>
 <style>
 :root{--green:var(--t-primary);--accent:var(--t-accent);--ink:var(--t-text);--ink-2:var(--t-text-2);--ink-3:var(--t-text-3);
-  --sub:var(--t-sub);--hair:var(--t-border);--olive:#DEE99B;--special:#FFEED6;
+  --sub:var(--t-sub);--hair:var(--t-border);--olive:#DEE99B;--special:#FFEED6;--special-dark:#E88A01;
   --disable:#F0F1F3;--disable-txt:var(--t-text-4);--myasnov:#74140D}
 /* Ночью серые этой страницы идут своей лестницей: в библиотеке их нет.
    Фирменные подложки карточек при этом не трогаем — они цветные
@@ -65,6 +65,13 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .banner{width:343px;display:flex;gap:12px;align-items:center;padding:12px 16px;
   border-radius:12px;background:var(--special)}
 .banner img{width:24px;height:24px;flex:none;display:block}
+/* Иконка баннера — оранжевая (Special-dark из библиотеки, 9215:183246).
+   Файл в ресурсах с зашитым тёмным контуром, поэтому красим маской:
+   форма берётся из svg, цвет — из токена. Тегом img так не сделать —
+   растр самой картинки лёг бы поверх заливки. */
+.banner .bi{width:24px;height:24px;flex:none;background:var(--special-dark);
+  -webkit-mask:url("Resurses%20coolstart/ic-info.svg") center/contain no-repeat;
+  mask:url("Resurses%20coolstart/ic-info.svg") center/contain no-repeat}
 .banner p{flex:1;min-width:0;font-size:16px;line-height:20px;font-weight:500;color:var(--ink)}
 
 /* ===== Купоны (8330:61223): ряд 273-х карточек, px16 py24 gap16 ===== */
@@ -168,7 +175,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
       </div>
       <div class="body" id="lead"></div>
       <button class="btn" id="btnCatalog">В каталог</button>
-      <div class="banner"><img id="icInfo" alt=""><p>Будут доступны после первой покупки. 1 покупка = 1 купон</p></div>
+      <div class="banner"><i class="bi"></i><p>Будут доступны после первой покупки. 1 покупка = 1 купон</p></div>
     </div>
     <div class="cupons" id="cupons"></div>
   </div>
@@ -313,7 +320,6 @@ const v2=()=>Steps.design()===2;
 
 function render(){
   document.getElementById('icBack').src=ICON.back;
-  document.getElementById('icInfo').src=ICON.info;
   const done=Math.min(buys,TASK_TOTAL);
   if(v2()){
     const hero=document.getElementById('hero');
