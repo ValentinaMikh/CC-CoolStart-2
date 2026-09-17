@@ -455,6 +455,11 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
     <div class="row"><span>Виджет «КуулСтарт»</span><div class="sw on" id="swCool"></div></div>
     <div class="row"><span>Дней с регистрации</span>
       <input id="inDays" type="number" min="0" max="400" value="1"></div>
+    <div class="row"><span>Выполнено шагов</span>
+      <div class="seg" id="segDone">
+        <button data-v="0">0</button><button data-v="2">2</button><button data-v="4">4</button>
+        <button data-v="6">6</button><button data-v="8">8</button><button data-v="10">10</button>
+      </div></div>
     <div class="row"><span>Вариант дизайна</span>
       <div class="seg" id="segDesign">
         <button data-v="1">А1</button><button data-v="2">В1</button>
@@ -468,7 +473,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
     <div class="row"><span>Баланс КеГЛей</span><input id="inBal" value="103 315"></div>
     <div class="row"><span>Показать выбор города</span>
       <div class="seg"><button id="btnCity">Открыть</button></div></div>
-    <div class="hint">Свайп вверх по карте — переворот на баланс, вниз — назад. Баланс скрыт тем, что по умолчанию открыта QR-сторона. Панель — тап по батарейке.</div>
+    <div class="hint">Свайп вверх по карте — переворот на баланс, вниз — назад. Баланс скрыт тем, что по умолчанию открыта QR-сторона. «Выполнено шагов» — те же этапы, что и в панели чек-листа: меняется счётчик на виджете и градиент под кубком. Панель — тап по батарейке.</div>
   </div>
 
 </div>
@@ -930,6 +935,19 @@ segDesign.onclick=e=>{
   syncDesignSeg(); render();
 };
 syncDesignSeg();
+
+/* Выполнено шагов — состояние общее с чек-листом, поэтому отмечаем те же
+   первые n шагов из Steps.IDS: иначе счётчик на виджете показывал бы одно,
+   а вкладки чек-листа — другое. */
+const segDone=document.getElementById('segDone');
+const syncDoneSeg=()=>[...segDone.children].forEach(b=>
+  b.classList.toggle('on',+b.dataset.v===Steps.all().length));
+segDone.onclick=e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  Steps.set(Steps.IDS.slice(0,+b.dataset.v));
+  syncDoneSeg(); render();
+};
+syncDoneSeg();
 
 /* Дней с регистрации — общее с чек-листом: виджет пересчитывает «еще N дней» */
 document.getElementById('inDays').value=Steps.days();

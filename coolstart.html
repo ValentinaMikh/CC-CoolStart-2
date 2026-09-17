@@ -803,7 +803,7 @@ segDone.onclick=e=>{
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 
 async function setDone(n){
-  const next=ALL.slice(0,n).map(it=>it.id);
+  const next=Steps.IDS.slice(0,n);          /* порядок общий с панелью на главной */
   const added=next.filter(id=>!done.has(id));
   done.clear(); next.forEach(id=>done.add(id));
   Steps.set(next);

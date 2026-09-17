@@ -16,6 +16,13 @@ const KEY = 'coolstart:done', FRESH = 'coolstart:fresh';
 const TOTAL = 10;   /* шагов в чек-листе */
 const TERM  = 60;   /* дней на прохождение */
 
+/* Идентификаторы шагов в том же порядке, в каком они идут в чек-листе.
+   Нужны панелям тестировщика: обе — и на чек-листе, и на главной —
+   отмечают «первые n шагов», и список должен быть у них общий, иначе
+   счётчик виджета и содержимое вкладок разошлись бы. */
+const IDS = ['hits','cats','delivery','weekend','email','push',
+             'kgl-day','kgl-month','plus-one','luch'];
+
 function read(key){
   try{ const v = JSON.parse(sessionStorage.getItem(key)); return Array.isArray(v) ? v : [] }
   catch(e){ return [] }
@@ -134,5 +141,5 @@ applyDesign();
 
 return {TOTAL, TERM, all, isDone, complete, set, takeFresh, finish,
         days, setDays, daysLeft, design, setDesign, designName, applyDesign,
-        get, put, onRestore, reset, stage};
+        get, put, onRestore, reset, stage, IDS};
 })();
