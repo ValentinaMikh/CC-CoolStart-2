@@ -593,25 +593,22 @@ function mountCup3d(){
 }
 
 /* ===== Подсказка удержания =====
-   Показываем её не сразу: пока человек не тронул кубок, подсказывать нечего,
-   а поверх шапки она только шумит. Считаем секунду с касания — если палец
-   всё ещё на кубке, жест начат, и подсказка помогает довести его до конца:
-   зарядка кубка занимает две секунды.
-   Отпускание ловим на окне: просмотрщик забирает указатель себе
-   (setPointerCapture), и до самого кубка pointerup уже не доходит. */
-const HINT_HOLD = 1000;
+   Показываем её в ответ на касание кубка: раз по нему нажали, значит ждут
+   реакции — подсказка и объясняет, что кубок нужно удерживать (зарядка
+   занимает две секунды). Через пять секунд она уходит сама, а новое
+   касание отсчитывает эти пять секунд заново.
+   Ловим pointerdown, а не click: на тапе подсказка нужна сразу, а не
+   после того, как палец оторвали от экрана. */
+const HINT_SHOW = 5000;
 function holdHint(host){
   let timer = 0;
-  const show = on => {
+  host.addEventListener('pointerdown', ()=>{
     const hint = document.getElementById('v2CupHint');
-    clearTimeout(timer); timer = 0;
     if(!hint) return;
-    if(on) timer = setTimeout(()=>hint.classList.add('is-on'), HINT_HOLD);
-    else hint.classList.remove('is-on');
-  };
-  host.addEventListener('pointerdown', ()=>show(true));
-  addEventListener('pointerup',     ()=>show(false));
-  addEventListener('pointercancel', ()=>show(false));
+    hint.classList.add('is-on');
+    clearTimeout(timer);
+    timer = setTimeout(()=>hint.classList.remove('is-on'), HINT_SHOW);
+  });
 }
 
 /* ===== Подмена кубка: растворение =====

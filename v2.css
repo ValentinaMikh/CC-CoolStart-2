@@ -169,8 +169,8 @@
    пиктограмма пальца 38×48, под ней подпись через 8, весь блок приглушён
    до 60%. Вынесена из потока — иначе растянула бы колонку и сдвинула всё,
    что ниже; события ей не нужны, удержание ловит сам кубок.
-   Появляется, только когда кубок держат дольше секунды (holdHint
-   в coolstart.html): до касания подсказывать нечего. */
+   Появляется по касанию кубка и держится пять секунд (holdHint
+   в coolstart.html): пока кубок не тронули, подсказывать нечего. */
 .v2 .v2-cup-hint{position:absolute;left:27px;top:40px;z-index:1;
   display:flex;flex-direction:column;gap:8px;align-items:center;width:86px;
   opacity:0;pointer-events:none;transition:opacity .2s var(--mc-ease)}
