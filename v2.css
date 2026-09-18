@@ -106,13 +106,17 @@ html.night{ --v2-head:var(--t-dark-ground) }
 
    Цвет держим тройкой каналов, чтобы прозрачный конец градиента был того
    же тона: keyword transparent — это прозрачный чёрный, и на старых
-   WebKit он подмешивал в края серую кайму. */
+   WebKit он подмешивал в края серую кайму.
+
+   Профиль приближает размытую окружность: сплошное ядро, дальше полоса
+   растворения до края коробки. Сила размытия — ширина этой полосы: она
+   занимает 62% радиуса, а размеры кругов учитывают её сверх ядра. */
 .v2 .head .v2-lava{position:absolute;inset:0;z-index:0;pointer-events:none}
 .v2 .head .v2-lava i{position:absolute;display:block;width:var(--w);height:var(--w);
   will-change:transform;
   background:radial-gradient(closest-side,
-    rgba(var(--c),1) 0%, rgba(var(--c),.98) 42%, rgba(var(--c),.72) 66%,
-    rgba(var(--c),.3) 84%, rgba(var(--c),0) 100%);
+    rgba(var(--c),1) 0%, rgba(var(--c),.98) 38%, rgba(var(--c),.72) 63%,
+    rgba(var(--c),.3) 83%, rgba(var(--c),0) 100%);
   animation:v2lava var(--t) var(--d,0s) ease-in-out infinite alternate}
 /* Ход вверх и лёгкий снос вбок: в референсе капли не поднимаются по
    отвесной линии, а покачиваются. Масштаб добавляет «дыхания» — большие
@@ -124,28 +128,28 @@ html.night{ --v2-head:var(--t-dark-ground) }
 
 /* Две неподвижные массы — снизу и сверху, как резервуары лампы: из них
    отрываются капли и в них же уходят. Обе заходят за край шапки. */
-.v2 .head .v2-lava i:nth-child(1){--c:252,198,63;--w:440px;left:-32px;bottom:-212px;
+.v2 .head .v2-lava i:nth-child(1){--c:252,198,63;--w:491px;left:-57px;bottom:-237px;
   --dy:-34px;--sc:1.06;--t:13s}
-.v2 .head .v2-lava i:nth-child(2){--c:245,130,47;--w:350px;left:-124px;bottom:-140px;
+.v2 .head .v2-lava i:nth-child(2){--c:245,130,47;--w:391px;left:-144px;bottom:-160px;
   --dy:-24px;--dx:18px;--sc:1.08;--t:17s;--d:-4s}
-.v2 .head .v2-lava i:nth-child(3){--c:234,67,67;--w:400px;left:156px;top:-196px;
+.v2 .head .v2-lava i:nth-child(3){--c:234,67,67;--w:446px;left:133px;top:-219px;
   --dy:30px;--dx:-20px;--sc:1.05;--t:15s;--d:-7s}
 /* Капли. Длительности намеренно не кратны друг другу: так они сходятся и
    расходятся каждый раз по-новому и рисунок не зацикливается на глаз.
    Жёлтые ходят ниже остальных: заголовок и подпись в шапке белые, и на
    светло-жёлтом они читались бы хуже всего — наверх пускаем оранжевые
    и красные, как и в самом макете. */
-.v2 .head .v2-lava i:nth-child(4){--c:252,198,63;--w:240px;left:-2px;bottom:-10px;
+.v2 .head .v2-lava i:nth-child(4){--c:252,198,63;--w:268px;left:-16px;bottom:-24px;
   --dy:-214px;--dx:34px;--sc:.74;--t:14s;--d:-2s}
-.v2 .head .v2-lava i:nth-child(5){--c:245,130,47;--w:210px;left:150px;bottom:-32px;
+.v2 .head .v2-lava i:nth-child(5){--c:245,130,47;--w:234px;left:138px;bottom:-44px;
   --dy:-372px;--dx:-44px;--sc:.7;--t:18s;--d:-9s}
-.v2 .head .v2-lava i:nth-child(6){--c:234,67,67;--w:185px;left:68px;bottom:84px;
+.v2 .head .v2-lava i:nth-child(6){--c:234,67,67;--w:206px;left:58px;bottom:74px;
   --dy:-256px;--dx:52px;--sc:.78;--t:11s;--d:-5s}
-.v2 .head .v2-lava i:nth-child(7){--c:252,198,63;--w:170px;left:220px;bottom:62px;
+.v2 .head .v2-lava i:nth-child(7){--c:252,198,63;--w:190px;left:210px;bottom:52px;
   --dy:-204px;--dx:-40px;--sc:.72;--t:16s;--d:-12s}
-.v2 .head .v2-lava i:nth-child(8){--c:245,130,47;--w:160px;left:-28px;bottom:146px;
+.v2 .head .v2-lava i:nth-child(8){--c:245,130,47;--w:179px;left:-37px;bottom:137px;
   --dy:-224px;--dx:44px;--sc:.76;--t:12s;--d:-6s}
-.v2 .head .v2-lava i:nth-child(9){--c:234,67,67;--w:175px;left:240px;bottom:160px;
+.v2 .head .v2-lava i:nth-child(9){--c:234,67,67;--w:195px;left:230px;bottom:150px;
   --dy:-196px;--dx:-30px;--sc:.8;--t:19s;--d:-15s}
 
 /* Серпантин в макете появляется только на финише: до него шапка спокойная.
