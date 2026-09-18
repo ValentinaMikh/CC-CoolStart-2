@@ -61,8 +61,8 @@
 .v2 .topnav{background:transparent}
 .v2 .status{color:#fff}
 .v2 .nav-title{color:#fff}
-.v2 .back{background:rgba(255,255,255,.4)}
-.v2 .back img{filter:brightness(0) invert(1)}
+.v2 .navbar .back{background:rgba(255,255,255,.4)}
+.v2 .navbar .back img{filter:brightness(0) invert(1)}
 .v2 .scroll{top:0}
 /* …а когда шапка уехала вверх, навбар снова непрозрачный: под ним уже
    белое тело, и светлый заголовок на нём не читался бы. Класс ставит
