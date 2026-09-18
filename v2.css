@@ -149,7 +149,10 @@ html.night{ --v2-head:var(--t-dark-ground) }
    внутри него — 297×245 со сдвигом на 9.69%, отражена по вертикали.
    В этом макете слой лежит в самой шапке, а не в группе с кубком. */
 .v2 .head .v2-conf2{left:56.9px;top:39px;width:297px;height:245px;transform:scaleY(-1)}
-.v2 .back{background:rgba(255,255,255,.4)}
+/* Только кнопка «назад» в шапке чек-листа: класс .back носит ещё и
+   оборотная сторона карты лояльности на главной (.face.back), а v2.css
+   подключён и там — без уточнения заливка съедала зелёный карты. */
+.v2 .head .back{background:rgba(255,255,255,.4)}
 /* В макете 2 шапка идёт кубок → награда → подсказка → прогресс, а счётчика
    дней в ней нет: он остался только на виджете главной. Разметка общая
    с первым вариантом, поэтому переставляем порядком, а не перерисовкой.
@@ -221,17 +224,17 @@ html.night{ --v2-head:var(--t-dark-ground) }
 .v2 .v2-empty p{width:100%;font-size:14px;line-height:18px;font-weight:500;color:var(--ink)}
 
 /* Сегмент-контрол переезжает из шапки в белый блок под ней */
-.v2 .seg{background:var(--v2-sub)}
+.v2 #seg{background:var(--v2-sub)}   /* по id: блок переезжает из шапки в тело */
 
 /* ===== Карточка чек-листа (1113:4166) ===== */
 .v2 .sect{gap:16px}
-.v2 .list{gap:8px}
+.v2 .sect .list{gap:8px}
 .v2 .item{position:relative;width:343px;padding:16px;border-radius:24px;
   background:var(--v2-sub);gap:12px}
 .v2 .item.corn,.v2 .item.peach{background:var(--v2-sub)}   /* цветных вариантов во 2-м нет */
 .v2 .item .top{gap:12px;align-items:flex-start}
-.v2 .thumb{width:64px;height:64px;border-radius:12px;background:none}
-.v2 .thumb img.fill{object-fit:contain}
+.v2 .item .thumb{width:64px;height:64px;border-radius:12px;background:none}
+.v2 .item .thumb img.fill{object-fit:contain}
 .v2 .item .content{width:auto;flex:1;min-width:0;gap:8px}
 .v2 .item h3{font-size:16px;line-height:20px;font-weight:700}
 /* Пунктирный разделитель перед строкой оффера — в макете это Vector 1 */
