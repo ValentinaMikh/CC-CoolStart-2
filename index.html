@@ -82,8 +82,11 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .card-head .left,.card-head .right{font-size:16px;line-height:20px;font-weight:600;
   text-shadow:0 2px 0 rgba(0,0,0,.1);white-space:nowrap}
 .chev{width:24px;height:24px;flex:none;display:block}
+/* Плашка QR светлая в обеих темах: код должен оставаться тёмным по белому,
+   иначе сканеры его не читают. only light запрещает браузеру подгонять её
+   под тёмную схему, даже когда вся остальная страница ночная. */
 .qr{width:100px;height:96px;background:#fff;border-radius:8px;overflow:hidden;flex:none;
-  display:grid;place-items:center}
+  display:grid;place-items:center;color-scheme:only light}
 .qr svg{width:83px;height:83px;display:block}
 .card-foot{display:flex;align-items:center;justify-content:space-between;width:254px;
   font-size:13px;line-height:16px;text-shadow:0 1px 1px rgba(0,0,0,.1);white-space:nowrap}
