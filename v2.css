@@ -88,22 +88,58 @@ html.night{ --v2-head:var(--t-dark-ground) }
 .v2 .head>.group{position:relative;z-index:2}
 .v2 .head>.navbar{position:relative;z-index:3}
 
-/* ===== Этапы прохождения (9084:103550 … 9084:103557) =====
-   В макете у каждого пятна свой центр на 0, 2, 4, 6, 8 и 10 шагах; между
-   ними координаты интерполируются (BLOBS в coolstart.html). Все три лежат
-   одним слоем: размеры и позиции ставит скрипт через background-size и
-   background-position, и оба свойства анимируются сами — @property, как
-   для прежнего круга, здесь не нужен.
-   В макете это залитые эллипсы с размытием в 90 и 180px. Радиальный
-   градиент повторяет тот же профиль без filter: blur, который на пятнах
-   в 700px стоил бы кадров на каждом шаге прогресса. */
-.v2 .head .v2-glow{position:absolute;inset:0;z-index:0;pointer-events:none;
-  background-repeat:no-repeat;
-  background-image:
-    radial-gradient(circle closest-side,rgba(252,198,63,.88) 0%,rgba(252,198,63,.5) 51%,rgba(252,198,63,0) 100%),
-    radial-gradient(circle closest-side,rgba(245,130,47,.85) 0%,rgba(245,130,47,.5) 47%,rgba(245,130,47,0) 100%),
-    radial-gradient(circle closest-side,rgba(234,67,67,1) 22%,rgba(234,67,67,.5) 61%,rgba(234,67,67,0) 100%);
-  transition:background-position .6s var(--mc-ease),background-size .6s var(--mc-ease)}
+/* ===== Лава-лампа в шапке (взамен пятен по прогрессу) =====
+   Раньше три размытых пятна ползли вверх по мере прохождения чек-листа —
+   координаты брались из шести состояний макета. Теперь шапка живёт сама:
+   круги фирменных цветов всплывают и оседают, сливаясь друг с другом.
+
+   Слияние даёт SVG-фильтр #v2goo из разметки: он размывает слой, резко
+   поднимает альфу — соседние круги стягиваются перемычкой, как капли в
+   лава-лампе, — и снова слегка размывает, чтобы края остались мягкими,
+   как на пятнах из макета. Цвета фильтр не трогает: матрица работает
+   только по альфе.
+
+   Круги описаны здесь, а не в скрипте: править их — работа дизайнерская,
+   и держать числа рядом с анимацией удобнее. Скрипт только создаёт
+   нужное количество пустых <i>. */
+.v2 .head .v2-lava{position:absolute;inset:0;z-index:0;pointer-events:none;
+  overflow:hidden;filter:url(#v2goo)}
+.v2 .head .v2-lava i{position:absolute;display:block;width:var(--w);height:var(--w);
+  border-radius:50%;background:var(--c);will-change:transform;
+  animation:v2lava var(--t) var(--d,0s) ease-in-out infinite alternate}
+/* Ход вверх и лёгкий снос вбок: в референсе капли не поднимаются по
+   отвесной линии, а покачиваются. Масштаб добавляет «дыхания» — большие
+   массы снизу и сверху так набухают и опадают. */
+@keyframes v2lava{
+  from{transform:translate3d(0,0,0) scale(1)}
+  to  {transform:translate3d(var(--dx,0px),var(--dy),0) scale(var(--sc,1))}
+}
+
+/* Две неподвижные массы — снизу и сверху, как резервуары лампы: из них
+   отрываются капли и в них же уходят. Обе заходят за край шапки. */
+.v2 .head .v2-lava i:nth-child(1){--c:#FCC63F;--w:340px;left:18px;bottom:-158px;
+  --dy:-26px;--sc:1.06;--t:13s}
+.v2 .head .v2-lava i:nth-child(2){--c:#F5822F;--w:250px;left:-64px;bottom:-96px;
+  --dy:-18px;--dx:14px;--sc:1.08;--t:17s;--d:-4s}
+.v2 .head .v2-lava i:nth-child(3){--c:#EA4343;--w:300px;left:196px;top:-142px;
+  --dy:22px;--dx:-16px;--sc:1.05;--t:15s;--d:-7s}
+/* Капли. Длительности намеренно не кратны друг другу: так они сходятся и
+   расходятся каждый раз по-новому и рисунок не зацикливается на глаз.
+   Жёлтые ходят ниже остальных: заголовок и подпись в шапке белые, и на
+   светло-жёлтом они читались бы хуже всего — наверх пускаем оранжевые
+   и красные, как и в самом макете. */
+.v2 .head .v2-lava i:nth-child(4){--c:#FCC63F;--w:138px;left:48px;bottom:40px;
+  --dy:-206px;--dx:30px;--sc:.74;--t:14s;--d:-2s}
+.v2 .head .v2-lava i:nth-child(5){--c:#F5822F;--w:112px;left:198px;bottom:18px;
+  --dy:-352px;--dx:-38px;--sc:.7;--t:18s;--d:-9s}
+.v2 .head .v2-lava i:nth-child(6){--c:#EA4343;--w:96px;left:112px;bottom:128px;
+  --dy:-244px;--dx:46px;--sc:.78;--t:11s;--d:-5s}
+.v2 .head .v2-lava i:nth-child(7){--c:#FCC63F;--w:84px;left:262px;bottom:106px;
+  --dy:-196px;--dx:-34px;--sc:.72;--t:16s;--d:-12s}
+.v2 .head .v2-lava i:nth-child(8){--c:#F5822F;--w:76px;left:14px;bottom:188px;
+  --dy:-214px;--dx:38px;--sc:.76;--t:12s;--d:-6s}
+.v2 .head .v2-lava i:nth-child(9){--c:#EA4343;--w:88px;left:284px;bottom:204px;
+  --dy:-188px;--dx:-26px;--sc:.8;--t:19s;--d:-15s}
 
 /* Серпантин в макете появляется только на финише: до него шапка спокойная.
    Сами слои до этого момента не создаются (иначе картинка скачалась бы
@@ -149,7 +185,10 @@ html.night{ --v2-head:var(--t-dark-ground) }
    внутри него — 297×245 со сдвигом на 9.69%, отражена по вертикали.
    В этом макете слой лежит в самой шапке, а не в группе с кубком. */
 .v2 .head .v2-conf2{left:56.9px;top:39px;width:297px;height:245px;transform:scaleY(-1)}
-.v2 .back{background:rgba(255,255,255,.4)}
+/* Только кнопка «назад» в шапке чек-листа: класс .back носит ещё и
+   оборотная сторона карты лояльности на главной (.face.back), а v2.css
+   подключён и там — без уточнения заливка съедала зелёный карты. */
+.v2 .head .back{background:rgba(255,255,255,.4)}
 /* В макете 2 шапка идёт кубок → награда → подсказка → прогресс, а счётчика
    дней в ней нет: он остался только на виджете главной. Разметка общая
    с первым вариантом, поэтому переставляем порядком, а не перерисовкой.
@@ -221,17 +260,17 @@ html.night{ --v2-head:var(--t-dark-ground) }
 .v2 .v2-empty p{width:100%;font-size:14px;line-height:18px;font-weight:500;color:var(--ink)}
 
 /* Сегмент-контрол переезжает из шапки в белый блок под ней */
-.v2 .seg{background:var(--v2-sub)}
+.v2 #seg{background:var(--v2-sub)}   /* по id: блок переезжает из шапки в тело */
 
 /* ===== Карточка чек-листа (1113:4166) ===== */
 .v2 .sect{gap:16px}
-.v2 .list{gap:8px}
+.v2 .sect .list{gap:8px}
 .v2 .item{position:relative;width:343px;padding:16px;border-radius:24px;
   background:var(--v2-sub);gap:12px}
 .v2 .item.corn,.v2 .item.peach{background:var(--v2-sub)}   /* цветных вариантов во 2-м нет */
 .v2 .item .top{gap:12px;align-items:flex-start}
-.v2 .thumb{width:64px;height:64px;border-radius:12px;background:none}
-.v2 .thumb img.fill{object-fit:contain}
+.v2 .item .thumb{width:64px;height:64px;border-radius:12px;background:none}
+.v2 .item .thumb img.fill{object-fit:contain}
 .v2 .item .content{width:auto;flex:1;min-width:0;gap:8px}
 .v2 .item h3{font-size:16px;line-height:20px;font-weight:700}
 /* Пунктирный разделитель перед строкой оффера — в макете это Vector 1 */
@@ -246,7 +285,7 @@ html.night{ --v2-head:var(--t-dark-ground) }
   font-size:16px;line-height:20px;font-weight:700;color:#fff}
 
 @media (prefers-reduced-motion:reduce){
-  .v2 .head .v2-glow,
   .v2 .cool .v2-glow,
   .v2 .v2-cup-hint{transition:none}
+  .v2 .head .v2-lava i{animation:none}
 }
