@@ -51,9 +51,17 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 /* ===== Loyalty card 3 — токены Figma (6624:34128) ===== */
 .card-slot{height:var(--card-h);margin-top:calc(var(--card-top) - var(--hero-h));
   position:relative;z-index:20;perspective:1500px}
-.card-lift{width:var(--card-w);height:var(--card-h);margin:0 auto;transform-style:preserve-3d;
-  transition:transform calc(.34s * var(--dur)) ease-out}
-.card-lift.lift{transform:translateZ(28px)}
+.card-lift{width:var(--card-w);height:var(--card-h);margin:0 auto;transform-style:preserve-3d}
+/* Подъём карты к зрителю на время переворота — одной анимацией туда и обратно.
+   Раньше это был transition на 340ms к translateZ(28px), который таймер
+   обрывал на 260ms: ease-out к этому моменту почти останавливал карту
+   (24.9 из 28px), а обратный переход стартовал с его же быстрого начала —
+   скорость за кадр прыгала с +1.3 до -2.7px. Этот излом и читался как
+   дёрганье QR: подъём приходится на первую половину переворота, где карта
+   ещё повёрнута к зрителю лицом и виден только QR, а не поворот.
+   ease-in-out гасит скорость в верхней точке, и разворот движения незаметен. */
+@keyframes cardLift{50%{transform:translateZ(28px)}}
+.card-lift.lift{animation:cardLift calc(.62s * var(--dur)) ease-in-out}
 .card-3d{width:100%;height:100%;position:relative;transform-style:preserve-3d;transform:rotateX(0deg);
   touch-action:pan-y;cursor:pointer}
 .card-3d.animating{transition:transform calc(.62s * var(--dur)) cubic-bezier(.35,.05,.2,1)}
@@ -880,7 +888,7 @@ function bindCard(){
     flipped=next;busy=true;
     card.classList.add('animating');
     card.style.transform=`rotateX(${flipped?-180:0}deg)`;   // снизу вверх
-    lift.classList.add('lift');setTimeout(()=>lift.classList.remove('lift'),260*dur());
+    lift.classList.add('lift');setTimeout(()=>lift.classList.remove('lift'),620*dur());
     if(useGlare){lift.classList.remove('sweep');void lift.offsetWidth;
       lift.classList.add('sweep');setTimeout(()=>lift.classList.remove('sweep'),740*dur())}
     document.querySelectorAll('#segSide button').forEach(b=>
