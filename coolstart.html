@@ -606,45 +606,24 @@ function mountCup3d(){
 }
 
 /* ===== Подсказка удержания =====
-   Показываем её в ответ на касание кубка и ровно там, куда нажали: палец
-   на картинке встаёт под настоящий палец, а подпись читается рядом. Через
-   секунду подсказка уходит сама, новое касание отсчитывает секунду заново.
-   Ловим pointerdown, а не click: на тапе подсказка нужна сразу, а не
-   после того, как палец оторвали от экрана. */
+   Показываем её в ответ на касание кубка. Место у подсказки постоянное —
+   слева сверху от кубка, как в макете (9110:112295); его задаёт v2.css.
+   Под палец она больше не переезжает: там подсказка закрывалась самой
+   рукой и вставала то на кубок, то вплотную к краю, а на отведённом
+   месте она читается целиком и всегда одинаково.
+   Через секунду подсказка уходит сама, новое касание отсчитывает секунду
+   заново. Ловим pointerdown, а не click: на тапе подсказка нужна сразу,
+   а не после того, как палец оторвали от экрана. */
 const HINT_SHOW = 1000;
-/* Кружок нажатия на пиктограмме — примерно в 10px от её верха: на столько
-   поднимаем блок, чтобы он пришёлся ровно на точку касания. */
-const HINT_TIP = 10;
 function holdHint(host){
   let timer = 0;
-  host.addEventListener('pointerdown', e=>{
+  host.addEventListener('pointerdown', ()=>{
     const hint = document.getElementById('v2CupHint');
     if(!hint) return;
-    placeHint(hint, host, e);
     hint.classList.add('is-on');
     clearTimeout(timer);
     timer = setTimeout(()=>hint.classList.remove('is-on'), HINT_SHOW);
   });
-}
-
-/* Подсказка лежит в группе шапки, а координаты приходят от окна — отсюда
-   пересчёт. Края подрезаем по самому кубку: у края блока подсказка
-   прижимается к нему и наружу не выезжает.
-   Телефон на сцене масштабируется, поэтому все rect'ы приходят в экранных
-   пикселях, а left/top применяются до трансформации — делим на масштаб,
-   иначе у краёв подрезка промахивается. */
-function placeHint(hint, host, e){
-  const group = hint.offsetParent;
-  if(!group) return;
-  const g = group.getBoundingClientRect(),
-        h = host.getBoundingClientRect(),
-        r = hint.getBoundingClientRect();
-  const k = g.width / group.offsetWidth || 1;
-  const clamp = (v, min, max) => Math.max(min, Math.min(v, max));
-  const x = clamp(e.clientX - r.width / 2,   h.left, h.right  - r.width);
-  const y = clamp(e.clientY - HINT_TIP * k,  h.top,  h.bottom - r.height);
-  hint.style.left = ((x - g.left) / k).toFixed(1) + 'px';
-  hint.style.top  = ((y - g.top)  / k).toFixed(1) + 'px';
 }
 
 /* ===== Подмена кубка: растворение =====

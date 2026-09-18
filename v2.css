@@ -180,9 +180,8 @@ html.night{ --v2-head:var(--t-dark-ground) }
    весь блок приглушён до 60% (9110:112295). Вынесена из потока — иначе
    растянула бы колонку и сдвинула всё, что ниже; события ей не нужны,
    удержание ловит сам кубок.
-   Появляется по касанию кубка и держится секунду, а left/top ставит
-   holdHint в coolstart.html — по точке нажатия. Значения ниже нужны
-   только до первого касания, пока подсказка ещё не показывалась. */
+   Появляется по касанию кубка и держится секунду; место постоянное —
+   left/top ниже, прямо по макету. */
 .v2 .v2-cup-hint{position:absolute;left:27px;top:40px;z-index:1;
   display:flex;flex-direction:column;gap:8px;align-items:center;width:86px;
   opacity:0;pointer-events:none;transition:opacity .2s var(--mc-ease)}
