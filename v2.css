@@ -102,7 +102,7 @@ html.night{ --v2-head:var(--t-dark-ground) }
    Круги описаны здесь, а не в скрипте: править их — работа дизайнерская,
    и держать числа рядом с анимацией удобнее. Скрипт только создаёт
    нужное количество пустых <i>. */
-/* Размытие в 60 поверх слияния: капли перестают быть кругами с краем и
+/* Размытие в 48 поверх слияния: капли перестают быть кругами с краем и
    читаются мягкими градиентными пятнами — так шапка ближе к прежним
    пятнам из макета, а движение остаётся лава-ламповым.
    Своего overflow у слоя нет намеренно: круги должны размываться целиком,
@@ -110,7 +110,7 @@ html.night{ --v2-head:var(--t-dark-ground) }
    бы светлая кайма от обрезанного круга. Готовый результат обрезает сама
    шапка — у неё overflow:hidden. */
 .v2 .head .v2-lava{position:absolute;inset:0;z-index:0;pointer-events:none;
-  filter:url(#v2goo) blur(60px)}
+  filter:url(#v2goo) blur(48px)}
 .v2 .head .v2-lava i{position:absolute;display:block;width:var(--w);height:var(--w);
   border-radius:50%;background:var(--c);will-change:transform;
   animation:v2lava var(--t) var(--d,0s) ease-in-out infinite alternate}
