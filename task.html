@@ -82,7 +82,9 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .banner .bi{width:24px;height:24px;flex:none;background:var(--special-dark);
   -webkit-mask:url("Resurses%20coolstart/ic-info.svg") center/contain no-repeat;
   mask:url("Resurses%20coolstart/ic-info.svg") center/contain no-repeat}
-.banner p{flex:1;min-width:0;font-size:16px;line-height:20px;font-weight:500;color:var(--ink)}
+/* Плашка светлая в обеих темах (Special не перекрашивается), поэтому
+   текст на ней фиксированно тёмный: --ink ночью становится белым. */
+.banner p{flex:1;min-width:0;font-size:16px;line-height:20px;font-weight:500;color:#1E1E1E}
 /* Иконки акций внутри текста плашки (8366:114405, 114400, 114411).
    Иконка 24px выше строки 16/20, поэтому у плашки с иконками интерлиньяж чуть больше. */
 .banner p .pi{width:24px;height:24px;display:inline-block;vertical-align:middle;margin-right:4px}

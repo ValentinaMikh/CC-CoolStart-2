@@ -72,7 +72,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .banner .bi{width:24px;height:24px;flex:none;background:var(--special-dark);
   -webkit-mask:url("Resurses%20coolstart/ic-info.svg") center/contain no-repeat;
   mask:url("Resurses%20coolstart/ic-info.svg") center/contain no-repeat}
-.banner p{flex:1;min-width:0;font-size:16px;line-height:20px;font-weight:500;color:var(--ink)}
+.banner p{flex:1;min-width:0;font-size:16px;line-height:20px;font-weight:500;color:#1E1E1E}
 
 /* ===== Купоны (8330:61223): ряд 273-х карточек, px16 py24 gap16 ===== */
 .cupons{background:var(--sub);display:flex;gap:16px;align-items:flex-start;padding:24px 16px;
@@ -101,6 +101,60 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
   font-family:inherit;font-size:16px;line-height:20px;font-weight:500;
   background:var(--green);color:#fff}
 .cupon .use.off{background:var(--disable);color:var(--disable-txt);cursor:default}
+
+/* ===== Купоны во втором варианте дизайна (9215:182054) =====
+   В А1 это ряд карточек 273 с горизонтальной прокруткой. В В1 макет
+   кладёт их сеткой 2×N прямо в белое тело задания: карточка 165.5,
+   шаг 12 по обеим осям. Сама карточка — Coupon/Wave (9215:181962):
+   фото, оливковое тело с названием и описанием, зубчатый шов, зелёная
+   плашка со скидкой, а низ срезан волной. */
+.v2 .cupons{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;
+  padding:0;background:transparent;overflow:visible;cursor:auto}
+
+.v2 .cw{--cw-body:var(--olive);--cw-foot:#B6D866;
+  position:relative;display:flex;flex-direction:column;align-items:stretch;
+  padding:0 0 23.666px;border:0;border-radius:24px 24px 0 0;overflow:hidden;
+  background:transparent;font:inherit;text-align:left;cursor:pointer}
+/* применённый купон гаснет — в макете такого кадра нет, но без него
+   не видно, какие уже потрачены */
+.v2 .cw.is-used{opacity:.5}
+
+/* Карточка купона цветная в обеих темах — как Primary и Accent, — поэтому
+   текст на ней берём не из темы, а фиксированный тёмный: ночью --ink
+   становится белым и надписи на оливковом пропадали. */
+.v2 .cw .cw-body{flex:1;display:flex;flex-direction:column;background:var(--cw-body)}
+.v2 .cw .cw-pic{aspect-ratio:164/92;width:100%;background:#fff;overflow:hidden}
+.v2 .cw .cw-pic img{position:static;inset:auto;width:100%;height:100%;max-width:none;
+  display:block;object-fit:cover;object-position:center top}
+.v2 .cw .cw-txt{display:flex;flex-direction:column;gap:8px;padding:8px 8px 16px;
+  font-size:14px;line-height:18px;color:#1E1E1E}
+/* В макете название занимает две строки и обрезается многоточием
+   («Пирожные, десерты и торты от Кондитерской…»), описание — три-четыре.
+   Тексты в прототипе длиннее макетных, поэтому ограничиваем и их:
+   иначе карточки вытягиваются вдвое и сетка расползается. */
+.v2 .cw .cw-txt .t,
+.v2 .cw .cw-txt .d{display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden}
+.v2 .cw .cw-txt .t{font-weight:500;-webkit-line-clamp:2}
+.v2 .cw .cw-txt .d{font-weight:400;-webkit-line-clamp:4}
+
+/* Шов над плашкой — ряд кружков Ø8 с шагом 16 (9215:182055). Их центры
+   лежат ровно на границе, поэтому в зелёное вдаются оливковые полукруги. */
+.v2 .cw .cw-foot{position:relative;padding:8px;background:var(--cw-foot);
+  display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center}
+.v2 .cw .cw-foot::before{content:'';position:absolute;left:0;right:0;top:-4px;height:8px;
+  background-image:radial-gradient(circle at 4px 4px,var(--cw-body) 3.6px,transparent 3.7px);
+  background-size:16px 8px;background-position:-1.25px 0}
+.v2 .cw .cw-foot b{font-size:16px;line-height:20px;font-weight:600;color:#1E1E1E}
+.v2 .cw .cw-foot span{font-size:13px;line-height:16px;font-weight:400;color:rgba(0,0,0,.64)}
+
+/* Волна вместо нижнего края: вектор 232×23.67 по центру, карточка его
+   обрезает по своей ширине (9215:181808): сплошное основание, под ним
+   восемь фестонов по 29. */
+.v2 .cw .cw-wave{position:absolute;left:50%;bottom:0;width:232px;height:23.666px;
+  transform:translateX(-50%);display:block;background:var(--cw-foot);
+  -webkit-mask:var(--cw-wave-mask) center/232px 23.666px no-repeat;
+          mask:var(--cw-wave-mask) center/232px 23.666px no-repeat}
+.v2 .cw{--cw-wave-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 232 23.666'%3E%3Cpath d='M0 0H232V13.7Q217.5 33.7 203 13.7Q188.5 33.7 174 13.7Q159.5 33.7 145 13.7Q130.5 33.7 116 13.7Q101.5 33.7 87 13.7Q72.5 33.7 58 13.7Q43.5 33.7 29 13.7Q14.5 33.7 0 13.7Z' fill='%23000'/%3E%3C/svg%3E")}
 
 /* progress widget задания — как на остальных страницах заданий */
 .pw{width:100%;display:flex;flex-direction:column;gap:16px}
@@ -196,6 +250,7 @@ const ICON={
   back:     RES+'ic-back.svg',
   info:     RES+'ic-info.svg',
   factory:  RES+'ic-cat-1.svg',
+  gift:     RES+'Gift.svg',     /* Promo/Gift 40×24 — иконка плашки оффера */
   cut:      RES+'ic-cut.svg'};  /* зубчатый низ билета, 44px */
 
 /* Шапка 204px: слой под подложкой Nature/Olive и слой поверх */
@@ -313,6 +368,25 @@ function cupon(c,i){
   </div>`;
 }
 
+/* Coupon/Wave второго варианта (9215:181962): фото, оливковое тело с
+   названием и описанием, плашка со скидкой и волна снизу. Кнопки в
+   макете нет — карточка нажимается целиком. Подпись под скидкой в
+   макете статическая («на первую покупку»), состояние «применён»
+   добавлено сверх макета: иначе не видно, какие купоны уже потрачены. */
+function cuponV2(c,i){
+  const applied=used.has(i);
+  return `<button class="cw${applied?' is-used':''}" data-use="${i}">
+    <span class="cw-body">
+      <span class="cw-pic">${c.pic?`<img src="${c.pic}" alt="">`:''}</span>
+      <span class="cw-txt"><span class="t">${esc(c.h)}</span>`+
+        `<span class="d">${esc(c.d)}</span></span>
+    </span>
+    <span class="cw-foot"><b>Скидка ${esc(c.pct)}</b>`+
+      `<span>${applied?'Применён':'на первую покупку'}</span></span>
+    <i class="cw-wave"></i>
+  </button>`;
+}
+
 /* Во втором варианте шапка своя: цветной блок с иллюстрацией, названием
    задания и шкалой (9215:38489). Блок задания из белого тела при этом
    убираем — он уже показан в шапке, а в навбаре остаётся номер шага. */
@@ -329,6 +403,19 @@ function render(){
     const pw=document.querySelector('.main .pw'); if(pw) pw.hidden=true;
     const n=Steps.IDS.indexOf('cats')+1;
     if(n) document.querySelector('.nav-title').textContent=`Задание ${n}`;
+    /* По макету (9215:38506) за плашкой «Будут доступны…» идёт check-list
+       item с оффером, и купоны лежат внутри белого тела, а не отдельной
+       лентой под ним. Переносим — тогда поля и шаг 24 задаёт само тело,
+       а место под кнопку достаётся ему же. */
+    const main=document.querySelector('.main');
+    if(!document.getElementById('v2Offer')){
+      const offer=document.createElement('div');
+      offer.id='v2Offer'; offer.className='pw';
+      offer.innerHTML=`<div class="head"><img src="${ICON.gift}" alt="">`+
+        `<p class="h3">Купоны на скидку</p></div>`;
+      main.append(offer);
+    }
+    main.append(document.getElementById('cupons'));
     V2Task.pinCta();
     V2Task.watchNav();
   }else{
@@ -342,7 +429,7 @@ function render(){
   /* карусель перерисовывается на каждый выбор — держим её на том же месте,
      иначе после нажатия она отматывалась бы к первому купону */
   const rail=document.getElementById('cupons'), railX=rail.scrollLeft;
-  rail.innerHTML=CUPONS.map(cupon).join('');
+  rail.innerHTML=CUPONS.map(v2()?cuponV2:cupon).join('');
   rail.scrollLeft=railX;
   document.getElementById('tabbar').innerHTML=
     `<div class="tab-panel">${TABI.map(([t,src,href],i)=>
@@ -374,6 +461,7 @@ document.getElementById('cupons').onclick=e=>{
 /* Горизонтальная прокрутка ряда купонов: свайп на тачскрине работает сам,
    на десктопе добавляем колесо и перетаскивание мышью. */
 (function(){
+  if(v2()) return;              /* в В1 купоны лежат сеткой, тащить нечего */
   const el=document.getElementById('cupons');
   el.addEventListener('wheel',e=>{
     if(Math.abs(e.deltaY)<=Math.abs(e.deltaX)) return;      /* уже горизонтальный жест */

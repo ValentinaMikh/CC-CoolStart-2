@@ -86,18 +86,20 @@ html.night .v2 .topnav.on-solid .back img{filter:brightness(0) invert(1)}
    карточку 343 с отступом 16 — и подпись там не заголовок, а строка 14/18.
    Шкалу задания это не касается: в В1 она уехала в шапку. */
 .v2 .main .pw{gap:12px;padding:16px;border-radius:16px;background:var(--t-sub)}
-.v2 .main .pw .head{min-height:40px;align-items:center;gap:8px}
+.v2 .main .pw .head{display:flex;min-height:40px;align-items:center;gap:8px}
 .v2 .main .pw .head .h3{font-size:14px;line-height:18px;font-weight:500}
 .v2 .main .pw .progress{gap:8px}
 
-/* ===== Зелёная кнопка задания =====
-   Прижата к низу экрана, в 8px над таб-баром. Лента прокрутки кончается
-   ровно по верху таб-бара (86px), отсюда 94. Сам перенос кнопки из ленты
-   в .screen делает V2Task.pinCta — внутри прокрутки её не удержать. */
-.v2 .v2t-cta{position:absolute;left:16px;right:16px;bottom:94px;z-index:25;width:auto}
-/* Место под кнопку в конце ленты, чтобы последний блок не оказался под ней.
-   Класс вешает pinCta на последний блок ленты — он не везде .main. */
-.v2 .has-cta{padding-bottom:88px}
+/* ===== Button panel (9215:38638 → 8046:25792) =====
+   Часть таб-бара: белая площадка 80 (поле 16 + кнопка 48 + поле 16) со
+   скруглением 16 сверху, лежит прямо на ряду вкладок. Ряд вкладок с
+   индикатором занимает 86, отсюда bottom. Саму площадку собирает
+   V2Task.pinCta — внутри прокрутки кнопку не удержать. */
+.v2 .v2t-cta{position:absolute;left:0;right:0;bottom:86px;z-index:25;
+  padding:16px;border-radius:16px 16px 0 0;background:var(--t-ground)}
+/* Место под площадку в конце ленты: её 80 и 40 нижнего поля тела по
+   макету. Класс вешает pinCta на последний блок ленты — он не везде .main. */
+.v2 .has-cta{padding-bottom:120px}
 
 /* ===== «Хиты»: тело разбито на .main и соседние блоки =====
    Там между шапкой и телом стоит .content со своим шагом 24, и вместе с
