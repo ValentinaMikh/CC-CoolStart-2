@@ -10,9 +10,11 @@
 .tab{flex:1;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;
   justify-content:center;gap:2px;padding:8px;position:relative;cursor:pointer;
   color:var(--t-text-3);text-decoration:none}
-/* Иконка наследует цвет вкладки — она нарисована currentColor */
-.tab .ic{width:20px;height:20px;display:grid;place-items:center;color:inherit}
-.tab .ic svg{display:block}
+/* Иконка — маска по файлу выгрузки: форма из svg, цвет от вкладки.
+   Файл сам по себе серый или зелёный, и тегом img его не перекрасить. */
+.tab .ic{width:20px;height:20px;flex:none;background:currentColor;
+  -webkit-mask:var(--ic) center/20px 20px no-repeat;
+          mask:var(--ic) center/20px 20px no-repeat}
 .tab .lbl{font-size:10px;line-height:12px;font-weight:600;text-align:center;width:100%;color:inherit}
 .tab.active{color:var(--t-primary)}
 .tab .badge{position:absolute;top:4px;right:12px;min-width:14px;height:14px;border-radius:60px;
