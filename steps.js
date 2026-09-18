@@ -16,6 +16,13 @@ const KEY = 'coolstart:done', FRESH = 'coolstart:fresh';
 const TOTAL = 10;   /* шагов в чек-листе */
 const TERM  = 60;   /* дней на прохождение */
 
+/* Идентификаторы шагов в том же порядке, в каком они идут в чек-листе.
+   Нужны панелям тестировщика: обе — и на чек-листе, и на главной —
+   отмечают «первые n шагов», и список должен быть у них общий, иначе
+   счётчик виджета и содержимое вкладок разошлись бы. */
+const IDS = ['hits','cats','delivery','weekend','email','push',
+             'kgl-day','kgl-month','plus-one','luch'];
+
 function read(key){
   try{ const v = JSON.parse(sessionStorage.getItem(key)); return Array.isArray(v) ? v : [] }
   catch(e){ return [] }
@@ -79,6 +86,16 @@ function applyDesign(){
   document.documentElement.classList.toggle('v2', design() === 2);
 }
 
+/* ===== Тема =====
+   День и ночь — две версии цветов из библиотеки Figma; сами значения
+   лежат в theme.css, здесь только выбор. Как и вариант дизайна, тема
+   общая для всех экранов и переживает переход между ними. */
+const theme    = () => (get('theme', 'day') === 'night' ? 'night' : 'day');
+const setTheme = t  => put('theme', t === 'night' ? 'night' : 'day');
+function applyTheme(){
+  document.documentElement.classList.toggle('night', theme() === 'night');
+}
+
 /* ===== «КеГЛи уже начислены» =====
    Последний этап шапки (макет 1144:2303) наступает не сразу: в день, когда
    закрылся десятый шаг, написано «начислятся завтра», и только на следующий
@@ -112,11 +129,29 @@ function reset(){
   }catch(e){}
 }
 
+/* ===== Этап оформления по числу закрытых шагов =====
+   Градиент шапки чек-листа и виджета на главной задан в макетах для 0, 2,
+   4, 6, 8 и 10 шагов. Между ними интерполируем: прогресс меняется по шагу,
+   а не рывками от макета к макету. Таблица — строки [шагов, ...числа];
+   возвращаются те же числа без первого, посчитанные для n. */
+function stage(table, n){
+  let a = table[0], b = table[0];
+  for(let i = 1; i < table.length; i++){
+    b = table[i];
+    if(n <= b[0]) break;
+    a = b;
+  }
+  const t = b[0] === a[0] ? 0 : (Math.min(n, b[0]) - a[0]) / (b[0] - a[0]);
+  return a.slice(1).map((v, i) => v + (b[i + 1] - v) * t);
+}
+
 /* Ставим класс сразу при загрузке модуля (он подключён в <head>), иначе
    первый вариант успел бы моргнуть до первой перерисовки. */
 applyDesign();
+applyTheme();
 
 return {TOTAL, TERM, all, isDone, complete, set, takeFresh, finish,
         days, setDays, daysLeft, design, setDesign, designName, applyDesign,
-        get, put, onRestore, reset};
+        theme, setTheme, applyTheme,
+        get, put, onRestore, reset, stage, IDS};
 })();

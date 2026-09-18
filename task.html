@@ -5,11 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>КуулКлевер — задание КуулСтарта</title>
 <link rel="stylesheet" href="micro.css">
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="tabbar.css">
+<link rel="stylesheet" href="dev-theme.css">
+<link rel="stylesheet" href="v2-task.css">
 <script src="micro.js"></script>
+<script src="tabbar.js"></script>
 <script src="steps.js"></script>
+<script src="v2-task.js"></script>
+<script src="dev-theme.js" defer></script>
 <style>
-:root{--green:#80BA27;--ink:#1E1E1E;--ink-2:#4F4F4F;--ink-3:#808080;--ink-4:#DFDFDF;
-  --sub:#F7F7F7;--hair:#E5E5E5;--hair-2:#D6D6D6;--olive:#DEE99B;--special:#FFEED6;--special-dark:#E88A01;--disable:#F0F1F3;--brand-soft:#E8F5D8;--dur:1}
+:root{--green:var(--t-primary);--ink:var(--t-text);--ink-2:var(--t-text-2);--ink-3:var(--t-text-3);--ink-4:#DFDFDF;
+  --sub:var(--t-sub);--hair:var(--t-border);--hair-2:#D6D6D6;--olive:#DEE99B;--special:#FFEED6;--special-dark:#E88A01;--disable:#F0F1F3;--brand-soft:#E8F5D8;--dur:1}
+/* Ночью серые этой страницы идут своей лестницей: в библиотеке их нет.
+   Фирменные подложки карточек при этом не трогаем — они цветные
+   в обеих темах, как Primary и Accent. */
+html.night{--ink-4:#3A3A3A;--hair-2:#2E2E2E;--disable:#2A2A2A}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
 html,body{height:100%}
@@ -21,7 +32,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .screen{position:absolute;inset:0;overflow:hidden;border-radius:44px}
 
 /* ===== Top Navigation (8284:139670): белая, статус-бар + навбар ===== */
-.topnav{position:absolute;top:0;left:0;right:0;z-index:40;background:#fff;padding-bottom:8px;
+.topnav{position:absolute;top:0;left:0;right:0;z-index:40;background:var(--t-ground);padding-bottom:8px;
   display:flex;flex-direction:column;align-items:center}
 .status{width:100%;height:44px;display:flex;align-items:center;justify-content:space-between;
   padding:0 26px;font-size:15px;font-weight:600;color:var(--ink)}
@@ -40,7 +51,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .scroll::-webkit-scrollbar{display:none}
 .hero{width:375px;height:204px;background:var(--olive);overflow:hidden;position:relative}
 .hero img{width:100%;height:100%;object-fit:cover;object-position:bottom;display:block}
-.main{background:#fff;padding:16px;display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+.main{background:var(--t-ground);padding:16px;display:flex;flex-direction:column;gap:16px;align-items:flex-start}
 
 
 .body{width:100%;font-size:16px;line-height:20px;font-weight:400;color:var(--ink)}
@@ -66,7 +77,16 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .banner{width:343px;display:flex;gap:12px;align-items:center;padding:12px 16px;
   border-radius:12px;background:var(--special)}
 .banner img{width:24px;height:24px;flex:none;display:block}
-.banner p{flex:1;min-width:0;font-size:16px;line-height:20px;font-weight:500;color:var(--ink)}
+/* Иконка баннера — оранжевая (Special-dark из библиотеки, 9215:183246).
+   Файл в ресурсах с зашитым тёмным контуром, поэтому красим маской:
+   форма берётся из svg, цвет — из токена. Тегом img так не сделать —
+   растр самой картинки лёг бы поверх заливки. */
+.banner .bi{width:24px;height:24px;flex:none;background:var(--special-dark);
+  -webkit-mask:url("Resurses%20coolstart/ic-info.svg") center/contain no-repeat;
+  mask:url("Resurses%20coolstart/ic-info.svg") center/contain no-repeat}
+/* Плашка светлая в обеих темах (Special не перекрашивается), поэтому
+   текст на ней фиксированно тёмный: --ink ночью становится белым. */
+.banner p{flex:1;min-width:0;font-size:16px;line-height:20px;font-weight:500;color:#1E1E1E}
 /* Иконки акций внутри текста плашки (8366:114405, 114400, 114411).
    Иконка 24px выше строки 16/20, поэтому у плашки с иконками интерлиньяж чуть больше. */
 .banner p .pi{width:24px;height:24px;display:inline-block;vertical-align:middle;margin-right:4px}
@@ -95,7 +115,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 /* Карточки товаров подборки — компонент Product card UPD, как на главной */
 .grid{width:343px;display:flex;gap:10px;overflow-x:auto}
 .grid::-webkit-scrollbar{display:none}
-.pcard{flex:none;width:164px;background:#fff;border:1px solid var(--hair);border-radius:12px;
+.pcard{flex:none;width:164px;background:var(--t-ground);border:1px solid var(--hair);border-radius:12px;
   overflow:hidden;display:flex;flex-direction:column}
 .pcard .pic{position:relative;width:100%;aspect-ratio:1/1;background:#D9D9D9;overflow:hidden}
 .pcard .pic img{width:100%;height:100%;object-fit:cover;display:block}
@@ -155,26 +175,13 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .pol u{font-weight:500}
 
 /* ===== Tab Bar — как на главной ===== */
-.tabbar{position:absolute;left:0;right:0;bottom:0;z-index:30;background:#fff;
-  display:flex;flex-direction:column;align-items:center}
-.tab-panel{display:flex;width:100%;border-top:1px solid var(--hair);background:#fff}
-.tab{flex:1;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;gap:2px;padding:8px;position:relative;color:var(--ink-3);text-decoration:none}
-.tab img{width:20px;height:20px;display:block}
-/* :not(.badge) — иначе width:100% растягивает счётчик корзины на всю вкладку */
-.tab span:not(.badge){font-size:10px;line-height:12px;font-weight:600;text-align:center;width:100%}
-.tab.active span{color:var(--green)}
-.badge{position:absolute;top:4px;right:12px;min-width:14px;height:14px;border-radius:60px;
-  background:#F45500;border:2px solid #fff;color:#fff;font-size:10px;line-height:12px;
-  display:grid;place-items:center;padding:1px}
-.home-ind-wrap{width:100%;background:#fff;padding:22px 8px 8px;display:grid;place-items:center}
-.home-ind-wrap i{width:134px;height:5px;border-radius:100px;background:var(--ink);display:block}
+/* Таб-бар — общий файл tabbar.css */
 
 /* ===== Модалка промокода (8284:140204) ===== */
 .m-scrim{position:absolute;inset:0;background:rgba(0,0,0,.5);z-index:70;opacity:0;pointer-events:none;
   transition:.25s}
 .m-scrim.on{opacity:1;pointer-events:auto}
-.sheet{position:absolute;left:0;right:0;bottom:0;z-index:71;background:#fff;
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:71;background:var(--t-ground);
   border-radius:24px 24px 44px 44px;padding:16px 16px 34px;transform:translateY(102%);
   transition:transform .34s cubic-bezier(.2,.85,.25,1);max-height:82%;overflow-y:auto}
 .sheet.on{transform:translateY(0)}
@@ -252,7 +259,11 @@ const ICON={
   back:RES+'ic-back.svg',
   info:RES+'ic-info.svg',
   lock:RES+'ic-lock.svg',
+  check:RES+'ic-check.svg',
   gift:RES+'Gift.svg'};
+
+/* Второй вариант дизайна — как и на других экранах, по классу на <html> */
+const v2=()=>Steps.design()===2;
 
 /* Иконки акций 24×24 для плашки задания «2+1, 3+1 или 5+1»
    (макеты 8366:114405, 8366:114400, 8366:114411 — файлы из папки) */
@@ -261,12 +272,6 @@ const PROMO_ICONS=[
  ['3+1','Resurses%20coolstart/3%2B1.png'],
  ['+1', 'Resurses%20coolstart/%2B1.png']];
 
-const TABI=[
- ['Главная',RES+'ic-tab-home.svg'],
- ['Каталог',RES+'ic-tab-catalog.svg'],
- ['Акции',  RES+'ic-tab-promo.svg'],
- ['Корзина',RES+'ic-tab-cart.svg'],
- ['Профиль',RES+'ic-tab-profile.svg']];
 
 /* Иконки заводов для строк купонов (в макете их 6, в ТЗ 10 категорий — циклим) */
 const FACTORY=[1,2,3,4,5,6].map(n=>RES+'ic-cat-'+n+'.svg');
@@ -284,6 +289,23 @@ const HERO={
  'kgl-month':{bg:'#FFE3A2',src:'Resurses%20coolstart/check-list%20image%20page%207-8.jpg'},   /* шаг 8  КгЛ      */
  'plus-one' :{bg:'#FFE3A2',src:'Resurses%20coolstart/check-list%20image%20page%209.jpg'},   /* шаг 9  монеты   */
  luch       :{bg:'#FFE3A2',src:'Resurses%20coolstart/check-list%20image%20page%2010.jpg'}};  /* шаг 10 х5 КгЛ   */
+
+/* ===== Шапка задания во втором варианте (9215:183280) =====
+   В В1 вместо фото-шапки идёт цветной блок: иллюстрация шага, название
+   задания и сегментная шкала. Иллюстрации — те же, что на карточках
+   чек-листа; тон повторяет группу шага, а названия взяты из макета,
+   поэтому они длиннее коротких подписей навбара. */
+const V2T={
+ hits       :{pic:'image.png',   tone:'',       ttl:'Купить товар из подборки хитов'},
+ cats       :{pic:'image-1.png', tone:'',       ttl:'Купите товары 3 разных категорий'},
+ delivery   :{pic:'image-2.png', tone:'',       ttl:'Оформить заказ от 700 ₽ с КуулДоставкой'},
+ weekend    :{pic:'image-3.png', tone:'',       ttl:'Совершите покупку в выходные'},
+ email      :{pic:'image-4.png', tone:'red',    ttl:'Подтвердите email'},
+ push       :{pic:'image-5.png', tone:'red',    ttl:'Включите push-уведомления'},
+ 'kgl-day'  :{pic:'image-6.png', tone:'orange', ttl:'Получите КеГЛи Дня'},
+ 'kgl-month':{pic:'image-7.png', tone:'orange', ttl:'Подписаться на КеГЛи Месяца'},
+ 'plus-one' :{pic:'image-8.png', tone:'orange', ttl:'Купите товар по акции 2+1, 3+1 или 5+1'},
+ luch       :{pic:'image-9.png', tone:'orange', ttl:'Добавьте товар в ЛУЧ'}};
 
 /* ===== 3.2.1 — 10 купонов ===== */
 const COUPONS=[
@@ -487,7 +509,7 @@ function block(b){
         '<span class="pig">'+PROMO_ICONS.map(([n,src])=>
           `<img class="pi" src="${src}" alt="${n}">`).join('')+'</span>');
       const cls=txt.includes('class="pi"') ? 'banner icons' : 'banner';
-      return `<div class="${cls}"><img src="${ICON.info}" alt=""><p>${txt}</p></div>`;
+      return `<div class="${cls}"><i class="bi"></i><p>${txt}</p></div>`;
     }
     case 'pw':      return pw(b.v,b.total,b.used,b.done,b.icon?ICON[b.icon]:'');
     case 'gift':    return `<div class="pw"><div class="head">`+
@@ -507,28 +529,43 @@ function block(b){
   return '';
 }
 
+/* ===== Шапка В1 =====
+   Цветной блок вместо фото: иллюстрация шага, название задания и
+   сегментная шкала. Числа шкалы берём из блока задания — того самого,
+   который в А1 рисуется первым в белом теле; здесь он переезжает в
+   шапку, поэтому из тела его убираем. */
+function heroV2(){
+  const V=V2T[id]; if(!V) return '';
+  const t=S.blocks.find(b=>b.t==='task') || {total:1,used:0};
+  const total=t.total;
+  const used = ((id==='email'&&emailOk) || Steps.isDone(id)) ? total : t.used;
+  return `<div class="${V2Task.tone(V.tone)}">` +
+         V2Task.hero({pic:RES+V.pic, ttl:V.ttl, used, total, check:ICON.check}) +
+         `</div>`;
+}
+
 function render(){
   document.getElementById('icBack').src=ICON.back;
-  document.getElementById('navTitle').textContent=S.nav;
+  /* В В1 в навбаре стоит номер задания, а название переехало в шапку */
+  const n=Steps.IDS.indexOf(id)+1;
+  document.getElementById('navTitle').textContent = v2() && n ? `Задание ${n}` : S.nav;
   document.title='КуулКлевер — '+S.nav;
   const H=HERO[id];
-  const hero=H
-    ? `<div class="hero" style="background:${H.bg}">${H.src?`<img src="${H.src}" alt="">`:''}</div>`
-    : `<div class="hero"></div>`;
+  const hero = v2() ? heroV2()
+    : H ? `<div class="hero" style="background:${H.bg}">${H.src?`<img src="${H.src}" alt="">`:''}</div>`
+        : `<div class="hero"></div>`;
   /* Прогресс-бар задания идёт сразу после фото, остальные блоки — в порядке ТЗ.
-     Шкалы офферов (t:'pw') это не касается: они относятся к своему блоку текста. */
-  const blocks=[...S.blocks.filter(b=>b.t==='task'), ...S.blocks.filter(b=>b.t!=='task')];
+     Шкалы офферов (t:'pw') это не касается: они относятся к своему блоку текста.
+     В В1 блок задания уже показан в шапке — второй раз не рисуем. */
+  const blocks = v2()
+    ? S.blocks.filter(b=>b.t!=='task')
+    : [...S.blocks.filter(b=>b.t==='task'), ...S.blocks.filter(b=>b.t!=='task')];
   document.getElementById('scroll').innerHTML=
     hero+`<div class="main">${blocks.map(block).join('')}</div>`;
+  if(v2()){ V2Task.pinCta(); V2Task.watchNav() }
   Micro.reveal('.main > *');
 
-  document.getElementById('tabbar').innerHTML=
-    `<div class="tab-panel">${TABI.map(([t,src],i)=>
-      `<a class="tab${i===0?' active':''}" href="${i===0?'index.html':'#'}">
-         <img src="${src}" alt=""><span>${t}</span>
-         ${t==='Корзина'?'<span class="badge">13</span>':''}
-       </a>`).join('')}</div>
-     <div class="home-ind-wrap"><i></i></div>`;
+  TabBar.mount(0);   /* ряд вкладок общий на все экраны — tabbar.js */
 }
 
 /* ===== модалка промокода (3.2.2) ===== */
@@ -670,7 +707,9 @@ function coupon(i){
 })();
 
 /* ===== события ===== */
-document.getElementById('scroll').onclick=e=>{
+/* Делегируем на весь экран, а не на ленту: во втором варианте кнопка
+   задания вынесена из прокрутки и до .scroll её клик уже не дошёл бы. */
+document.querySelector('.screen').onclick=e=>{
   const c=e.target.closest('[data-c]');
   if(c){ coupon(+c.dataset.c); return }
   const d=e.target.closest('[data-d]');
@@ -703,8 +742,8 @@ function completeTask(btn){
   }
   Steps.complete(id);
   render();
-  Micro.flash(document.querySelector('.pw .scale'));
-  Micro.bump(document.querySelector('.pw .done'));
+  Micro.flash(document.querySelector('.v2t-progress .scale, .pw .scale'));
+  Micro.bump(document.querySelector('.v2t-progress .done, .pw .done'));
   Micro.bump(btn);
   showNote(id==='push'
     ? '<b>Уведомления разрешены</b><br>Задание засчитано — шаг отмечен в КуулСтарте.'

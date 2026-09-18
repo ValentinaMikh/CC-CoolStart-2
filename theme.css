@@ -1,0 +1,72 @@
+/* ===== Тема приложения =====
+   Цвета взяты из библиотеки Figma (⬛️ Design System, коллекция Themes).
+   Там у каждого цвета две версии: «[d]/…» — день и «[n]/…» — ночь; здесь
+   это :root и html.night. Класс ставит Steps.applyTheme() по настройке
+   в панели тестировщика, поэтому тема переживает переход между экранами.
+
+   Страницы не используют эти переменные напрямую: у каждой свои имена
+   (--ink, --sub, --hair и так далее), и они объявлены через токены ниже.
+   Так ночной режим включается одной подменой значений, а вёрстка страниц
+   остаётся прежней. */
+
+:root{
+  /* Фоны */
+  --t-ground:#FFFFFF;        /* Background/Main-ground — карточки, листы */
+  --t-sub:#F7F7F7;           /* Background/Sub-ground 1 — подложка страницы */
+  --t-primary-ground:#EEFCD9;/* Background/Primary-ground — зелёные плашки */
+  --t-dark-ground:#35383D;   /* Background/Dark-ground */
+  /* Текст */
+  --t-text:#1E1E1E;          /* Elements/Main-text */
+  --t-text-2:#4F4F4F;        /* Elements/Sub-text 1 */
+  --t-text-3:#808080;        /* Elements/Sub-text 2 */
+  --t-text-4:#BCBCBC;        /* Elements/Sub-text 3 */
+  --t-light:#FFFFFF;         /* Elements/Light-text — текст на цветном */
+  /* Границы */
+  --t-border:#E5E5E5;        /* Border/Main-border */
+  /* Фирменные — одни на обе темы */
+  --t-primary:#80BA27;       /* Main/Primary */
+  --t-accent:#F45500;        /* Main/Accent */
+  --t-accent-dark:#CF4A10;   /* Dark/Accent-dark */
+}
+
+/* Ночь. Значения сняты с тёмных макетов (9211:34357, 9211:33014) — они
+   собраны в ночном режиме, поэтому отдают «[n]/…» напрямую. Обратите
+   внимание: Sub-ground ночью светлее Main-ground, а не темнее, — карточки
+   всплывают над подложкой, а не утопают в ней. */
+html.night{
+  --t-ground:#1E1E1E;        /* [n]/Background/Main-ground */
+  --t-sub:#2C2D2E;           /* [n]/Background/Sub-ground 1 */
+  --t-text:#FFFFFF;          /* [n]/Elements/Main-text */
+  --t-text-2:#D6D6D6;        /* [n]/Elements/Sub-text 1 */
+  --t-text-4:#808080;        /* [n]/Elements/Sub-text 3 */
+  /* Ниже — три токена, которых на тёмных макетах нет, поэтому значения
+     достроены по той же лестнице: Sub-text 2 — между Sub-text 1 и 3,
+     граница на ступень светлее карточки, зелёная подложка приглушена.
+     Их стоит сверить с библиотекой. */
+  --t-text-3:#A6A6A6;        /* Elements/Sub-text 2 */
+  --t-border:#3A3B3C;        /* Border/Main-border */
+  --t-primary-ground:#23301A;/* Background/Primary-ground */
+}
+
+/* Подложка за «телефоном» и сам корпус остаются тёмными в обеих темах —
+   это не экран приложения, а стенд, на котором он показан. */
+
+/* ===== Монохромные иконки =====
+   Часть иконок лежит в ресурсах отдельными файлами с зашитым чёрным
+   контуром (#1E1E1E) и вставляется тегом img — перекрасить их через
+   currentColor нельзя, поэтому ночью инвертируем. Перечисляем поимённо:
+   цветные иконки (КгЛ, подарок, категории, сердце, процент, тег) и те,
+   что уже белые (CheckCircle, Time), трогать нельзя. Иконки таб-бара и
+   карточки товара сюда не попадают: они рисуются маской и берут цвет
+   не из файла.
+   Внутри залитой градиентом шапки чек-листа действует своё правило из
+   v2.css — оно специфичнее, так что инверсия не удваивается. */
+html.night img[src*="ic-back"],
+html.night img[src*="ic-arrow"],
+html.night img[src*="ic-check.svg"],
+html.night img[src*="ic-clock"],
+html.night img[src*="ic-close"],
+html.night img[src*="ic-cup"],
+html.night img[src*="ic-info"],
+html.night img[src*="ic-lock"],
+html.night img[src*="ic-cube"]{filter:brightness(0) invert(1)}

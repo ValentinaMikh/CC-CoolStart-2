@@ -59,7 +59,7 @@
    анимируем только transform. Раньше в переходе была и width — то есть
    пересчёт раскладки на каждом кадре вместо чистой композиции. */
 .mc-has-pill>.mc-pill{position:absolute;left:0;top:4px;bottom:4px;width:0;
-  border-radius:12px;background:#fff;pointer-events:none;will-change:transform;
+  border-radius:12px;background:var(--t-ground);pointer-events:none;will-change:transform;
   filter:drop-shadow(0 4px 6px rgba(0,0,0,.08)) drop-shadow(0 0 2px rgba(0,0,0,.04));
   transition:transform .3s var(--mc-ease)}
 .mc-has-pill>.mc-pill.mc-jump{transition:none}   /* первая установка — без проезда */
@@ -70,7 +70,7 @@
    Рамка, тень и тёмная подложка — это мокап, он нужен только на десктопе.
    На сенсорном экране прототип разворачивается во весь экран; масштаб
    и высоту «телефона» пересчитывает Micro.fitFull(). */
-.mc-full body{background:#fff}
+.mc-full body{background:var(--t-ground)}
 .mc-full .phone{border-radius:0;box-shadow:none}
 .mc-full .screen{border-radius:0}
 

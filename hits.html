@@ -5,11 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>КуулКлевер — Попробуй один из хитов</title>
 <link rel="stylesheet" href="micro.css">
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="tabbar.css">
+<link rel="stylesheet" href="dev-theme.css">
+<link rel="stylesheet" href="v2-task.css">
 <script src="micro.js"></script>
+<script src="tabbar.js"></script>
 <script src="steps.js"></script>
+<script src="v2-task.js"></script>
+<script src="dev-theme.js" defer></script>
 <style>
-:root{--green:#80BA27;--accent:#F45500;--ink:#1E1E1E;--ink-2:#4F4F4F;--ink-3:#808080;--ink-4:#DFDFDF;
-  --sub:#F7F7F7;--hair:#E5E5E5;--olive:#DEE99B}
+:root{--green:var(--t-primary);--accent:var(--t-accent);--ink:var(--t-text);--ink-2:var(--t-text-2);--ink-3:var(--t-text-3);--ink-4:#DFDFDF;
+  --sub:var(--t-sub);--hair:var(--t-border);--olive:#DEE99B}
+/* Ночью серые этой страницы идут своей лестницей: в библиотеке их нет.
+   Фирменные подложки карточек при этом не трогаем — они цветные
+   в обеих темах, как Primary и Accent. */
+html.night{--ink-4:#3A3A3A}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
 html,body{height:100%}
@@ -21,7 +32,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .screen{position:absolute;inset:0;overflow:hidden;border-radius:44px}
 
 /* ===== Top Navigation (8330:60409) ===== */
-.topnav{position:absolute;top:0;left:0;right:0;z-index:40;background:#fff;padding-bottom:8px;
+.topnav{position:absolute;top:0;left:0;right:0;z-index:40;background:var(--t-ground);padding-bottom:8px;
   display:flex;flex-direction:column;align-items:center}
 .status{width:100%;height:44px;display:flex;align-items:center;justify-content:space-between;
   padding:0 26px;font-size:15px;font-weight:600;color:var(--ink)}
@@ -34,7 +45,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
   font-size:16px;line-height:20px;font-weight:600;color:var(--ink);text-align:center;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-.scroll{position:absolute;inset:108px 0 86px 0;overflow-y:auto;overflow-x:hidden;background:#fff}
+.scroll{position:absolute;inset:108px 0 86px 0;overflow-y:auto;overflow-x:hidden;background:var(--t-ground)}
 .scroll::-webkit-scrollbar{display:none}
 /* Content (8330:60279): белый, gap 24 */
 .content{display:flex;flex-direction:column;gap:24px;align-items:flex-start;padding-bottom:24px}
@@ -61,12 +72,12 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .seg2{width:343px;display:flex;padding:4px;border-radius:12px;background:var(--sub);overflow:hidden}
 .seg2 button{flex:1;min-width:0;padding:8px;border:0;border-radius:12px;background:transparent;cursor:pointer;
   font-family:inherit;font-size:14px;line-height:18px;font-weight:500;color:var(--ink-2);text-align:center}
-.seg2 button.on{background:#fff;color:var(--ink);
+.seg2 button.on{background:var(--t-ground);color:var(--ink);
   filter:drop-shadow(0 4px 6px rgba(0,0,0,.08)) drop-shadow(0 0 2px rgba(0,0,0,.04))}
 .row{width:100%;display:flex;gap:12px;align-items:flex-start}
 
 /* ===== Product card UPD (8330:60297) ===== */
-.pcard{flex:none;width:164px;height:332px;background:#fff;border:1px solid var(--hair);
+.pcard{flex:none;width:164px;height:332px;background:var(--t-ground);border:1px solid var(--hair);
   border-radius:12px;overflow:hidden;display:flex;flex-direction:column;cursor:pointer}
 .pcard .pic{position:relative;width:100%;height:160px;flex:none;padding:4px;overflow:hidden;
   display:flex;align-items:flex-end;justify-content:flex-end}
@@ -74,7 +85,11 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
   display:block;pointer-events:none}
 .fav{position:relative;flex:none;padding:8px;border:0;border-radius:12px;background:rgba(0,0,0,.4);
   backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;cursor:pointer}
-.fav img{width:20px;height:20px;display:block}
+/* Иконки карточки белые: сердце лежит на затемнении поверх фото, корзина —
+   на зелёной кнопке. В файлах ресурсов контур зашит тёмным, и тегом img его
+   не перекрасить, поэтому рисуем маской: форма из svg, цвет — свой. */
+.fav .ic{width:20px;height:20px;display:block;background:#fff;
+  -webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat}
 .pcard .pbody{flex:1;min-height:0;width:100%;padding:12px;display:flex;flex-direction:column;
   gap:6px;align-items:center;justify-content:center}
 .pcard .badge-row{width:100%;display:flex;align-items:center}
@@ -96,7 +111,8 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .price .info{width:16px;height:16px;flex:none;display:block}
 .add{width:100%;height:34px;flex:none;padding:7px;border:0;border-radius:8px;background:var(--green);
   display:flex;gap:8px;align-items:center;justify-content:center;cursor:pointer;font-family:inherit}
-.add img{width:16px;height:16px;flex:none;display:block}
+.add .ic{width:16px;height:16px;flex:none;display:block;background:#fff;
+  -webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat}
 .add span{font-size:12px;line-height:14px;font-weight:500;color:#fff;white-space:nowrap}
 
 /* ===== Редакционная карточка (8330:60330) ===== */
@@ -105,25 +121,13 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .ecard .banner{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 
 /* ===== Tab Bar ===== */
-.tabbar{position:absolute;left:0;right:0;bottom:0;z-index:30;background:#fff;
-  display:flex;flex-direction:column;align-items:center}
-.tab-panel{display:flex;width:100%;border-top:1px solid var(--hair);background:#fff}
-.tab{flex:1;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;gap:2px;padding:8px;position:relative;color:var(--ink-3);text-decoration:none}
-.tab img{width:20px;height:20px;display:block}
-.tab .lbl{font-size:10px;line-height:12px;font-weight:600;text-align:center;width:100%}
-.tab.active .lbl{color:var(--green)}
-.badge{position:absolute;top:4px;right:12px;min-width:14px;height:14px;border-radius:60px;
-  background:var(--accent);border:2px solid #fff;color:#fff;font-size:10px;line-height:12px;
-  display:grid;place-items:center;padding:1px}
-.home-ind-wrap{width:100%;background:#fff;padding:22px 8px 8px;display:grid;place-items:center}
-.home-ind-wrap i{width:134px;height:5px;border-radius:100px;background:var(--ink);display:block}
+/* Таб-бар — общий файл tabbar.css */
 
 /* ===== Modal / Bottom Sheet (8330:60807) ===== */
 .m-scrim{position:absolute;inset:0;background:rgba(0,0,0,.5);z-index:70;opacity:0;pointer-events:none;
   transition:.25s}
 .m-scrim.on{opacity:1;pointer-events:auto}
-.sheet{position:absolute;left:0;right:0;bottom:0;z-index:71;background:#fff;
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:71;background:var(--t-ground);
   border-radius:12px 12px 44px 44px;padding:16px 16px 0;transform:translateY(102%);
   transition:transform .34s cubic-bezier(.2,.85,.25,1);max-height:86%;
   display:flex;flex-direction:column}
@@ -232,12 +236,6 @@ const ICON={
 /* Шапка 204px — готовый кадр из папки «Resurses coolstart» (шаг 1) */
 const HERO=['Resurses%20coolstart/check-list%20image%20page%201.jpg'];
 
-const TABI=[
- ['Главная',RES+'ic-tab-home.svg'],
- ['Каталог',RES+'ic-tab-catalog.svg'],
- ['Акции',  RES+'ic-tab-promo.svg'],
- ['Корзина',RES+'ic-tab-cart.svg'],
- ['Профиль',RES+'ic-tab-profile.svg']];
 
 /* ===== Подборки. pic — готовый кадр товара 164×160, ed — редакционная карточка справа ===== */
 const TABS={
@@ -395,13 +393,15 @@ function pcard(it){
   return `<div class="pcard" data-open="${it.id}">
     <div class="pic">
       <img class="ph" src="${it.pic}" alt="">
-      <button class="fav" data-fav="${it.id}" aria-label="В избранное"><img src="${ICON.fav}" alt=""></button>
+      <button class="fav" data-fav="${it.id}" aria-label="В избранное">`+
+        `<i class="ic" style="--ic:url('${ICON.fav}')"></i></button>
     </div>
     <div class="pbody">
       ${badge}
       <div class="ttl">${esc(it.title)}</div>
       <div class="prices">${old}${cur}</div>
-      <button class="add" data-add="${it.id}"><img src="${ICON.cart}" alt=""><span>Добавить</span></button>
+      <button class="add" data-add="${it.id}">`+
+        `<i class="ic" style="--ic:url('${ICON.cart}')"></i><span>Добавить</span></button>
     </div>
   </div>`;
 }
@@ -417,14 +417,31 @@ function ecard(it){
 
 /* Только шкала задания: вызывается и из render(), и при добавлении в корзину */
 function renderTask(){
+  if(v2()){ heroV2(); return }        /* в В1 шкала нарисована в шапке */
   document.getElementById('taskScale').innerHTML=
     Array.from({length:TASK_TOTAL},(_,i)=>`<div class="seg${i<taskDone?' on':''}"></div>`).join('');
   document.getElementById('taskDone').textContent=`Выполнено ${taskDone} из ${TASK_TOTAL}`;
 }
 
+/* Во втором варианте шапка своя: цветной блок с иллюстрацией, названием
+   задания и шкалой (9215:34590). Блок задания из белого тела при этом
+   убираем — он уже показан в шапке, а в навбаре остаётся номер шага. */
+const v2=()=>Steps.design()===2;
+function heroV2(){
+  const hero=document.getElementById('hero');
+  hero.className = 'hero '+V2Task.tone('');
+  hero.innerHTML = V2Task.hero({pic:RES+'image.png', ttl:'Купить товар из подборки хитов',
+    used:taskDone, total:TASK_TOTAL, check:RES+'ic-check.svg'});
+  const pw=document.querySelector('.main .pw'); if(pw) pw.hidden=true;
+  V2Task.watchNav();
+  const n=Steps.IDS.indexOf('hits')+1;
+  if(n) document.querySelector('.nav-title').textContent=`Задание ${n}`;
+}
+
 function render(animate){
   document.getElementById('icBack').src=ICON.back;
-  document.getElementById('hero').innerHTML=HERO.filter(Boolean).map(h=>`<img src="${h}" alt="">`).join('');
+  if(v2()){ heroV2() }
+  else document.getElementById('hero').innerHTML=HERO.filter(Boolean).map(h=>`<img src="${h}" alt="">`).join('');
 
   renderTask();
 
@@ -433,13 +450,7 @@ function render(animate){
     .map(it=>`<div class="row">${pcard(it)}${ecard(it)}</div>`).join('');
   Micro.reveal('.pw, .lead, .minis > .h3, .seg2, .row',{force:animate});
 
-  document.getElementById('tabbar').innerHTML=
-    `<div class="tab-panel">${TABI.map(([t,src,href],i)=>
-      `<a class="tab${i===0?' active':''}" href="${href}">
-         <img src="${src}" alt=""><span class="lbl">${t}</span>
-         ${t==='Корзина'?'<span class="badge">13</span>':''}
-       </a>`).join('')}</div>
-     <div class="home-ind-wrap"><i></i></div>`;
+  TabBar.mount(0);   /* ряд вкладок общий на все экраны — tabbar.js */
 }
 
 /* ===== модалка описания товара (8330:60807) ===== */

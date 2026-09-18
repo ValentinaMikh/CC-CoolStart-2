@@ -5,21 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>КуулКлевер — главная / карта</title>
 <link rel="stylesheet" href="micro.css">
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="tabbar.css">
 <script src="micro.js"></script>
+<script src="tabbar.js"></script>
 <script src="steps.js"></script>
 <!-- Кубок виджета КуулСтарта — единственная тяжёлая картинка выше сгиба:
      просим браузер начать грузить её сразу, не дожидаясь скриптов. -->
 <link rel="preload" as="image" fetchpriority="high"
-      href="Resurses%20coolstart/%D0%9A%D1%83%D0%B1%D0%BE%D0%BA%20%D0%B7%D0%BE%D0%BB%D0%BE%D1%82%D0%BE.png">
+      href="Resurses%20coolstart/Goblet.png">
 <link rel="stylesheet" href="v2.css">
 <style>
-:root{--green:#80BA27;--ink:#1D1D1F;--ink-2:#6E6E73;--panel:#F1F1F2;--hair:#E4E4E6;--dur:1}
+:root{--green:var(--t-primary);--ink:#1D1D1F;--ink-2:#6E6E73;--panel:#F1F1F2;--hair:#E4E4E6;--dur:1}
+/* Ночью серые этой страницы идут своей лестницей: в библиотеке их нет,
+   а нейтральные из неё здесь на полтона холоднее макета. */
+html.night{--ink:#FFFFFF;--ink-2:#BCBCBC;--panel:#2A2A2A;--hair:#333333}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
 body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text",Inter,system-ui,sans-serif;
   display:flex;align-items:center;justify-content:center;overflow:hidden}
 #stage{transform-origin:center center}
-.phone{width:375px;height:812px;position:relative;overflow:hidden;background:#fff;border-radius:44px;
+.phone{width:375px;height:812px;position:relative;overflow:hidden;background:var(--t-ground);border-radius:44px;
   box-shadow:0 40px 90px rgba(0,0,0,.6),0 0 0 10px #111,0 0 0 11px #2A2C2E;color:var(--ink);
   --hero-h:223px;--card-w:302px;--card-h:176px;--card-top:122px}
 .screen{position:absolute;inset:0;overflow:hidden;border-radius:44px}
@@ -53,7 +59,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .card-3d.animating{transition:transform calc(.62s * var(--dur)) cubic-bezier(.35,.05,.2,1)}
 .face{position:absolute;inset:0;border-radius:16px;overflow:hidden;
   backface-visibility:hidden;-webkit-backface-visibility:hidden;
-  background:radial-gradient(180.79px 176px at 151px 0px,#A8E649 0%,#80BA27 100%),#80BA27;
+  background:radial-gradient(180.79px 176px at 151px 0px,#A8E649 0%,var(--t-primary) 100%),var(--t-primary);
   box-shadow:0 2px 0 0 #94CE3B, inset 0 2px 0 0 #A5E347;
   color:#fff;display:flex;flex-direction:column;align-items:center;padding:12px 24px}
 .face::before{content:"";position:absolute;top:50%;left:50%;width:303px;height:178px;
@@ -103,7 +109,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .card-guest{width:var(--card-w);height:var(--card-h);margin:0 auto;position:relative;cursor:pointer;
   border-radius:16px;overflow:hidden;padding:16px 24px 20px;display:flex;flex-direction:column;
   justify-content:space-between;align-items:flex-start;color:#fff;
-  background:radial-gradient(180.79px 176px at 151px 0px,#A8E649 0%,#80BA27 100%),#80BA27;
+  background:radial-gradient(180.79px 176px at 151px 0px,#A8E649 0%,var(--t-primary) 100%),var(--t-primary);
   box-shadow:0 2px 0 0 #94CE3B, inset 0 2px 0 0 #A5E347}
 .card-guest::before{content:"";position:absolute;top:50%;left:50%;width:303px;height:178px;
   transform:translate(-50%,-50%);background:var(--clover) center/303px 178px no-repeat;pointer-events:none}
@@ -120,7 +126,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 /* КОНЦЕПТ: серая обводка 1px, отступ 4, подпись снаружи */
 .rail.concept{gap:16px}
 .concept .tile{width:90px}
-.concept .thumb{width:90px;height:90px;border:1px solid #DEDEE1;border-radius:20px;padding:4px;background:#fff}
+.concept .thumb{width:90px;height:90px;border:1px solid #DEDEE1;border-radius:20px;padding:4px;background:var(--t-ground)}
 .concept .inner{width:100%;height:100%;border-radius:16px;overflow:hidden;background:var(--ph,#E6E6E8);
   background-image:var(--shot,none);background-size:var(--shot-size,cover);
   background-position:var(--shot-pos,center)}
@@ -132,67 +138,83 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
    белый градиент поверх картинки, подпись внутри */
 .rail.prod{gap:6px}
 .prod .tile{width:90px}
-.prod .thumb{width:90px;height:120px;border:1px solid #80BA27;border-radius:12px;padding:4px;background:#fff}
+.prod .thumb{width:90px;height:120px;border:1px solid var(--t-primary);border-radius:12px;padding:4px;background:var(--t-ground)}
 .prod .inner{width:82px;height:112px;border-radius:8px;overflow:hidden;position:relative;
   background:var(--ph,#E6E6E8);background-image:var(--shot,none);
   background-size:var(--shot-size,cover);background-position:var(--shot-pos,center)}
 .prod .veil{position:absolute;inset:0;border-radius:8px;pointer-events:none;
   background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,0) 30.202%,
-    rgba(255,255,255,.3) 40.215%,#fff 59.865%,#fff 100%)}
+    rgba(255,255,255,.3) 40.215%,var(--t-ground) 59.865%,var(--t-ground) 100%)}
 .prod .cap-in{position:absolute;left:0;right:0;bottom:0;padding:8px;display:flex;align-items:center;
-  justify-content:center;font-size:12px;line-height:1.05;font-weight:400;color:#4F4F4F;text-align:center;
+  justify-content:center;font-size:12px;line-height:1.05;font-weight:400;color:var(--t-text-2);text-align:center;
   word-break:break-word}
 .prod .cap{display:none}
 
+/* Ночью подложки под карточкой нет: между фотографией и обводкой остаётся
+   тёмный просвет страницы — так обводка и читается кольцом, как в макете.
+   Белое ночью только то, что лежит под самой фотографией: плашка подписи.
+   Днём карточка целиком белая, --t-ground её и красит.
+   Подпись «концепта» это не трогает: она снаружи карточки, на странице,
+   и там светлый текст на тёмном — то, что нужно. */
+html.night .prod .thumb,
+html.night .concept .thumb{background:transparent}
+/* Ночью подпись стоит отдельной белой плашкой под фотографией, а не
+   растворением поверх неё: фото обрывается ровным краем, текст прижат
+   влево и набран тёмным. Днём остаётся растворение из 3974:96894. */
+html.night .prod .veil{display:none}
+html.night .prod .cap-in{background:#FFF;border-radius:0 0 8px 8px;
+  padding:6px 6px 8px;justify-content:flex-start;text-align:left;
+  line-height:1.15;color:#1E1E1E;word-break:normal;overflow-wrap:break-word}
+
 /* ===== ШОРТКАТЫ (Figma 3974:96896) ===== */
-.hotkeys{margin-top:20px;background:#F7F7F7;height:99px;padding-top:12px}
+.hotkeys{margin-top:20px;background:var(--t-sub);height:99px;padding-top:12px}
 .hk-rail{display:flex;gap:8px;overflow-x:auto;padding:0 16px}
 .hk-rail::-webkit-scrollbar{display:none}
-.hk{flex:none;width:78px;height:75px;background:#fff;border-radius:12px;position:relative;overflow:hidden}
+.hk{flex:none;width:78px;height:75px;background:var(--t-ground);border-radius:12px;position:relative;overflow:hidden}
 .hk .ic{position:absolute;left:50%;top:10px;transform:translateX(-50%);width:32px;height:32px;
-  display:grid;place-items:center;color:#80BA27}
+  display:grid;place-items:center;color:var(--t-primary)}
 .hk .lb{position:absolute;left:50%;top:calc(50% + 6.5px);transform:translateX(-50%);width:66px;height:24px;
-  font-size:12px;line-height:normal;font-weight:400;color:#808080;text-align:center}
+  font-size:12px;line-height:normal;font-weight:400;color:var(--t-text-3);text-align:center}
 .hk-add{flex:none;width:86px;height:75px;display:grid;place-items:center;
-  background:#fff;border-radius:12px}
-.hk-add .plus{width:40px;height:40px;border-radius:50%;background:#80BA27;display:grid;place-items:center;
+  background:var(--t-ground);border-radius:12px}
+.hk-add .plus{width:40px;height:40px;border-radius:50%;background:var(--t-primary);display:grid;place-items:center;
   color:#fff}
-.kgl-badge{width:29px;height:29px;border:1.7px solid #80BA27;border-radius:50%;display:grid;
+.kgl-badge{width:29px;height:29px;border:1.7px solid var(--t-primary);border-radius:50%;display:grid;
   place-items:center;font-family:"SF Pro Rounded","SF Pro Display",system-ui;font-size:10.875px;
-  font-weight:800;color:#80BA27;letter-spacing:-.2px}
+  font-weight:800;color:var(--t-primary);letter-spacing:-.2px}
 
 /* ===== Блоки (Auto Layout Main, gap 20) ===== */
 .block{margin-top:20px;padding:0 16px}
 .section-head{display:flex;align-items:center;gap:8px;width:343px}
-.section-head h2{flex:1;min-width:0;font-size:20px;line-height:normal;font-weight:600;color:#1E1E1E}
-.pill{flex:none;border:1px solid #80BA27;border-radius:20px;padding:4px 12px;font-size:12px;
-  line-height:normal;font-weight:600;color:#4F4F4F;white-space:nowrap}
+.section-head h2{flex:1;min-width:0;font-size:20px;line-height:normal;font-weight:600;color:var(--t-text)}
+.pill{flex:none;border:1px solid var(--t-primary);border-radius:20px;padding:4px 12px;font-size:12px;
+  line-height:normal;font-weight:600;color:var(--t-text-2);white-space:nowrap}
 
 /* Actions Block (3974:96898): h181, gap16, карточки 290×140 */
 .promos{display:flex;gap:10px;overflow-x:auto;margin-top:16px}
 .promos::-webkit-scrollbar{display:none}
 .promo{flex:none;width:290px;height:140px;border-radius:12px;background:var(--ph)}
 
-/* Action block (3974:96899): gap10, карточки #EEFCD9 */
+/* Action block (3974:96899): gap10, карточки var(--t-primary-ground) */
 .actions{display:flex;gap:10px;overflow-x:auto;margin-top:10px}
 .actions::-webkit-scrollbar{display:none}
-.action{flex:none;width:325px;background:#EEFCD9;border:1px solid #80BA27;border-radius:12px;
+.action{flex:none;width:325px;background:var(--t-primary-ground);border:1px solid var(--t-primary);border-radius:12px;
   padding:16px;display:flex;flex-direction:column;gap:16px}
 .action .top{display:flex;gap:12px;align-items:flex-start;width:293px}
 .action .ava{flex:none;width:80px;height:80px;border-radius:40px;background:var(--ph);overflow:hidden}
 .action .mid{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
-.action .tag{align-self:flex-start;background:#80BA27;color:#fff;border-radius:18px;padding:2px 8px;
+.action .tag{align-self:flex-start;background:var(--t-primary);color:#fff;border-radius:18px;padding:2px 8px;
   font-size:12px;line-height:normal;font-weight:400}
-.action .date{font-size:12px;line-height:normal;color:#4F4F4F}
-.action .ttl{font-size:16px;line-height:normal;font-weight:500;color:#1E1E1E;
+.action .date{font-size:12px;line-height:normal;color:var(--t-text-2)}
+.action .ttl{font-size:16px;line-height:normal;font-weight:500;color:var(--t-text);
   overflow:hidden;text-overflow:ellipsis}
-.action .bm{flex:none;width:24px;height:24px;color:#1E1E1E}
-.action .desc{width:293px;height:51px;overflow:hidden;font-size:14px;line-height:normal;color:#4F4F4F}
+.action .bm{flex:none;width:24px;height:24px;color:var(--t-text)}
+.action .desc{width:293px;height:51px;overflow:hidden;font-size:14px;line-height:normal;color:var(--t-text-2)}
 
 
 /* ===== КуулСтарт / BeginnerWidget (3974:96895) — ведёт на coolstart.html ===== */
 .cool-slot{margin-top:20px;padding:0 16px}
-.cool{width:343px;border:2px solid #E5E5E5;border-radius:12px;overflow:hidden;position:relative;
+.cool{width:343px;border:2px solid var(--t-border);border-radius:12px;overflow:hidden;position:relative;
   display:flex;flex-direction:column;justify-content:center;background:linear-gradient(140deg,#6E8F3F,#2E3A21);
   color:inherit;text-decoration:none;cursor:pointer}
 .cool .bg{position:absolute;inset:0;pointer-events:none}
@@ -213,15 +235,15 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 
 /* Скелетон виджета: пока грузится фоновое фото, вместо зелёной подложки
    показываем серые плейсхолдеры той же геометрии. */
-.cool.loading{background:#F7F7F7;border-color:#E5E5E5}
+.cool.loading{background:var(--t-sub);border-color:var(--t-border)}
 .cool.loading .bg,.cool.loading .top,.cool.loading .down{visibility:hidden}
 .cool .sk{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center}
 .cool.loading .sk{display:flex}
 .sk-top{padding:12px;display:flex;flex-direction:column;gap:8px}
 .sk-row{display:flex;gap:8px;align-items:center}
 .sk-down{padding:12px;background:#F0F1F3;display:flex;align-items:center;justify-content:space-between}
-.sk i{display:block;flex:none;height:14px;border-radius:6px;background:#E5E5E5;
-  background-image:linear-gradient(90deg,#E5E5E5 0,#EFEFEF 45%,#E5E5E5 90%);
+.sk i{display:block;flex:none;height:14px;border-radius:6px;background:var(--t-border);
+  background-image:linear-gradient(90deg,var(--t-border) 0,#EFEFEF 45%,var(--t-border) 90%);
   background-size:200px 100%;background-repeat:no-repeat;animation:skshine 1.2s linear infinite}
 .sk i.dot{width:16px;height:16px;border-radius:6px}
 .sk i.dot-l{width:18px;height:18px;border-radius:50%}
@@ -235,12 +257,12 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 /* ===== Карусели товаров (3974:96904 / 3974:96905) ===== */
 .carousel{margin-top:20px;width:345px;margin-left:auto;margin-right:auto;padding:8px 0;
   display:flex;flex-direction:column;gap:16px;justify-content:center}
-.carousel h2{font-size:20px;line-height:24px;font-weight:600;color:#1E1E1E;width:100%}
+.carousel h2{font-size:20px;line-height:24px;font-weight:600;color:var(--t-text);width:100%}
 .carusel{display:flex;gap:16px;align-items:flex-start;overflow-x:auto}
 .carusel::-webkit-scrollbar{display:none}
 
 /* Product card UPD (2117:42308): 164 шириной, бордер 1px, r12 */
-.pcard{flex:none;width:164px;background:#fff;border:1px solid #E5E5E5;border-radius:12px;
+.pcard{flex:none;width:164px;background:var(--t-ground);border:1px solid var(--t-border);border-radius:12px;
   overflow:hidden;display:flex;flex-direction:column;align-items:flex-start}
 .pcard .pic{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden;padding:4px;
   display:flex;align-items:flex-end;justify-content:flex-end}
@@ -258,18 +280,18 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .ib{flex:none;padding:2px 4px;border-radius:4px;overflow:hidden;font-size:12px;line-height:normal;
   font-weight:500;color:#fff;white-space:nowrap}
 .ib.hit{background:#F45500}
-.ib.new{background:#80BA27}
+.ib.new{background:var(--t-primary)}
 .promo-ico{display:flex;gap:2px;align-items:flex-start;flex:none}
 .promo-ico>*{flex:none;width:22px;height:22px}
 .promo-ico img.flat{width:22px;height:22px;object-fit:cover;display:block}
-.pi-kgl{background:#80BA27;border-radius:60px;overflow:hidden;position:relative}
+.pi-kgl{background:var(--t-primary);border-radius:60px;overflow:hidden;position:relative}
 .pi-kgl img{position:absolute;top:35.48%;bottom:35.48%;left:16.12%;right:16.12%;
   width:auto;height:auto;display:block}
-.pi-quant{background:#F7F7F7;border-radius:100px;padding:4px;display:flex;align-items:center}
+.pi-quant{background:var(--t-sub);border-radius:100px;padding:4px;display:flex;align-items:center}
 .pi-quant img{width:14px;height:14px;display:block}
 
 .pcard .ttl{width:100%;height:28px;overflow:hidden;text-overflow:ellipsis;
-  font-size:12px;line-height:14px;font-weight:500;color:#1E1E1E}
+  font-size:12px;line-height:14px;font-weight:500;color:var(--t-text)}
 
 /* Discount (1002:6244) */
 .disc{width:100%;display:flex;flex-direction:column}
@@ -278,31 +300,22 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .disc .val b{font-size:18px;line-height:22px;font-weight:600;white-space:nowrap}
 .disc .val i{font-size:12px;line-height:14px;font-weight:400;font-style:normal;white-space:nowrap}
 .disc .strike{position:absolute;top:4px;bottom:6px;left:0;right:0}
-.disc .strike svg{width:100%;height:100%;display:block;stroke:#808080}
-.disc .old{color:#1E1E1E}
+.disc .strike svg{width:100%;height:100%;display:block;stroke:var(--t-text-3)}
+.disc .old{color:var(--t-text)}
 .disc .old .unit{font-size:12px;line-height:14px;white-space:nowrap}
 .disc .cur{color:#F45500}
 .disc .cur .unit{flex:1;min-width:0;font-size:12px;line-height:14px}
 .disc .cur .info{flex:none;width:16px;height:16px;display:block}
 
-.pcard .add{width:140px;min-height:32px;padding:8px;border-radius:8px;background:#80BA27;
+.pcard .add{width:140px;min-height:32px;padding:8px;border-radius:8px;background:var(--t-primary);
   display:flex;gap:4px;align-items:center;justify-content:center;cursor:pointer}
-.pcard .add img{width:16px;height:16px;flex:none;display:block}
+/* Плюс на зелёной кнопке — белый. В файле ресурса он тёмный, тегом img
+   не перекрасить, поэтому маской: форма из svg, цвет свой. */
+.pcard .add .ic{width:16px;height:16px;flex:none;display:block;background:#fff;
+  -webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat}
 .pcard .add span{font-size:12px;line-height:14px;font-weight:600;color:#fff;white-space:nowrap}
 
-.tabbar{position:absolute;left:0;right:0;bottom:0;z-index:30;background:#fff;
-  display:flex;flex-direction:column;align-items:center}
-.tab-panel{display:flex;width:100%;border-top:1px solid #E5E5E5;background:#fff}
-.tab{flex:1;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;gap:2px;padding:8px;position:relative;color:#808080}
-.tab .ic{width:20px;height:20px;display:grid;place-items:center}
-.tab span{font-size:10px;line-height:12px;font-weight:600;text-align:center;width:100%}
-.tab.active{color:#80BA27}
-.badge{position:absolute;top:4px;right:12px;min-width:14px;height:14px;border-radius:60px;
-  background:#F45500;border:2px solid #fff;color:#fff;font-size:10px;line-height:12px;font-weight:400;
-  display:grid;place-items:center;padding:1px}
-.home-ind-wrap{width:100%;background:#fff;padding:22px 8px 8px;display:grid;place-items:center}
-.home-ind-wrap i{width:134px;height:5px;border-radius:100px;background:#1E1E1E;display:block}
+/* Таб-бар — общий файл tabbar.css */
 
 /* ===== шапка: постер → шиммер → зациклённое видео ===== */
 .hero{position:relative;height:var(--hero-h);overflow:hidden;background:#8FBF5E center/cover no-repeat}
@@ -335,29 +348,29 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .m-scrim{position:absolute;inset:0;background:rgba(0,0,0,.6);z-index:70;opacity:0;pointer-events:none;
   transition:opacity .3s;border-radius:44px}
 .m-scrim.on{opacity:1;pointer-events:auto}
-.sheet{position:absolute;left:0;right:0;bottom:0;z-index:71;background:#fff;
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:71;background:var(--t-ground);
   border-radius:12px 12px 0 0;padding:16px 16px 0;transform:translateY(102%);
   transition:transform .38s cubic-bezier(.2,.85,.25,1)}
 .sheet.on{transform:translateY(0)}
 .sheet .nav{display:flex;align-items:center;justify-content:center;gap:8px;position:relative}
 .sheet .nav h4{position:absolute;left:16.33%;right:16.33%;text-align:center;font-size:16px;
-  line-height:20px;font-weight:600;color:#1E1E1E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  line-height:20px;font-weight:600;color:var(--t-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sheet .nav .sp{flex:1}
-.sheet .close{flex:none;background:#F7F7F7;border-radius:12px;padding:10px;display:grid;
+.sheet .close{flex:none;background:var(--t-sub);color:var(--t-text);border-radius:12px;padding:10px;display:grid;
   place-items:center;cursor:pointer}
 .sheet .gap16{height:16px}
 .sheet .list{display:flex;flex-direction:column;gap:8px}
 .sheet .row{display:flex;align-items:center;gap:10px;padding:4px 0}
 .sheet .radiobox{flex:1;min-width:0;display:flex;align-items:center;gap:12px;padding:8px;cursor:pointer}
-.sheet .radio{flex:none;width:20px;height:20px;border-radius:60px;background:#fff;
+.sheet .radio{flex:none;width:20px;height:20px;border-radius:60px;background:var(--t-ground);
   border:1px solid #DFDFDF;display:grid;place-items:center}
 .sheet .radio i{width:8px;height:8px;border-radius:60px;background:transparent;display:block}
-.sheet .radiobox.sel .radio{background:#80BA27;border-color:#80BA27}
+.sheet .radiobox.sel .radio{background:var(--t-primary);border-color:var(--t-primary)}
 .sheet .radiobox.sel .radio i{background:#fff}
-.sheet .radiobox p{font-size:14px;line-height:18px;font-weight:500;color:#1E1E1E;white-space:nowrap}
-.sheet .cnt{flex:none;font-size:13px;line-height:16px;color:#4F4F4F;white-space:nowrap}
+.sheet .radiobox p{font-size:14px;line-height:18px;font-weight:500;color:var(--t-text);white-space:nowrap}
+.sheet .cnt{flex:none;font-size:13px;line-height:16px;color:var(--t-text-2);white-space:nowrap}
 .sheet .btn-panel{padding:16px 0}
-.sheet .btn{width:100%;background:#80BA27;color:#fff;border:0;border-radius:12px;padding:14px;
+.sheet .btn{width:100%;background:var(--t-primary);color:#fff;border:0;border-radius:12px;padding:14px;
   font:inherit;font-size:16px;line-height:20px;font-weight:500;cursor:pointer}
 
 /* панель тестировщика */
@@ -382,7 +395,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .sw{width:44px;height:26px;border-radius:13px;background:#3A3C40;position:relative;cursor:pointer;
   transition:background .2s;flex:none}
 .sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;
-  background:#fff;transition:transform .2s}
+  background:var(--t-ground);transition:transform .2s}
 .sw.on{background:var(--green)}
 .sw.on::after{transform:translateX(18px)}
 .dev input{background:#232529;border:1px solid #33363B;color:#fff;font:inherit;font-size:12px;
@@ -429,7 +442,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
   <div class="sheet" id="sheet">
     <div class="nav">
       <h4>Подскажите, где вы?</h4><div class="sp"></div>
-      <div class="close" id="sheetClose"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="#1E1E1E" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+      <div class="close" id="sheetClose"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
     </div>
     <div class="gap16"></div>
     <div class="list">
@@ -455,9 +468,18 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
     <div class="row"><span>Виджет «КуулСтарт»</span><div class="sw on" id="swCool"></div></div>
     <div class="row"><span>Дней с регистрации</span>
       <input id="inDays" type="number" min="0" max="400" value="1"></div>
+    <div class="row"><span>Выполнено шагов</span>
+      <div class="seg" id="segDone">
+        <button data-v="0">0</button><button data-v="2">2</button><button data-v="4">4</button>
+        <button data-v="6">6</button><button data-v="8">8</button><button data-v="10">10</button>
+      </div></div>
     <div class="row"><span>Вариант дизайна</span>
       <div class="seg" id="segDesign">
         <button data-v="1">А1</button><button data-v="2">В1</button>
+      </div></div>
+    <div class="row"><span>Тема</span>
+      <div class="seg" id="segTheme">
+        <button data-v="day">День</button><button data-v="night">Ночь</button>
       </div></div>
     <div class="row"><span>Сторис</span>
       <div class="seg" id="segStory"><button data-v="prod" class="on">Прод</button><button data-v="concept">Концепт</button></div></div>
@@ -468,7 +490,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
     <div class="row"><span>Баланс КеГЛей</span><input id="inBal" value="103 315"></div>
     <div class="row"><span>Показать выбор города</span>
       <div class="seg"><button id="btnCity">Открыть</button></div></div>
-    <div class="hint">Свайп вверх по карте — переворот на баланс, вниз — назад. Баланс скрыт тем, что по умолчанию открыта QR-сторона. Панель — тап по батарейке.</div>
+    <div class="hint">Свайп вверх по карте — переворот на баланс, вниз — назад. Баланс скрыт тем, что по умолчанию открыта QR-сторона. «Выполнено шагов» — те же этапы, что и в панели чек-листа: меняется счётчик на виджете и градиент под кубком. Панель — тап по батарейке.</div>
   </div>
 
 </div>
@@ -484,12 +506,15 @@ const VIDEO_SRC='';   // напр. './assets/hero.mp4'
 const RES='Resurses%20coolstart/';
 const FIG={
   hero:'Resurses%20coolstart/Main%20header.jpg',
-  /* 8284:140342 — КуулСтарт, промо-карточки, «Персонально», карточки товара.
+  /* 8685:31053 — КуулСтарт, промо-карточки, «Персонально», карточки товара.
      Сторис берутся ниже из Storis 1-4; здесь — остальные фото. */
   coolBg:RES+encodeURIComponent('Banner 3.png'),
   promo1:RES+encodeURIComponent('Banner 1.png'),
   promo2:RES+encodeURIComponent('Banner 2.png'),
-  actionAva:RES+encodeURIComponent('Banner 6.png'),
+  /* Кружок «Персонально» — фото товара, а не редакционная карточка: в макете
+     там снимок того же пива, о котором сама карточка. Banner-карточки
+     вертикальные, 164×332, и в круг попадал случайный кусок текста. */
+  actionAva:RES+encodeURIComponent('Pic 02.png'),
   product:RES+encodeURIComponent('Pic 05.png')};
 
 /* Иконки — экспорт из тех же нод. В отличие от фото не прячутся тумблером «картинки». */
@@ -531,7 +556,6 @@ const QR=(()=>{const N=29;let s=20250807;const r=()=>(s=(s*1103515245+12345)&0x7
  return `<svg viewBox="0 0 ${N} ${N}" shape-rendering="crispEdges"><g fill="#1E1E1E">${o}</g></svg>`})();
 
 /* иконки */
-const CLOVER_TAB='<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M16.4553 8.37811C16.4243 8.84759 16.2062 10.4355 14.7079 11.1538C13.4341 11.7639 11.8606 11.4477 10.8507 10.4761C14.3415 10.2113 15.2105 9.15328 15.4058 8.50921C15.5359 8.08027 15.4596 7.49963 15.0691 6.82973C15.5345 6.64076 15.8581 6.60676 16.0234 6.71269C16.2393 6.85065 16.5164 7.45909 16.4553 8.37811ZM6.24513 11.1504C5.61239 10.8611 5.37434 9.9767 5.35295 9.22866C6.27825 9.78446 7.47092 10.198 8.82333 10.4096C7.91839 11.2004 6.86199 11.4326 6.24513 11.1504ZM8.82048 9.41306C7.46428 9.17505 6.28368 8.70655 5.48017 8.11185C5.61507 7.61229 5.82863 7.2896 5.9963 7.22127C6.03321 7.20623 6.07703 7.19871 6.12809 7.19871C6.60488 7.19871 7.68301 7.86697 8.82048 9.41306ZM4.39545 6.64123C4.23019 5.79642 4.85706 4.31637 7.1665 2.92361C8.43473 2.15955 9.62188 1.81104 10.3864 1.81104C10.6838 1.81104 10.917 1.86335 11.0664 1.9647C11.4262 2.20859 11.5791 2.86084 11.5004 3.80569C10.2895 3.18974 9.00295 2.85005 8.26257 3.37021C7.52461 3.8884 7.48218 5.16216 8.12802 7.16662C7.18203 6.3715 6.26881 6.04097 5.5857 6.31919C5.17446 6.48691 4.87948 6.8521 4.67731 7.29478C4.53828 7.08325 4.43926 6.86485 4.39545 6.64123ZM8.88031 4.15907C8.94275 4.11526 9.04729 4.09172 9.18736 4.09172C9.62034 4.09172 10.3987 4.31992 11.3433 4.84989C11.107 5.96605 10.6333 7.33527 9.88633 8.86273C8.71919 6.16091 8.47493 4.44383 8.88031 4.15907ZM14.4128 8.23959C14.2441 8.79604 13.0183 9.24984 11.2768 9.44861C12.4339 8.45341 13.4027 7.7469 14.1631 7.29507C14.3911 7.66549 14.487 7.99505 14.4128 8.23959ZM13.5383 6.51344C12.8986 6.89269 12.1831 7.40108 11.3903 8.04188C11.7977 7.0846 12.0924 6.21396 12.278 5.44141C12.7682 5.7896 13.1953 6.15642 13.5383 6.51344ZM16.6033 5.9004C16.1089 5.58392 15.3968 5.63035 14.4778 6.0279C14.0227 5.51559 13.3948 4.97124 12.5457 4.41348C12.523 4.39844 12.4995 4.38406 12.4767 4.36935C12.6917 2.717 12.3498 1.62829 11.6698 1.16731C10.5268 0.392137 8.30567 1.07577 6.61205 2.09679C4.81424 3.1806 3.02092 4.99053 3.37904 6.81975C3.49668 7.42132 3.83823 7.98431 4.35643 8.48158C4.33331 8.66172 4.31951 8.83925 4.31572 9.00828C4.2826 10.4638 4.83598 11.595 5.79612 12.0341C6.10835 12.177 6.45611 12.2446 6.82009 12.2446C7.36312 12.2446 7.94238 12.0874 8.49887 11.8085C8.12178 12.7475 7.86924 13.7299 7.76194 14.7245C7.59289 16.2984 7.71157 17.6529 8.22045 19.1666L9.28409 19.1395C8.81868 17.7545 8.63687 16.263 8.79212 14.8239C8.93288 13.5112 9.34757 12.2208 9.99273 11.0431C10.8573 11.9409 12.0845 12.4451 13.3172 12.4451C13.952 12.4451 14.5882 12.3117 15.1764 12.0295C16.5181 11.3864 17.383 10.0447 17.4893 8.44038C17.5655 7.29054 17.2178 6.29371 16.6033 5.9004Z" fill="currentColor"/></svg>';
 const CHEV_DOWN='<svg class="chev" viewBox="0 0 24 24" fill="none"><path d="M7 9.5 12 14.5l5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 /* Outline / Picker / KGL — монета с «КгЛ» */
 /* Outline / Picker / KGL — вектор из макета */
@@ -598,11 +622,37 @@ const plural=(n,f)=>{const m=n%100,k=n%10;return f[(m>=11&&m<=14)?2:k===1?0:(k>=
    ресурсов, включая кубок; из Figma тянутся только мелкие иконки
    прототипа (такие ссылки живут ~7 дней). */
 const V2={
-  cup:RES+encodeURIComponent('Кубок золото.png'),
+  cup:RES+'Goblet.png',
   conf:RES+encodeURIComponent('Снимок экрана 2026-09-10 в 14.06.59 2.png'),
   time:RES+'Time.svg',
   check:RES+'CheckCircle.svg'};
 const coolDone=()=>`Выполнено ${Steps.all().length} из ${Steps.TOTAL}`;
+
+/* ===== Пятна градиента виджета (9010:9738) =====
+   В макете шесть состояний — 0, 2, 4, 6, 8 и 10 шагов, — и в каждом у двух
+   пятен свой центр: с прогрессом они наползают справа налево. Числа —
+   смещение центра пятна от центра карточки и сторона его квадрата. В макете
+   это эллипс с гауссовым размытием, поэтому сторона больше самого эллипса
+   на два радиуса размытия: на нуле оба пятна 200+2×90, дальше жёлтое
+   199+2×90, оранжевое 278+2×150. */
+const COOL_BLOBS=[
+  /* шагов  жёлтое dx,dy,d      оранжевое dx,dy,d */
+  [0,        161.5, 73,   380,   243.5,    0, 380],
+  [2,         95,   78.5, 379,   221.5, -102, 578],
+  [4,         71,   78.5, 379,   197.5, -102, 578],
+  [6,          5,   78.5, 379,   165.5, -102, 578],
+  [8,        -37,   78.5, 379,   132.5, -102, 578],
+  [Steps.TOTAL, -86, 78.5, 379,  111.5, -102, 578]
+];
+/* Слои перечислены в том же порядке, что в v2.css: жёлтое, оранжевое.
+   Позиция — от центра карточки, поэтому calc(50% + …). */
+function coolGlow(){
+  const b=Steps.stage(COOL_BLOBS, Steps.all().length);
+  const layer=i=>`calc(50% + ${b[i].toFixed(1)}px) calc(50% + ${b[i+1].toFixed(1)}px)`;
+  const side =i=>`${b[i].toFixed(1)}px ${b[i].toFixed(1)}px`;
+  return `background-size:${side(2)},${side(5)};`+
+         `background-position:${layer(0)},${layer(3)}`;
+}
 const coolLeft=()=>{const d=Steps.daysLeft();
   return d ? `еще ${d} ${plural(d,['день','дня','дней'])}` : 'срок истёк'};
 
@@ -688,16 +738,18 @@ function render(){
   const coolSlot=document.getElementById('coolSlot');
   coolSlot.style.display=(authed&&coolStart)?'':'none';
   coolSlot.innerHTML = !(authed&&coolStart) ? '' : Steps.design()===2 ?
-    /* 1113:3850 — градиент, кубок, счётчик плашкой */
+    /* 9010:9738 — заливка с пятнами, кубок, счётчик плашкой. Пока не закрыт
+       ни один шаг, плашки в макете нет: считать там нечего. */
     `<a class="cool" href="coolstart.html">
+       <i class="v2-glow" style="${coolGlow()}"></i>
        <img class="v2-conf" src="${V2.conf}" alt="">
        <img class="v2-cup" src="${V2.cup}" alt="">
        <div class="v2-body">
          <div class="v2-time"><img src="${V2.time}" alt=""><span>${coolLeft()}</span></div>
          <div class="v2-row">
            <div class="v2-txt"><b>${COOL.ttl}</b><span>${COOL.sub}</span></div>
-           <div class="v2-chip"><img src="${V2.check}" alt="">
-             <span>${Steps.all().length} из ${Steps.TOTAL}</span></div>
+           ${Steps.all().length ? `<div class="v2-chip"><img src="${V2.check}" alt="">
+             <span>${Steps.all().length} из ${Steps.TOTAL}</span></div>` : ''}
          </div>
        </div>
      </a>` :
@@ -799,7 +851,8 @@ function render(){
              <img class="info" src="${ICON.info}" alt="">
            </div>
          </div>
-         <div class="add"><img src="${ICON.plus}" alt=""><span>Добавить</span></div>
+         <div class="add"><i class="ic" style="--ic:url('${ICON.plus}')"></i>`+
+           `<span>Добавить</span></div>
        </div>
      </div>`;
   CAROUSELS.forEach(([ttl,id])=>{
@@ -807,21 +860,7 @@ function render(){
       `<h2>${ttl}</h2><div class="carusel">${pcard()+pcard()+pcard()}</div>`;
   });
 
-  /* таббар (8046:25793): 50px, иконка 20, 10/12 Semibold, активный #80BA27 */
-  const TABI={
-    cat :'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="8" width="18" height="12.5" rx="3"/><path d="M8 8V6.2a4 4 0 0 1 8 0V8"/></svg>',
-    sale:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="8.5" cy="8.5" r="2.8"/><circle cx="15.5" cy="15.5" r="2.8"/><path d="M17.5 6.5 6.5 17.5" stroke-linecap="round"/></svg>',
-    cart:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2.5 4h2.3l2.5 10.5h10l2.2-7.5H6.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9.5" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/></svg>',
-    prof:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9.2"/><circle cx="12" cy="9.8" r="3.2"/><path d="M5.9 19.6a6.6 6.6 0 0 1 12.2 0"/></svg>'};
-  const TABS=[['Главная','clover',1],['Каталог','cat',0],['Акции','sale',0],
-              ['Корзина','cart',0],['Профиль','prof',0]];
-  document.getElementById('tabbar').innerHTML=
-    `<div class="tab-panel">${TABS.map(([t,k,act])=>`
-      <div class="tab${act?' active':''}">
-        <div class="ic">${k==='clover'?CLOVER_TAB:TABI[k]}</div><span>${t}</span>
-        ${k==='cart'?'<div class="badge">13</div>':''}
-      </div>`).join('')}</div>
-     <div class="home-ind-wrap"><i></i></div>`;
+  TabBar.mount(0);   /* ряд вкладок общий на все экраны — tabbar.js */
 
   document.getElementById('rowSide').classList.toggle('off',!authed);
 
@@ -899,6 +938,31 @@ segDesign.onclick=e=>{
   syncDesignSeg(); render();
 };
 syncDesignSeg();
+
+/* Тема — общая для всех экранов, как и вариант дизайна: класс night на
+   <html>, значения цветов в theme.css. */
+const segTheme=document.getElementById('segTheme');
+const syncThemeSeg=()=>[...segTheme.children].forEach(b=>
+  b.classList.toggle('on', b.dataset.v===Steps.theme()));
+segTheme.onclick=e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  Steps.setTheme(b.dataset.v); Steps.applyTheme();
+  syncThemeSeg(); render();
+};
+syncThemeSeg();
+
+/* Выполнено шагов — состояние общее с чек-листом, поэтому отмечаем те же
+   первые n шагов из Steps.IDS: иначе счётчик на виджете показывал бы одно,
+   а вкладки чек-листа — другое. */
+const segDone=document.getElementById('segDone');
+const syncDoneSeg=()=>[...segDone.children].forEach(b=>
+  b.classList.toggle('on',+b.dataset.v===Steps.all().length));
+segDone.onclick=e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  Steps.set(Steps.IDS.slice(0,+b.dataset.v));
+  syncDoneSeg(); render();
+};
+syncDoneSeg();
 
 /* Дней с регистрации — общее с чек-листом: виджет пересчитывает «еще N дней» */
 document.getElementById('inDays').value=Steps.days();

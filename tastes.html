@@ -5,12 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>КуулКлевер — Откройте разнообразие вкусов</title>
 <link rel="stylesheet" href="micro.css">
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="tabbar.css">
+<link rel="stylesheet" href="dev-theme.css">
+<link rel="stylesheet" href="v2-task.css">
 <script src="micro.js"></script>
+<script src="tabbar.js"></script>
 <script src="steps.js"></script>
+<script src="v2-task.js"></script>
+<script src="dev-theme.js" defer></script>
 <style>
-:root{--green:#80BA27;--accent:#F45500;--ink:#1E1E1E;--ink-2:#4F4F4F;--ink-3:#808080;
-  --sub:#F7F7F7;--hair:#E5E5E5;--olive:#DEE99B;--special:#FFEED6;
-  --disable:#F0F1F3;--disable-txt:#BCBCBC;--myasnov:#74140D}
+:root{--green:var(--t-primary);--accent:var(--t-accent);--ink:var(--t-text);--ink-2:var(--t-text-2);--ink-3:var(--t-text-3);
+  --sub:var(--t-sub);--hair:var(--t-border);--olive:#DEE99B;--special:#FFEED6;--special-dark:#E88A01;
+  --disable:#F0F1F3;--disable-txt:var(--t-text-4);--myasnov:#74140D}
+/* Ночью серые этой страницы идут своей лестницей: в библиотеке их нет.
+   Фирменные подложки карточек при этом не трогаем — они цветные
+   в обеих темах, как Primary и Accent. */
+html.night{--disable:#2A2A2A}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
 html,body{height:100%}
@@ -22,7 +33,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .screen{position:absolute;inset:0;overflow:hidden;border-radius:44px}
 
 /* ===== Top Navigation (8284:140338) ===== */
-.topnav{position:absolute;top:0;left:0;right:0;z-index:40;background:#fff;padding-bottom:8px;
+.topnav{position:absolute;top:0;left:0;right:0;z-index:40;background:var(--t-ground);padding-bottom:8px;
   display:flex;flex-direction:column;align-items:center}
 .status{width:100%;height:44px;display:flex;align-items:center;justify-content:space-between;
   padding:0 26px;font-size:15px;font-weight:600;color:var(--ink)}
@@ -46,7 +57,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .hero .tint{position:absolute;inset:0;background:var(--olive)}
 
 /* Main content (8284:140280): белый, p16 gap16 */
-.main{background:#fff;padding:16px;display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+.main{background:var(--t-ground);padding:16px;display:flex;flex-direction:column;gap:16px;align-items:flex-start}
 .body{width:100%;font-size:16px;line-height:20px;font-weight:400;color:var(--ink)}
 .body p{margin-bottom:8px}
 .btn{width:100%;padding:14px;border:0;border-radius:12px;background:var(--green);cursor:pointer;
@@ -56,7 +67,14 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .banner{width:343px;display:flex;gap:12px;align-items:center;padding:12px 16px;
   border-radius:12px;background:var(--special)}
 .banner img{width:24px;height:24px;flex:none;display:block}
-.banner p{flex:1;min-width:0;font-size:16px;line-height:20px;font-weight:500;color:var(--ink)}
+/* Иконка баннера — оранжевая (Special-dark из библиотеки, 9215:183246).
+   Файл в ресурсах с зашитым тёмным контуром, поэтому красим маской:
+   форма берётся из svg, цвет — из токена. Тегом img так не сделать —
+   растр самой картинки лёг бы поверх заливки. */
+.banner .bi{width:24px;height:24px;flex:none;background:var(--special-dark);
+  -webkit-mask:url("Resurses%20coolstart/ic-info.svg") center/contain no-repeat;
+  mask:url("Resurses%20coolstart/ic-info.svg") center/contain no-repeat}
+.banner p{flex:1;min-width:0;font-size:16px;line-height:20px;font-weight:500;color:#1E1E1E}
 
 /* ===== Купоны (8330:61223): ряд 273-х карточек, px16 py24 gap16 ===== */
 .cupons{background:var(--sub);display:flex;gap:16px;align-items:flex-start;padding:24px 16px;
@@ -73,18 +91,68 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
          drop-shadow(0 0 2px rgba(0,0,0,.02)) drop-shadow(0 0 1px rgba(0,0,0,.01))}
 .cupon .cbody{position:relative;width:273px;height:432px;flex:none;overflow:hidden;
   padding:0 16px 16px;display:flex;flex-direction:column;gap:24px;justify-content:flex-end;
-  background:#fff}
+  background:var(--t-ground)}
 .cupon .lay{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .cupon .lay img{position:absolute;display:block;max-width:none}
 /* растушёвка фото в белый — из макета */
 .cupon .fade{position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(180deg,rgba(255,255,255,0) 31.287%,#fff 44.12%)}
+  background:linear-gradient(180deg,transparent 31.287%,var(--t-ground) 44.12%)}
 .cupon h3{position:relative;width:100%;font-size:20px;line-height:24px;font-weight:600;color:#000}
 .cupon .desc{position:relative;width:100%;font-size:16px;line-height:20px;font-weight:400;color:var(--ink)}
 .cupon .use{position:relative;width:100%;padding:14px;border:0;border-radius:12px;cursor:pointer;
   font-family:inherit;font-size:16px;line-height:20px;font-weight:500;
   background:var(--green);color:#fff}
 .cupon .use.off{background:var(--disable);color:var(--disable-txt);cursor:default}
+
+/* ===== Купоны во втором варианте дизайна (9215:182054) =====
+   В А1 это ряд карточек 273 с горизонтальной прокруткой. В В1 макет
+   кладёт их сеткой 2×N прямо в белое тело задания: карточка 165.5,
+   шаг 12 по обеим осям. Сама карточка — Coupon/Wave (9215:181962):
+   фото, оливковое тело с названием и описанием, зубчатый шов, зелёная
+   плашка со скидкой, а низ срезан волной. */
+.v2 .cupons{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;
+  align-items:stretch;padding:0;background:transparent;overflow:visible;cursor:auto}
+/* button в гриде сам не тянется до высоты ряда — просим явно, иначе
+   в паре карточек плашки скидки встают на разной высоте */
+.v2 .cupons > .cw{align-self:stretch}
+
+.v2 .cw{--cw-body:var(--olive);--cw-foot:#B6D866;
+  position:relative;display:flex;flex-direction:column;align-items:stretch;
+  padding:0;border:0;border-radius:24px 24px 16px 16px;overflow:hidden;
+  background:transparent;font:inherit;text-align:left;cursor:pointer}
+/* применённый купон гаснет — в макете такого кадра нет, но без него
+   не видно, какие уже потрачены */
+.v2 .cw.is-used{opacity:.5}
+
+/* Карточка купона цветная в обеих темах — как Primary и Accent, — поэтому
+   текст на ней берём не из темы, а фиксированный тёмный: ночью --ink
+   становится белым и надписи на оливковом пропадали. */
+.v2 .cw .cw-body{flex:1;display:flex;flex-direction:column;background:var(--cw-body)}
+.v2 .cw .cw-pic{aspect-ratio:164/92;width:100%;background:#fff;overflow:hidden}
+.v2 .cw .cw-pic img{position:static;inset:auto;width:100%;height:100%;max-width:none;
+  display:block;object-fit:cover;object-position:center top}
+.v2 .cw .cw-txt{display:flex;flex-direction:column;gap:8px;padding:8px 8px 16px;
+  font-size:14px;line-height:18px;color:#1E1E1E}
+/* Название в макете обрезается многоточием на двух строках
+   («Пирожные, десерты и торты от Кондитерской…»), описание течёт как
+   есть — карточка растёт под него, а в ряду обе выравниваются по высокой. */
+.v2 .cw .cw-txt .t{font-weight:500;display:-webkit-box;-webkit-box-orient:vertical;
+  -webkit-line-clamp:2;overflow:hidden}
+.v2 .cw .cw-txt .d{font-weight:400;display:-webkit-box;-webkit-box-orient:vertical;
+  -webkit-line-clamp:4;overflow:hidden}
+
+/* Шов над плашкой — ряд кружков Ø8 с шагом 16 (9215:182055). Центры
+   лежат ровно на границе, так что кружки сидят верхом на ней и линия
+   читается как перфорация билета. Цвет у них свой, Sub-ground 1 — он
+   и приходит с этой карточкой в списке переменных. */
+.v2 .cw .cw-foot{position:relative;padding:8px;border-radius:0 0 8px 8px;
+  background:var(--cw-foot);
+  display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center}
+.v2 .cw .cw-foot::before{content:'';position:absolute;left:0;right:0;top:-4px;height:8px;
+  background-image:radial-gradient(circle at 4px 4px,#F7F7F7 3.6px,transparent 3.7px);
+  background-size:16px 8px;background-position:-1.25px 0}
+.v2 .cw .cw-foot b{font-size:16px;line-height:20px;font-weight:600;color:#1E1E1E}
+.v2 .cw .cw-foot span{font-size:13px;line-height:16px;font-weight:400;color:rgba(0,0,0,.64)}
 
 /* progress widget задания — как на остальных страницах заданий */
 .pw{width:100%;display:flex;flex-direction:column;gap:16px}
@@ -96,7 +164,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .pw .done{font-size:14px;line-height:18px;font-weight:500;color:var(--ink)}
 /* бейдж скидки — «язычок» сверху по центру */
 .cupon .badge{position:absolute;top:0;left:calc(50% + 4.5px);transform:translateX(-50%);
-  z-index:2;background:#fff;border-radius:0 0 24px 24px;padding:8px 16px 8px 8px;
+  z-index:2;background:var(--t-ground);border-radius:0 0 24px 24px;padding:8px 16px 8px 8px;
   display:flex;gap:8px;align-items:center}
 .cupon .badge img{width:40px;height:40px;flex:none;display:block}
 .cupon .badge b{font-size:20px;line-height:24px;font-weight:600;color:var(--myasnov);white-space:nowrap}
@@ -105,19 +173,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .cupon .cut img{width:100%;height:100%;display:block}
 
 /* ===== Tab Bar ===== */
-.tabbar{position:absolute;left:0;right:0;bottom:0;z-index:30;background:#fff;
-  display:flex;flex-direction:column;align-items:center}
-.tab-panel{display:flex;width:100%;border-top:1px solid var(--hair);background:#fff}
-.tab{flex:1;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;gap:2px;padding:8px;position:relative;color:var(--ink-3);text-decoration:none}
-.tab img{width:20px;height:20px;display:block}
-.tab .lbl{font-size:10px;line-height:12px;font-weight:600;text-align:center;width:100%}
-.tab.active .lbl{color:var(--green)}
-.badge-cart{position:absolute;top:4px;right:12px;min-width:14px;height:14px;border-radius:60px;
-  background:var(--accent);border:2px solid #fff;color:#fff;font-size:10px;line-height:12px;
-  display:grid;place-items:center;padding:1px}
-.home-ind-wrap{width:100%;background:#fff;padding:22px 8px 8px;display:grid;place-items:center}
-.home-ind-wrap i{width:134px;height:5px;border-radius:100px;background:var(--ink);display:block}
+/* Таб-бар — общий файл tabbar.css */
 
 .note{position:absolute;left:16px;right:16px;bottom:100px;z-index:75;background:#17181A;color:#fff;
   border-radius:14px;padding:12px 14px;font-size:12px;line-height:1.45;
@@ -159,7 +215,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
       </div>
       <div class="body" id="lead"></div>
       <button class="btn" id="btnCatalog">В каталог</button>
-      <div class="banner"><img id="icInfo" alt=""><p>Будут доступны после первой покупки. 1 покупка = 1 купон</p></div>
+      <div class="banner"><i class="bi"></i><p>Будут доступны после первой покупки. 1 покупка = 1 купон</p></div>
     </div>
     <div class="cupons" id="cupons"></div>
   </div>
@@ -180,47 +236,56 @@ const ICON={
   back:     RES+'ic-back.svg',
   info:     RES+'ic-info.svg',
   factory:  RES+'ic-cat-1.svg',
+  gift:     RES+'Gift.svg',     /* Promo/Gift 40×24 — иконка плашки оффера */
   cut:      RES+'ic-cut.svg'};  /* зубчатый низ билета, 44px */
 
 /* Шапка 204px: слой под подложкой Nature/Olive и слой поверх */
 const HERO={front:'Resurses%20coolstart/check-list%20image%20page%202.jpg'};
 
-const TABI=[
- ['Главная',RES+'ic-tab-home.svg'],
- ['Каталог',RES+'ic-tab-catalog.svg'],
- ['Акции',  RES+'ic-tab-promo.svg'],
- ['Корзина',RES+'ic-tab-cart.svg'],
- ['Профиль',RES+'ic-tab-profile.svg']];
 
 const LEAD=[
  'У нас 7 собственных заводов, и каждый создаёт продукты со своим характером и традициями. А то, что мы не производим сами, привозим напрямую от проверенных производителей со всего мира: пасту — из Италии, паприку пиментон — из Испании, а выдержанные сыры — из Швейцарии. Так каждый поход в КуулКлевер становится маленьким гастрономическим путешествием!',
  'С 2003 года мы вместе с виноделами и производителями собираем три уникальные коллекции напитков — Somelie, Somelie Grand, Somelie Grand Prix. Сегодня это более 1 500 напитков из 25 стран мира, подобранных для самых разных вкусов и поводов.',
  'Мы подготовили для вас купоны на скидку в любимых категориях — чтобы знакомство с нашим ассортиментом было не только интересным, но и выгодным. Начните открывать новые вкусы уже сегодня!'];
 
-/* ===== 10 купонов. pic — своё фото карточки со смещениями из макета ===== */
+/* ===== 10 купонов =====
+   pic — фото большой карточки А1 со смещениями из макета.
+   v2pic — фото узкой карточки В1 (9215:181765): отдельная выгрузка,
+   уже обрезанная под 164×92, поэтому кладём её по cover без смещений.
+   Из макета пришли пять снимков из шести — для «Мяса и блюд для
+   запекания» выгрузки нет, там пока остаётся фото карточки А1,
+   как и у последних четырёх купонов, которых в макете нет вовсе. */
 const CUPONS=[
  {pct:'15%',pic:RES+encodeURIComponent('Pic 01.png'),
   css:'left:0;top:-25.11%;width:100%;height:86.14%',
+  /* снимка «мяса и блюд для запекания» в выгрузке нет — берём из
+     ресурсов ближайшее по смыслу, печёный пирог */
+  v2pic:RES+encodeURIComponent('Pic 05.png'),
   h:'Мясо и блюда для запекания',
   d:'Мясо без шприцевания и натуральные маринады собственного приготовления и домашние рецепты А главное — всё почти готово!'},
  {pct:'25%',pic:RES+encodeURIComponent('Pic 02.png'),
   css:'left:0;top:-11.23%;width:100%;height:63.19%',
+  v2pic:RES+encodeURIComponent('Cupon 02.jpg'),
   h:'Сосиски, сардельки и шпикачки',
   d:'По ГОСТу и традиционным советским рецептам. Много свежего качественного мяса, натуральные специи и привычный вкус, который любят уже несколько поколений.'},
  {pct:'50%',pic:RES+encodeURIComponent('Pic 03.png'),
   css:'left:-29.12%;top:-29.62%;width:158.24%;height:100%',
+  v2pic:RES+encodeURIComponent('Cupon 03.jpg'),
   h:'Пельмени, вареники и хинкали',
   d:'Много сочной начинки и домашние рецепты. Каждое блюдо готовим с любовью, чтобы радовать вас натуральным вкусом!'},
  {pct:'30%',pic:RES+encodeURIComponent('Pic 04.png'),
   css:'left:0;top:-10.43%;width:100%;height:59.35%',
+  v2pic:RES+encodeURIComponent('Cupon 04.jpg'),
   h:'Молочку от Молзавода МясновЪ Хлевное',
   d:'Из молока высшего сорта без заменителей молочного жира. Бережная пастеризация сохраняет натуральный вкус и максимум белка в составе.'},
  {pct:'30%',pic:RES+encodeURIComponent('Pic 05.png'),
   css:'left:0;top:-10.67%;width:100%;height:63.19%',
+  v2pic:RES+encodeURIComponent('Cupon 05.jpg'),
   h:'Ремесленный хлеб и выпечка',
   d:'Хлеб длительной ферментации на живой закваске, выпечка на сливочном масле. Настоящий вкус, который начинается с качественных ингредиентов.'},
  {pct:'30%',pic:RES+encodeURIComponent('Pic 06.png'),
   css:'left:0;top:-17.11%;width:100%;height:63.19%',
+  v2pic:RES+encodeURIComponent('Cupon 06.jpg'),
   h:'Пирожные, десерты и торты от Кондитерской МясновЪ',
   d:'Натуральные сливки, сливочное масло и шоколад вместо заменителей. Десерты ручной работы, от которых невозможно отказаться!'},
  {pct:'30%',pic:RES+encodeURIComponent('Pic 01.png'),
@@ -297,28 +362,80 @@ function cupon(c,i){
   </div>`;
 }
 
+/* Coupon/Wave второго варианта (9215:181962): фото, оливковое тело с
+   названием и описанием, плашка со скидкой и волна снизу. Кнопки в
+   макете нет — карточка нажимается целиком. Подпись под скидкой в
+   макете статическая («на первую покупку»), состояние «применён»
+   добавлено сверх макета: иначе не видно, какие купоны уже потрачены. */
+/* В макете сетка ровно на шесть карточек (9215:182054), остальные четыре
+   купона в неё не входят — в В1 показываем первые шесть. */
+const V2_COUNT = 6;
+const cwList = () => v2() ? CUPONS.slice(0, V2_COUNT) : CUPONS;
+const cwPic = c => c.v2pic || c.pic;
+/* В макете под названием стоит одна фраза описания — та же первая фраза,
+   что и в наших текстах. Берём её, а не весь абзац: иначе карточка
+   вытягивается втрое. Где точки в тексте нет, строку подрежет обрезка
+   на четырёх строках. */
+const cwDesc = t => (String(t).match(/^[\s\S]*?[.!?](?=\s|$)/) || [t])[0];
+
+function cuponV2(c,i){
+  const applied=used.has(i);
+  return `<button class="cw${applied?' is-used':''}" data-use="${i}">
+    <span class="cw-body">
+      <span class="cw-pic">${cwPic(c)?`<img src="${cwPic(c)}" alt="">`:''}</span>
+      <span class="cw-txt"><span class="t">${esc(c.h)}</span>`+
+        `<span class="d">${esc(cwDesc(c.d))}</span></span>
+    </span>
+    <span class="cw-foot"><b>Скидка ${esc(c.pct)}</b>`+
+      `<span>${applied?'Применён':'на первую покупку'}</span></span>
+  </button>`;
+}
+
+/* Во втором варианте шапка своя: цветной блок с иллюстрацией, названием
+   задания и шкалой (9215:38489). Блок задания из белого тела при этом
+   убираем — он уже показан в шапке, а в навбаре остаётся номер шага. */
+const v2=()=>Steps.design()===2;
+
 function render(){
   document.getElementById('icBack').src=ICON.back;
-  document.getElementById('icInfo').src=ICON.info;
-  document.getElementById('hero').innerHTML=
-    `<img class="front" src="${HERO.front}" alt="">`;
   const done=Math.min(buys,TASK_TOTAL);
-  document.getElementById('taskScale').innerHTML=Array.from({length:TASK_TOTAL},(_,i)=>
-    `<div class="seg${i<done?' on':''}"></div>`).join('');
-  document.getElementById('taskDone').textContent=`Выполнено ${done} из ${TASK_TOTAL}`;
+  if(v2()){
+    const hero=document.getElementById('hero');
+    hero.className='hero '+V2Task.tone('');
+    hero.innerHTML=V2Task.hero({pic:RES+'image-1.png', ttl:'Купите товары 3 разных категорий',
+      used:done, total:TASK_TOTAL, check:RES+'ic-check.svg'});
+    const pw=document.querySelector('.main .pw'); if(pw) pw.hidden=true;
+    const n=Steps.IDS.indexOf('cats')+1;
+    if(n) document.querySelector('.nav-title').textContent=`Задание ${n}`;
+    /* По макету (9215:38506) за плашкой «Будут доступны…» идёт check-list
+       item с оффером, и купоны лежат внутри белого тела, а не отдельной
+       лентой под ним. Переносим — тогда поля и шаг 24 задаёт само тело,
+       а место под кнопку достаётся ему же. */
+    const main=document.querySelector('.main');
+    if(!document.getElementById('v2Offer')){
+      const offer=document.createElement('div');
+      offer.id='v2Offer'; offer.className='pw';
+      offer.innerHTML=`<div class="head"><img src="${ICON.gift}" alt="">`+
+        `<p class="h3">Купоны на скидку</p></div>`;
+      main.append(offer);
+    }
+    main.append(document.getElementById('cupons'));
+    V2Task.pinCta();
+    V2Task.watchNav();
+  }else{
+    document.getElementById('hero').innerHTML=
+      `<img class="front" src="${HERO.front}" alt="">`;
+    document.getElementById('taskScale').innerHTML=Array.from({length:TASK_TOTAL},(_,i)=>
+      `<div class="seg${i<done?' on':''}"></div>`).join('');
+    document.getElementById('taskDone').textContent=`Выполнено ${done} из ${TASK_TOTAL}`;
+  }
   document.getElementById('lead').innerHTML=LEAD.map(p=>`<p>${esc(p)}</p>`).join('');
   /* карусель перерисовывается на каждый выбор — держим её на том же месте,
      иначе после нажатия она отматывалась бы к первому купону */
   const rail=document.getElementById('cupons'), railX=rail.scrollLeft;
-  rail.innerHTML=CUPONS.map(cupon).join('');
+  rail.innerHTML=cwList().map(v2()?cuponV2:cupon).join('');
   rail.scrollLeft=railX;
-  document.getElementById('tabbar').innerHTML=
-    `<div class="tab-panel">${TABI.map(([t,src,href],i)=>
-      `<a class="tab${i===0?' active':''}" href="${href}">
-         <img src="${src}" alt=""><span class="lbl">${t}</span>
-         ${t==='Корзина'?'<span class="badge-cart">13</span>':''}
-       </a>`).join('')}</div>
-     <div class="home-ind-wrap"><i></i></div>`;
+  TabBar.mount(0);   /* ряд вкладок общий на все экраны — tabbar.js */
 
   /* .cupons — карусель целиком: карточки внутри уезжают вправо за пределы
      вертикального скроллера, поштучно их проявлять некорректно */
@@ -342,6 +459,7 @@ document.getElementById('cupons').onclick=e=>{
 /* Горизонтальная прокрутка ряда купонов: свайп на тачскрине работает сам,
    на десктопе добавляем колесо и перетаскивание мышью. */
 (function(){
+  if(v2()) return;              /* в В1 купоны лежат сеткой, тащить нечего */
   const el=document.getElementById('cupons');
   el.addEventListener('wheel',e=>{
     if(Math.abs(e.deltaY)<=Math.abs(e.deltaX)) return;      /* уже горизонтальный жест */
@@ -377,7 +495,7 @@ document.getElementById('cupons').onclick=e=>{
    На третьей покупке задание закрыто и уходит в чек-лист КуулСтарта. */
 document.getElementById('btnCatalog').onclick=e=>{
   /* покупок ровно столько, сколько есть купонов: больше открывать нечего */
-  if(buys>=CUPONS.length){
+  if(buys>=cwList().length){
     showNote(slots()
       ? `<b>Все купоны уже открыты</b><br>Осталось выбрать: ${slots()}.`
       : '<b>Все купоны применены</b><br>Покупать больше незачем.');

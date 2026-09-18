@@ -5,51 +5,39 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>КуулКлевер — КуулСтарт</title>
 <link rel="stylesheet" href="micro.css">
+<link rel="stylesheet" href="theme.css">
 <script src="micro.js"></script>
 <script src="steps.js"></script>
 <script>
 /* ===== Кубок =====
-   Самая крупная картинка шапки, и её адрес зависит от прогресса — значит,
-   тег появляется только после основного скрипта, и сканер предзагрузки
-   браузера его не видит: запрос уходит в самом конце, когда канал уже
-   занят карточками. Считаем этап здесь же и ставим preload, чтобы кубок
-   грузился одновременно с разбором страницы. */
-/* Этапы кубка по числу закрытых шагов: пока ничего не сделано — белый,
-   со второго шага идут золотые крапинки, с половины чек-листа золота
-   больше белого, на последнем шаге перед финишем белого остаётся пара
-   пятен, на финише кубок золотой целиком. Когда КеГЛи пришли — он же
-   в венке из плашек. */
-const CUPS=['Белый кубок.png','Кубок пятна 2.png','Кубок пятна 5.png',
-            'Кубок пятна 9.png','Кубок золото.png'];
-const CUP_GOLD=CUPS[4];
-window.cupSrc=function(n,paid){
-  const T=Steps.TOTAL;
-  const file = paid  ? 'KGL Image.png'
-    : n>=T           ? CUPS[4]
-    : n>=T-1         ? CUPS[3]
-    : n>=Math.round(T*.5) ? CUPS[2]
-    : n>=Math.round(T*.2) ? CUPS[1]
-    : CUPS[0];
-  return 'Resurses%20coolstart/'+encodeURIComponent(file);
+   Самая крупная картинка шапки, и тег появляется только после основного
+   скрипта — сканер предзагрузки браузера его не видит: запрос уходит в
+   самом конце, когда канал уже занят карточками. Поэтому ставим preload
+   здесь, чтобы кубок грузился одновременно с разбором страницы.
+   Кубок всегда золотой: этапов с белым и крапчатым больше нет, как и в
+   макетах, где на всех состояниях стоит один и тот же кубок. Меняется он
+   ровно один раз — когда КеГЛи пришли и кубок встаёт в венок из плашек. */
+window.cupSrc=function(paid){
+  return 'Resurses%20coolstart/'+encodeURIComponent(paid ? 'KGL Image.png' : 'Goblet.png');
 };
 if(Steps.design()===2){
   const n=Steps.all().length, d=Steps.get('doneDay',null);
   const l=document.createElement('link');
   l.rel='preload'; l.as='image'; l.fetchPriority='high';
-  l.href=cupSrc(n, n>=Steps.TOTAL && d!==null && Steps.days()>d);
+  l.href=cupSrc(n>=Steps.TOTAL && d!==null && Steps.days()>d);
   document.head.appendChild(l);
 }
 </script>
 <link rel="stylesheet" href="v2.css">
 <style>
-:root{--green:#80BA27;--ink:#1E1E1E;--ink-2:#4F4F4F;--corn:#FFE3A2;--olive:#DEE99B;--peach:#FFC9B7;--dur:1}
+:root{--green:var(--t-primary);--ink:var(--t-text);--ink-2:var(--t-text-2);--corn:#FFE3A2;--olive:#DEE99B;--peach:#FFC9B7;--dur:1}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
 html,body{height:100%}
 body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text",Inter,system-ui,sans-serif;
   display:flex;align-items:center;justify-content:center;overflow:hidden}
 #stage{transform-origin:center center}
-.phone{width:375px;height:812px;position:relative;overflow:hidden;background:#F7F7F7;border-radius:44px;
+.phone{width:375px;height:812px;position:relative;overflow:hidden;background:var(--t-ground);border-radius:44px;
   box-shadow:0 40px 90px rgba(0,0,0,.6),0 0 0 10px #111,0 0 0 11px #2A2C2E;color:var(--ink)}
 .screen{position:absolute;inset:0;overflow:hidden;border-radius:44px}
 
@@ -67,7 +55,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 /* ===== Шапка (I8284:140343;4084:123316): Nature/Corn, скругление снизу 16 ===== */
 .head{flex:none;background:var(--corn);border-radius:0 0 16px 16px;padding-top:44px}
 .navbar{position:relative;display:flex;align-items:center;padding:8px 16px;min-height:56px}
-.back{flex:none;width:40px;height:40px;border-radius:12px;background:#F7F7F7;
+.back{flex:none;width:40px;height:40px;border-radius:12px;background:var(--t-sub);
   display:grid;place-items:center;cursor:pointer;text-decoration:none}
 .back img{width:20px;height:20px;display:block}
 .nav-title{position:absolute;left:16.33%;right:16.33%;top:50%;transform:translateY(-50%);
@@ -96,11 +84,11 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .seg{width:100%;display:flex;gap:0;padding:4px;border-radius:12px;background:rgba(255,255,255,.64);overflow:hidden}
 .seg button{flex:1;min-width:0;padding:8px;border:0;border-radius:12px;background:transparent;cursor:pointer;
   font:500 14px/18px inherit;font-family:inherit;color:var(--ink-2);text-align:center}
-.seg button.on{background:#fff;color:var(--ink);
+.seg button.on{background:var(--t-ground);color:var(--ink);
   filter:drop-shadow(0 4px 6px rgba(0,0,0,.08)) drop-shadow(0 0 2px rgba(0,0,0,.04))}
 
 /* ===== Секции-контейнеры (I8284:140343;4084:123334 и далее) ===== */
-.sect{flex:none;width:375px;background:#fff;border-radius:12px;padding:24px 16px;
+.sect{flex:none;width:375px;background:var(--t-ground);border-radius:12px;padding:24px 16px;
   display:flex;flex-direction:column;gap:16px}
 .sect h2{width:100%;font-size:20px;line-height:24px;font-weight:600;color:var(--ink)}
 .list{display:flex;flex-direction:column;gap:8px}
@@ -123,7 +111,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .item h3{font-size:16px;line-height:20px;font-weight:500;color:var(--ink)}
 .item p{font-size:14px;line-height:18px;font-weight:500;color:var(--ink)}
 .offer{align-self:flex-start;display:flex;gap:8px;align-items:center;
-  padding:4px 8px 4px 4px;border-radius:12px;background:#fff}
+  padding:4px 8px 4px 4px;border-radius:12px;background:var(--t-ground)}
 .offer img{width:40px;height:24px;flex:none;display:block}
 /* в макете плашка была в одну строку; новые офферы длиннее — переносим, чтобы не резалось */
 .offer{max-width:100%}
@@ -132,7 +120,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 
 .stub{padding:24px 0;text-align:center;font-size:14px;line-height:18px;font-weight:500;color:var(--ink-2)}
 
-.home-ind{position:absolute;left:0;right:0;bottom:0;height:34px;z-index:30;background:#fff;
+.home-ind{position:absolute;left:0;right:0;bottom:0;height:34px;z-index:30;background:var(--t-ground);
   display:grid;place-items:center}
 .home-ind i{width:134px;height:5px;border-radius:100px;background:var(--ink);display:block}
 
@@ -242,7 +230,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
     <div class="row"><span>Дней с регистрации</span><input id="inDays" type="number" min="0" max="400" value="1"></div>
     <div class="row"><span>Выполнено шагов</span>
       <div class="dseg" id="segDone">
-        <button data-v="0" class="on">0</button><button data-v="2">2</button><button data-v="5">5</button><button data-v="9">9</button><button data-v="10">10</button>
+        <button data-v="0" class="on">0</button><button data-v="2">2</button><button data-v="4">4</button><button data-v="6">6</button><button data-v="8">8</button><button data-v="10">10</button>
       </div></div>
     <div class="row"><span>КеГЛи начислены</span><div class="sw" id="swPaid"></div></div>
     <div class="row"><span>Была первая покупка</span><div class="sw" id="swBuy"></div></div>
@@ -250,9 +238,13 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
       <div class="dseg" id="segDesign">
         <button data-v="1">А1</button><button data-v="2">В1</button>
       </div></div>
+    <div class="row"><span>Тема</span>
+      <div class="dseg" id="segTheme">
+        <button data-v="day">День</button><button data-v="night">Ночь</button>
+      </div></div>
     <div class="row"><span>Прогресс КуулСтарта</span>
       <button class="danger" id="btnReset">Начать заново</button></div>
-    <div class="hint">Тап по карточке открывает внутренний раздел задания. Статус шагов переключается здесь — карточки уезжают во вкладку «Выполненные», прогресс и подпись пересчитываются. Значения 2, 5, 9 и 10 — это этапы шапки: кубок золотеет, а градиент разрастается вокруг него. «КеГЛи начислены» показывает последний этап, тот, что в приложении наступит на следующий день после финиша. «Начать заново» снимает и отметки, сделанные на экранах заданий: подтверждённую почту, засчитанные покупки. Панель — тап по батарейке.</div>
+    <div class="hint">Тап по карточке открывает внутренний раздел задания. Статус шагов переключается здесь — карточки уезжают во вкладку «Выполненные», прогресс и подпись пересчитываются. Значения 2, 4, 6, 8 и 10 — это этапы шапки: пятна градиента поднимаются снизу вверх. «КеГЛи начислены» показывает последний этап, тот, что в приложении наступит на следующий день после финиша. «Начать заново» снимает и отметки, сделанные на экранах заданий: подтверждённую почту, засчитанные покупки. Панель — тап по батарейке.</div>
   </div>
 
 </div>
@@ -272,7 +264,9 @@ const ICON={
   time:RES+'ic-clock.svg',
   check:RES+'ic-check.svg',
   kgl:RES+'ic-kgl.svg',
-  gift:RES+'Gift.svg'};
+  gift:RES+'Gift.svg',
+  /* Пиктограмма пальца из подсказки удержания (9110:112292), 38×48 */
+  hold:RES+'Finger.png'};
 
 const PIC=[
  'Resurses%20coolstart/check-list%20image%201.jpg',  /* 0 хиты      шаг 1  */
@@ -311,33 +305,35 @@ const TOTAL=Steps.TOTAL, TERM=Steps.TERM;   /* шагов всего и срок
 
 const HEAD={
   lead:'10 подсказок, чтобы влюбиться в КуулКлевер. Пройдите все — и заберите награду',
-  /* 1144:2014 — в день, когда закрылся последний шаг */
+  /* 9084:103568 — в день, когда закрылся последний шаг */
   congrats:['Поздравляем с прохождением КуулСтарта!','КеГЛи начислятся завтра.'],
-  /* 1144:2312 / 1144:2313 — на следующий день, вместо плашки с наградой */
-  paidTtl:'КеГЛи уже начислены',
+  /* 9084:104576 / 9084:104577 — на следующий день, вместо плашки с наградой */
+  paidTtl:'КеГЛи начислены',
   paid:'Вы можете потратить их на натуральные продукты и звездные напитки КуулКлевер',
   cap:'за прохождение КуулСтарта',
-  hold:'Удерживайте кубок 2 секунды',
+  hold:'Удерживайте',
   reward:'10 000'};
 
-/* ===== Круг, которым проявляется градиент шапки (1144:2370) =====
-   В макете пять состояний, диаметр круга вокруг кубка задан для 2, 5, 9 и 10
-   шагов. Между ними интерполируем: прогресс меняется по шагу, а не рывками
-   от макета к макету. */
-/* Последнее значение больше макетных 691: там круг ровно доходит до углов
-   кадра, а у нас шапка выше на подпись прогресса — берём с запасом, чтобы
-   на финише градиент закрывал её целиком, как в макете. */
-const GLOW=[[0,0],[2,137],[5,245],[9,411],[TOTAL,1200]];
-function glowD(n){
-  for(let i=1;i<GLOW.length;i++){
-    const [x0,y0]=GLOW[i-1], [x1,y1]=GLOW[i];
-    if(n<=x1) return y0+(y1-y0)*(n-x0)/(x1-x0);
-  }
-  return GLOW[GLOW.length-1][1];
-}
-/* Размытие в макете — 75px независимо от размера круга: на столько край
-   круга уходит наружу и настолько же внутрь размывается его граница. */
-const GLOW_BLUR=75;
+/* ===== Пятна, которыми залита шапка (9084:103550 … 9084:103557) =====
+   В макете шесть состояний — 0, 2, 4, 6, 8 и 10 шагов, — и в каждом у трёх
+   пятен свой центр: по мере прохождения они поднимаются снизу вверх, и к
+   финишу жёлтое с оранжевым занимают всю шапку. Между состояниями
+   интерполируем: прогресс меняется по шагу, а не рывками от макета к макету.
+
+   Числа — центр пятна и сторона его квадрата в координатах шапки (375 в
+   ширину, 0 по верху статус-бара). В макете это эллипс с гауссовым
+   размытием, поэтому сторона больше самого эллипса на два радиуса размытия:
+   жёлтое 374+2×180, оранжевое 320+2×180, красное 280+2×90, а на последних
+   этапах оно размыто сильнее — 280+2×180. */
+const BLOBS=[
+  /* шагов  жёлтое x,y,d     оранжевое x,y,d   красное x,y,d */
+  [0,       405,637,734,     48,514,680,       194,595,460],
+  [2,       383,605,734,     46,461,680,       194,595,460],
+  [4,       398,559,734,     79,435,680,       194,595,460],
+  [6,       437,404,734,     48,367,680,       220,536,460],
+  [8,       406,372,734,     52,358,680,       260,522,640],
+  [TOTAL,   375,176,740,     71,418,680,       339,514,640]
+];
 
 /* ===== Шаги КуулСтарта: 4 + 2 + 4 ===== */
 const SECTIONS=[
@@ -459,7 +455,26 @@ function progressState(days){
   return '';
 }
 
-/* пустые состояния вкладок */
+/* ===== Пустые состояния вкладок (9100:111433 / 9100:111780) =====
+   В макете у каждой вкладки своя картинка, заголовок и подпись, которая
+   отправляет на соседнюю вкладку. «Доступные» пустеют, когда пройдены все
+   шаги; «Уже получили» — пока не закрыт ни один. */
+const EMPTY={
+  open:{pic:RES+'Serpantine.png', ttl:'Все 10 шагов пройдены',
+        sub:'Посмотреть выполненные задания и воспользоваться купонами '+
+            'и скидками можно на вкладке «Уже получили»'},
+  done:{pic:RES+'Capibara.png',   ttl:'Тут пока ничего нет',
+        sub:'Посмотреть задания и воспользоваться купонами и скидками '+
+            'можно на вкладке «Доступные»'}};
+function emptyBlock(){
+  const e = EMPTY[tab==='done' ? 'done' : 'open'];
+  return `<div class="v2-empty">
+      <img src="${e.pic}" alt="" width="108" height="108" decoding="async">
+      <h3>${esc(e.ttl)}</h3><p>${esc(e.sub)}</p>
+    </div>`;
+}
+
+/* пустые состояния вкладок первого варианта */
 function emptyText(days){
   if(tab==='done')
     return 'Пока здесь пусто. Сделайте первый 10 шагов, чтобы влюбиться в КуулКлевер, и забирайте награду!';
@@ -524,7 +539,9 @@ function renderList(animate){
     return `<div class="sect"><h2>${esc(ttl)}</h2>${v2()?'':intro}
       <div class="list">${items.map(it=>card(it,s.corn)).join('')}</div></div>`;
   }).join('');
-  host.innerHTML=html || `<div class="sect"><div class="stub">${esc(emptyText(days))}</div></div>`;
+  host.innerHTML=html || `<div class="sect">${v2()
+    ? emptyBlock()
+    : `<div class="stub">${esc(emptyText(days))}</div>`}</div>`;
   placeTabs();
   Micro.reveal('.sect, .item',{force:animate});
 }
@@ -544,7 +561,7 @@ function renderList(animate){
    Второе включается на закрытом чек-листе — вместе с ним просмотрщик
    сам проигрывает свечение, оборот и конфетти. */
 const CUP3D = RES + encodeURIComponent('trophy-web 2') + '/trophy-viewer.js';
-let cup3d = null, cup3dBusy = false, cup3dFull = null;
+let cup3d = null, cup3dBusy = false;
 
 function loadCup3d(){
   if(cup3d || cup3dBusy || !v2() || !window.WebGL2RenderingContext) return;
@@ -564,9 +581,11 @@ function mountCup3d(){
   host.className = 'v2-cup-3d';
   img.parentElement.insertBefore(host, img);
   try{
-    cup3dFull = done.size >= TOTAL;
+    /* Тёмного состояния у модели больше нет: кубок золотой с самого начала,
+       как и картинка под ним. Удержание по-прежнему работает — просмотрщик
+       пускает свечение и конфетти по своему событию зарядки. */
     cup3d = Trophy3D.mountTrophy(host, {autoplay:true, shadow:false,
-                                        unlocked: cup3dFull});
+                                        unlocked: true});
   }catch(e){ host.remove(); cup3dBusy = false; return }
   /* картинка больше не нужна, но остаётся в разметке: если вариант
      дизайна переключат на А1, шапка вернётся к ней */
@@ -574,14 +593,58 @@ function mountCup3d(){
   host.animate([{opacity:0},{opacity:1}], {duration:CUP_FADE, easing:'ease-out'});
 
   /* Свою кнопку-подсказку просмотрщик рисует поверх кубка и перекрывает
-     ею плашку награды — она спрятана в v2.css. Вместо неё ставим обычную
-     подпись под кубком: удержание работает по самому кубку, кнопка для
-     этого не нужна. */
-  const hint = document.createElement('p');
+     ею плашку награды — она спрятана в v2.css. Вместо неё ставим подсказку
+     слева от кубка, как в макете (9110:112295): пиктограмма пальца и
+     подпись. Удержание работает по самому кубку, кнопка для этого не нужна. */
+  const hint = document.createElement('div');
   hint.id = 'v2CupHint';
   hint.className = 'v2-cup-hint';
-  hint.textContent = HEAD.hold;
+  hint.innerHTML = `<img src="${ICON.hold}" alt="" width="38" height="48">`+
+                   `<p>${esc(HEAD.hold)}</p>`;
   host.parentElement.insertBefore(hint, host.nextSibling);
+  holdHint(host);
+}
+
+/* ===== Подсказка удержания =====
+   Показываем её в ответ на касание кубка и ровно там, куда нажали: палец
+   на картинке встаёт под настоящий палец, а подпись читается рядом. Через
+   секунду подсказка уходит сама, новое касание отсчитывает секунду заново.
+   Ловим pointerdown, а не click: на тапе подсказка нужна сразу, а не
+   после того, как палец оторвали от экрана. */
+const HINT_SHOW = 1000;
+/* Кружок нажатия на пиктограмме — примерно в 10px от её верха: на столько
+   поднимаем блок, чтобы он пришёлся ровно на точку касания. */
+const HINT_TIP = 10;
+function holdHint(host){
+  let timer = 0;
+  host.addEventListener('pointerdown', e=>{
+    const hint = document.getElementById('v2CupHint');
+    if(!hint) return;
+    placeHint(hint, host, e);
+    hint.classList.add('is-on');
+    clearTimeout(timer);
+    timer = setTimeout(()=>hint.classList.remove('is-on'), HINT_SHOW);
+  });
+}
+
+/* Подсказка лежит в группе шапки, а координаты приходят от окна — отсюда
+   пересчёт. Края подрезаем по самому кубку: у края блока подсказка
+   прижимается к нему и наружу не выезжает.
+   Телефон на сцене масштабируется, поэтому все rect'ы приходят в экранных
+   пикселях, а left/top применяются до трансформации — делим на масштаб,
+   иначе у краёв подрезка промахивается. */
+function placeHint(hint, host, e){
+  const group = hint.offsetParent;
+  if(!group) return;
+  const g = group.getBoundingClientRect(),
+        h = host.getBoundingClientRect(),
+        r = hint.getBoundingClientRect();
+  const k = g.width / group.offsetWidth || 1;
+  const clamp = (v, min, max) => Math.max(min, Math.min(v, max));
+  const x = clamp(e.clientX - r.width / 2,   h.left, h.right  - r.width);
+  const y = clamp(e.clientY - HINT_TIP * k,  h.top,  h.bottom - r.height);
+  hint.style.left = ((x - g.left) / k).toFixed(1) + 'px';
+  hint.style.top  = ((y - g.top)  / k).toFixed(1) + 'px';
 }
 
 /* ===== Подмена кубка: растворение =====
@@ -647,15 +710,15 @@ function mountV2Head(n, full, paid){
     }
     return el;
   };
-  /* круг с градиентом — самым нижним слоем, под серпантин и содержимое */
+  /* пятна градиента — самым нижним слоем, под серпантин и содержимое */
   const glow=add('v2Glow','v2-glow',null,head,true,v2());
-  /* Приглушённый слой — на всю шапку, яркий — в группу с кубком (так в макете),
-     содержимое обоих поднято position:relative, чтобы лежать поверх лент.
-     До финиша серпантина в макете нет, и вешать его скрытым нельзя: картинка
-     всё равно скачается — а это сотня килобайт в тот самый момент, когда
-     канал нужен кубку и карточкам. */
+  /* Оба слоя лент — в самой шапке, как в макете; её содержимое поднято
+     position:relative, чтобы лежать поверх них. До финиша серпантина
+     в макете нет, и вешать его скрытым нельзя: картинка всё равно
+     скачается — а это сотня килобайт в тот самый момент, когда канал
+     нужен кубку и карточкам. */
   add('v2Conf1','v2-conf v2-conf1',V2.conf1,head,true,v2()&&full);
-  add('v2Conf2','v2-conf v2-conf2',V2.conf2,group,true,v2()&&full);
+  add('v2Conf2','v2-conf v2-conf2',V2.conf2,head,true,v2()&&full);
   /* Трёхмерный кубок — только во втором варианте: в первом шапка своя,
      и прячем модель до раннего выхода ниже, иначе в А1 она бы осталась. */
   const host3d = document.getElementById('v2Cup3d');
@@ -666,7 +729,7 @@ function mountV2Head(n, full, paid){
     if(cup3d) cup3d.setAnimation(v2());   /* в А1 не жжём кадры впустую */
   }
   const fresh=!document.getElementById('v2Cup');
-  const cup=add('v2Cup','v2-cup-big',cupSrc(n,paid),group,true,v2());
+  const cup=add('v2Cup','v2-cup-big',cupSrc(paid),group,true,v2());
   if(!cup) return;
   /* При уходе в А1 картинку удаляют, и на обратном пути она создаётся
      заново уже видимой — под живой моделью её надо снова спрятать,
@@ -675,20 +738,18 @@ function mountV2Head(n, full, paid){
   /* Кубок: этапы по ходу чек-листа, золотой на финише и он же
      с КеГЛями вокруг — когда награда уже пришла. Пока на экране модель,
      картинка под ней спрятана, и растворять её незачем. */
-  setCup(cup, cupSrc(n,paid), paid, fresh || !!cup3d);
-  /* Модель показывает не этап заполнения, а факт получения награды.
-     Состояние навязываем только когда прогресс действительно изменился:
-     иначе удержание кубка (оно тоже переводит его в золото и пускает
-     конфетти) гасло бы на первой же перерисовке. */
-  if(cup3d && cup3dFull !== full){ cup3dFull = full; cup3d.setUnlocked(full) }
-
-  /* Вырез растёт и заодно набирает плотность: у первых этапов градиент
-     ещё просвечивает белым, на финише закрывает шапку целиком. */
-  const r0=glowD(n)/2, R=r0+GLOW_BLUR;
-  glow.style.setProperty('--v2-r', R.toFixed(1)+'px');
-  glow.style.setProperty('--v2-p', (Math.max(r0-GLOW_BLUR,0)/R*100).toFixed(1)+'%');
-  glow.style.setProperty('--v2-h', (r0/R*100).toFixed(1)+'%');
-  glow.style.setProperty('--v2-a', (.55 + .45*Math.min(n/TOTAL,1)).toFixed(3));
+  setCup(cup, cupSrc(paid), paid, fresh || !!cup3d);
+  /* Пятна поднимаются вместе с прогрессом. Слои перечислены в том же
+     порядке, что в CSS: жёлтое, оранжевое, красное. Позиция в CSS — левый
+     верхний угол квадрата, а в макете задан центр, отсюда половина стороны. */
+  const b=Steps.stage(BLOBS,n), size=[], pos=[];
+  for(let i=0;i<9;i+=3){
+    const x=b[i], y=b[i+1], d=b[i+2];
+    size.push(`${d.toFixed(1)}px ${d.toFixed(1)}px`);
+    pos.push(`${(x-d/2).toFixed(1)}px ${(y-d/2).toFixed(1)}px`);
+  }
+  glow.style.backgroundSize=size.join(',');
+  glow.style.backgroundPosition=pos.join(',');
 }
 
 function placeTabs(){
@@ -770,7 +831,7 @@ segDone.onclick=e=>{
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 
 async function setDone(n){
-  const next=ALL.slice(0,n).map(it=>it.id);
+  const next=Steps.IDS.slice(0,n);          /* порядок общий с панелью на главной */
   const added=next.filter(id=>!done.has(id));
   done.clear(); next.forEach(id=>done.add(id));
   Steps.set(next);
@@ -830,6 +891,18 @@ segDesign.onclick=e=>{
 };
 syncDesignSeg();
 
+/* Тема — общая для всех экранов, как и вариант дизайна: класс night на
+   <html>, значения цветов в theme.css. */
+const segTheme=document.getElementById('segTheme');
+const syncThemeSeg=()=>[...segTheme.children].forEach(b=>
+  b.classList.toggle('on', b.dataset.v===Steps.theme()));
+segTheme.onclick=e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  Steps.setTheme(b.dataset.v); Steps.applyTheme();
+  syncThemeSeg(); render();
+};
+syncThemeSeg();
+
 document.getElementById('swBuy').onclick=e=>{
   e.currentTarget.classList.toggle('on');
   firstBuy=e.currentTarget.classList.contains('on'); render();
@@ -855,11 +928,14 @@ document.getElementById('btnReset').onclick=e=>{
   regDate=addDays(new Date(),-1);
   tab='open';
   [...segTabs.querySelectorAll('button')].forEach(b=>b.classList.toggle('on',b.dataset.v==='open'));
-  /* сброс чистит и выбранный вариант дизайна — возвращаем оформление
-     к умолчанию, иначе класс на <html> и подсветка кнопки остались бы
-     от прежнего выбора, а разметка перерисовалась бы уже по новому */
+  /* сброс чистит и выбранный вариант дизайна с темой — возвращаем
+     оформление к умолчанию, иначе классы на <html> и подсветка кнопок
+     остались бы от прежнего выбора, а разметка перерисовалась бы уже
+     по новому */
   Steps.applyDesign();
+  Steps.applyTheme();
   syncDesignSeg();
+  syncThemeSeg();
   syncDoneSeg();
   render();
   scrollBox.scrollTo({top:0,behavior:'smooth'});
@@ -904,20 +980,16 @@ async function replayFresh(replay){
   replaying=false;
 }
 
-/* Кубок меняется на границах этапов, и в этот момент картинка подменяется
-   на лету — без заранее скачанной на её месте была бы дыра. Подтягиваем
-   в простое ровно одну, ту, что встанет следующей: тянуть все пять — это
-   лишняя сотня килобайт мобильного трафика ради кадра, до которого
-   большинство не дойдёт. */
+/* Кубок за весь чек-лист меняется один раз — на венок из КеГЛей, — и в
+   этот момент картинка подменяется на лету: без заранее скачанной на её
+   месте была бы дыра. Подтягиваем её в простое, и только пока она ещё
+   впереди: после начисления тянуть уже нечего. */
 addEventListener('load',()=>{
   if(!v2()) return;
   const warm=()=>{
-    const cur=cupSrc(done.size);
-    let next=cupSrc(TOTAL,true);          /* дальше этапов нет — последний */
-    for(let k=done.size+1;k<=TOTAL;k++){
-      const s=cupSrc(k); if(s!==cur){ next=s; break }
-    }
-    const i=new Image(); i.src=next;
+    const d=Steps.get('doneDay',null);
+    if(done.size>=TOTAL && d!==null && Steps.days()>d) return;   /* венок уже на экране */
+    const i=new Image(); i.src=cupSrc(true);
   };
   window.requestIdleCallback ? requestIdleCallback(warm,{timeout:2000}) : setTimeout(warm,600);
   loadCup3d();
