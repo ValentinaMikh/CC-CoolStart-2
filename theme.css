@@ -56,8 +56,9 @@ html.night{
    контуром (#1E1E1E) и вставляется тегом img — перекрасить их через
    currentColor нельзя, поэтому ночью инвертируем. Перечисляем поимённо:
    цветные иконки (КгЛ, подарок, категории, сердце, процент, тег) и те,
-   что уже белые (CheckCircle, Time), трогать нельзя. Иконки таб-бара
-   сюда не попадают: они инлайновые и красятся currentColor.
+   что уже белые (CheckCircle, Time), трогать нельзя. Иконки таб-бара и
+   карточки товара сюда не попадают: они рисуются маской и берут цвет
+   не из файла.
    Внутри залитой градиентом шапки чек-листа действует своё правило из
    v2.css — оно специфичнее, так что инверсия не удваивается. */
 html.night img[src*="ic-back"],
@@ -68,7 +69,4 @@ html.night img[src*="ic-close"],
 html.night img[src*="ic-cup"],
 html.night img[src*="ic-info"],
 html.night img[src*="ic-lock"],
-html.night img[src*="ic-plus"],
-html.night img[src*="ic-cart.svg"],
-html.night img[src*="ic-cube"],
-html.night img[src*="ic-heart.svg"]{filter:brightness(0) invert(1)}
+html.night img[src*="ic-cube"]{filter:brightness(0) invert(1)}

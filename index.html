@@ -305,7 +305,10 @@ html.night .prod .cap-in{color:#4F4F4F}
 
 .pcard .add{width:140px;min-height:32px;padding:8px;border-radius:8px;background:var(--t-primary);
   display:flex;gap:4px;align-items:center;justify-content:center;cursor:pointer}
-.pcard .add img{width:16px;height:16px;flex:none;display:block}
+/* Плюс на зелёной кнопке — белый. В файле ресурса он тёмный, тегом img
+   не перекрасить, поэтому маской: форма из svg, цвет свой. */
+.pcard .add .ic{width:16px;height:16px;flex:none;display:block;background:#fff;
+  -webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat}
 .pcard .add span{font-size:12px;line-height:14px;font-weight:600;color:#fff;white-space:nowrap}
 
 /* Таб-бар — общий файл tabbar.css */
@@ -844,7 +847,8 @@ function render(){
              <img class="info" src="${ICON.info}" alt="">
            </div>
          </div>
-         <div class="add"><img src="${ICON.plus}" alt=""><span>Добавить</span></div>
+         <div class="add"><i class="ic" style="--ic:url('${ICON.plus}')"></i>`+
+           `<span>Добавить</span></div>
        </div>
      </div>`;
   CAROUSELS.forEach(([ttl,id])=>{

@@ -85,7 +85,11 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
   display:block;pointer-events:none}
 .fav{position:relative;flex:none;padding:8px;border:0;border-radius:12px;background:rgba(0,0,0,.4);
   backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;cursor:pointer}
-.fav img{width:20px;height:20px;display:block}
+/* Иконки карточки белые: сердце лежит на затемнении поверх фото, корзина —
+   на зелёной кнопке. В файлах ресурсов контур зашит тёмным, и тегом img его
+   не перекрасить, поэтому рисуем маской: форма из svg, цвет — свой. */
+.fav .ic{width:20px;height:20px;display:block;background:#fff;
+  -webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat}
 .pcard .pbody{flex:1;min-height:0;width:100%;padding:12px;display:flex;flex-direction:column;
   gap:6px;align-items:center;justify-content:center}
 .pcard .badge-row{width:100%;display:flex;align-items:center}
@@ -107,7 +111,8 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .price .info{width:16px;height:16px;flex:none;display:block}
 .add{width:100%;height:34px;flex:none;padding:7px;border:0;border-radius:8px;background:var(--green);
   display:flex;gap:8px;align-items:center;justify-content:center;cursor:pointer;font-family:inherit}
-.add img{width:16px;height:16px;flex:none;display:block}
+.add .ic{width:16px;height:16px;flex:none;display:block;background:#fff;
+  -webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat}
 .add span{font-size:12px;line-height:14px;font-weight:500;color:#fff;white-space:nowrap}
 
 /* ===== Редакционная карточка (8330:60330) ===== */
@@ -388,13 +393,15 @@ function pcard(it){
   return `<div class="pcard" data-open="${it.id}">
     <div class="pic">
       <img class="ph" src="${it.pic}" alt="">
-      <button class="fav" data-fav="${it.id}" aria-label="В избранное"><img src="${ICON.fav}" alt=""></button>
+      <button class="fav" data-fav="${it.id}" aria-label="В избранное">`+
+        `<i class="ic" style="--ic:url('${ICON.fav}')"></i></button>
     </div>
     <div class="pbody">
       ${badge}
       <div class="ttl">${esc(it.title)}</div>
       <div class="prices">${old}${cur}</div>
-      <button class="add" data-add="${it.id}"><img src="${ICON.cart}" alt=""><span>Добавить</span></button>
+      <button class="add" data-add="${it.id}">`+
+        `<i class="ic" style="--ic:url('${ICON.cart}')"></i><span>Добавить</span></button>
     </div>
   </div>`;
 }
