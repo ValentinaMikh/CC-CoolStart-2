@@ -6,9 +6,11 @@
 <title>КуулКлевер — задание КуулСтарта</title>
 <link rel="stylesheet" href="micro.css">
 <link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="tabbar.css">
 <link rel="stylesheet" href="dev-theme.css">
 <link rel="stylesheet" href="v2-task.css">
 <script src="micro.js"></script>
+<script src="tabbar.js"></script>
 <script src="steps.js"></script>
 <script src="v2-task.js"></script>
 <script src="dev-theme.js" defer></script>
@@ -173,20 +175,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .pol u{font-weight:500}
 
 /* ===== Tab Bar — как на главной ===== */
-.tabbar{position:absolute;left:0;right:0;bottom:0;z-index:30;background:var(--t-ground);
-  display:flex;flex-direction:column;align-items:center}
-.tab-panel{display:flex;width:100%;border-top:1px solid var(--hair);background:var(--t-ground)}
-.tab{flex:1;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;gap:2px;padding:8px;position:relative;color:var(--ink-3);text-decoration:none}
-.tab img{width:20px;height:20px;display:block}
-/* :not(.badge) — иначе width:100% растягивает счётчик корзины на всю вкладку */
-.tab span:not(.badge){font-size:10px;line-height:12px;font-weight:600;text-align:center;width:100%}
-.tab.active span{color:var(--green)}
-.badge{position:absolute;top:4px;right:12px;min-width:14px;height:14px;border-radius:60px;
-  background:#F45500;border:2px solid var(--t-ground);color:#fff;font-size:10px;line-height:12px;
-  display:grid;place-items:center;padding:1px}
-.home-ind-wrap{width:100%;background:var(--t-ground);padding:22px 8px 8px;display:grid;place-items:center}
-.home-ind-wrap i{width:134px;height:5px;border-radius:100px;background:var(--ink);display:block}
+/* Таб-бар — общий файл tabbar.css */
 
 /* ===== Модалка промокода (8284:140204) ===== */
 .m-scrim{position:absolute;inset:0;background:rgba(0,0,0,.5);z-index:70;opacity:0;pointer-events:none;
@@ -283,12 +272,6 @@ const PROMO_ICONS=[
  ['3+1','Resurses%20coolstart/3%2B1.png'],
  ['+1', 'Resurses%20coolstart/%2B1.png']];
 
-const TABI=[
- ['Главная',RES+'ic-tab-home.svg'],
- ['Каталог',RES+'ic-tab-catalog.svg'],
- ['Акции',  RES+'ic-tab-promo.svg'],
- ['Корзина',RES+'ic-tab-cart.svg'],
- ['Профиль',RES+'ic-tab-profile.svg']];
 
 /* Иконки заводов для строк купонов (в макете их 6, в ТЗ 10 категорий — циклим) */
 const FACTORY=[1,2,3,4,5,6].map(n=>RES+'ic-cat-'+n+'.svg');
@@ -582,13 +565,7 @@ function render(){
   if(v2()){ V2Task.pinCta(); V2Task.watchNav() }
   Micro.reveal('.main > *');
 
-  document.getElementById('tabbar').innerHTML=
-    `<div class="tab-panel">${TABI.map(([t,src],i)=>
-      `<a class="tab${i===0?' active':''}" href="${i===0?'index.html':'#'}">
-         <img src="${src}" alt=""><span>${t}</span>
-         ${t==='Корзина'?'<span class="badge">13</span>':''}
-       </a>`).join('')}</div>
-     <div class="home-ind-wrap"><i></i></div>`;
+  TabBar.mount(0);   /* ряд вкладок общий на все экраны — tabbar.js */
 }
 
 /* ===== модалка промокода (3.2.2) ===== */

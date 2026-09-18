@@ -1,0 +1,22 @@
+/* ===== Tab Bar (9215:38638 → 8046:25793, Home indicator 15:2632) =====
+   Ряд вкладок 50 с границей сверху, иконка 20, подпись 10/12 Semibold,
+   активная — Primary; ниже home indicator 134×5 в поле 22/8.
+   Файл общий: раньше эти правила лежали в каждой странице своей копией
+   и успели разойтись (то .lbl, то span, то .badge-cart). */
+
+.tabbar{position:absolute;left:0;right:0;bottom:0;z-index:30;background:var(--t-ground);
+  display:flex;flex-direction:column;align-items:center}
+.tab-panel{display:flex;width:100%;border-top:1px solid var(--t-border);background:var(--t-ground)}
+.tab{flex:1;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:2px;padding:8px;position:relative;cursor:pointer;
+  color:var(--t-text-3);text-decoration:none}
+/* Иконка наследует цвет вкладки — она нарисована currentColor */
+.tab .ic{width:20px;height:20px;display:grid;place-items:center;color:inherit}
+.tab .ic svg{display:block}
+.tab .lbl{font-size:10px;line-height:12px;font-weight:600;text-align:center;width:100%;color:inherit}
+.tab.active{color:var(--t-primary)}
+.tab .badge{position:absolute;top:4px;right:12px;min-width:14px;height:14px;border-radius:60px;
+  background:var(--t-accent);border:2px solid var(--t-ground);color:#fff;
+  font-size:10px;line-height:10px;font-weight:400;display:grid;place-items:center;padding:1px}
+.home-ind-wrap{width:100%;background:var(--t-ground);padding:22px 8px 8px;display:grid;place-items:center}
+.home-ind-wrap i{width:134px;height:5px;border-radius:100px;background:var(--t-text);display:block}

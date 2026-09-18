@@ -6,9 +6,11 @@
 <title>КуулКлевер — Попробуй один из хитов</title>
 <link rel="stylesheet" href="micro.css">
 <link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="tabbar.css">
 <link rel="stylesheet" href="dev-theme.css">
 <link rel="stylesheet" href="v2-task.css">
 <script src="micro.js"></script>
+<script src="tabbar.js"></script>
 <script src="steps.js"></script>
 <script src="v2-task.js"></script>
 <script src="dev-theme.js" defer></script>
@@ -114,19 +116,7 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
 .ecard .banner{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 
 /* ===== Tab Bar ===== */
-.tabbar{position:absolute;left:0;right:0;bottom:0;z-index:30;background:var(--t-ground);
-  display:flex;flex-direction:column;align-items:center}
-.tab-panel{display:flex;width:100%;border-top:1px solid var(--hair);background:var(--t-ground)}
-.tab{flex:1;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;gap:2px;padding:8px;position:relative;color:var(--ink-3);text-decoration:none}
-.tab img{width:20px;height:20px;display:block}
-.tab .lbl{font-size:10px;line-height:12px;font-weight:600;text-align:center;width:100%}
-.tab.active .lbl{color:var(--green)}
-.badge{position:absolute;top:4px;right:12px;min-width:14px;height:14px;border-radius:60px;
-  background:var(--accent);border:2px solid var(--t-ground);color:#fff;font-size:10px;line-height:12px;
-  display:grid;place-items:center;padding:1px}
-.home-ind-wrap{width:100%;background:var(--t-ground);padding:22px 8px 8px;display:grid;place-items:center}
-.home-ind-wrap i{width:134px;height:5px;border-radius:100px;background:var(--ink);display:block}
+/* Таб-бар — общий файл tabbar.css */
 
 /* ===== Modal / Bottom Sheet (8330:60807) ===== */
 .m-scrim{position:absolute;inset:0;background:rgba(0,0,0,.5);z-index:70;opacity:0;pointer-events:none;
@@ -241,12 +231,6 @@ const ICON={
 /* Шапка 204px — готовый кадр из папки «Resurses coolstart» (шаг 1) */
 const HERO=['Resurses%20coolstart/check-list%20image%20page%201.jpg'];
 
-const TABI=[
- ['Главная',RES+'ic-tab-home.svg'],
- ['Каталог',RES+'ic-tab-catalog.svg'],
- ['Акции',  RES+'ic-tab-promo.svg'],
- ['Корзина',RES+'ic-tab-cart.svg'],
- ['Профиль',RES+'ic-tab-profile.svg']];
 
 /* ===== Подборки. pic — готовый кадр товара 164×160, ed — редакционная карточка справа ===== */
 const TABS={
@@ -459,13 +443,7 @@ function render(animate){
     .map(it=>`<div class="row">${pcard(it)}${ecard(it)}</div>`).join('');
   Micro.reveal('.pw, .lead, .minis > .h3, .seg2, .row',{force:animate});
 
-  document.getElementById('tabbar').innerHTML=
-    `<div class="tab-panel">${TABI.map(([t,src,href],i)=>
-      `<a class="tab${i===0?' active':''}" href="${href}">
-         <img src="${src}" alt=""><span class="lbl">${t}</span>
-         ${t==='Корзина'?'<span class="badge">13</span>':''}
-       </a>`).join('')}</div>
-     <div class="home-ind-wrap"><i></i></div>`;
+  TabBar.mount(0);   /* ряд вкладок общий на все экраны — tabbar.js */
 }
 
 /* ===== модалка описания товара (8330:60807) ===== */
