@@ -158,9 +158,13 @@ body{background:#0E0F10;font-family:"SF Pro Display",-apple-system,"SF Pro Text"
    и там светлый текст на тёмном — то, что нужно. */
 html.night .prod .thumb,
 html.night .concept .thumb{background:#FFF}
-html.night .prod .veil{background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,0) 30.202%,
-    rgba(255,255,255,.3) 40.215%,#FFF 59.865%,#FFF 100%)}
-html.night .prod .cap-in{color:#4F4F4F}
+/* Ночью подпись стоит отдельной белой плашкой под фотографией, а не
+   растворением поверх неё: фото обрывается ровным краем, текст прижат
+   влево и набран тёмным. Днём остаётся растворение из 3974:96894. */
+html.night .prod .veil{display:none}
+html.night .prod .cap-in{background:#FFF;border-radius:0 0 8px 8px;
+  padding:6px 6px 8px;justify-content:flex-start;text-align:left;
+  line-height:1.15;color:#1E1E1E;word-break:normal;overflow-wrap:break-word}
 
 /* ===== ШОРТКАТЫ (Figma 3974:96896) ===== */
 .hotkeys{margin-top:20px;background:var(--t-sub);height:99px;padding-top:12px}
