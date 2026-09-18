@@ -102,8 +102,15 @@ html.night{ --v2-head:var(--t-dark-ground) }
    Круги описаны здесь, а не в скрипте: править их — работа дизайнерская,
    и держать числа рядом с анимацией удобнее. Скрипт только создаёт
    нужное количество пустых <i>. */
+/* Размытие в 60 поверх слияния: капли перестают быть кругами с краем и
+   читаются мягкими градиентными пятнами — так шапка ближе к прежним
+   пятнам из макета, а движение остаётся лава-ламповым.
+   Своего overflow у слоя нет намеренно: круги должны размываться целиком,
+   вместе с частями, уходящими за край, иначе по периметру шапки осталась
+   бы светлая кайма от обрезанного круга. Готовый результат обрезает сама
+   шапка — у неё overflow:hidden. */
 .v2 .head .v2-lava{position:absolute;inset:0;z-index:0;pointer-events:none;
-  overflow:hidden;filter:url(#v2goo)}
+  filter:url(#v2goo) blur(60px)}
 .v2 .head .v2-lava i{position:absolute;display:block;width:var(--w);height:var(--w);
   border-radius:50%;background:var(--c);will-change:transform;
   animation:v2lava var(--t) var(--d,0s) ease-in-out infinite alternate}
@@ -117,29 +124,29 @@ html.night{ --v2-head:var(--t-dark-ground) }
 
 /* Две неподвижные массы — снизу и сверху, как резервуары лампы: из них
    отрываются капли и в них же уходят. Обе заходят за край шапки. */
-.v2 .head .v2-lava i:nth-child(1){--c:#FCC63F;--w:340px;left:18px;bottom:-158px;
-  --dy:-26px;--sc:1.06;--t:13s}
-.v2 .head .v2-lava i:nth-child(2){--c:#F5822F;--w:250px;left:-64px;bottom:-96px;
-  --dy:-18px;--dx:14px;--sc:1.08;--t:17s;--d:-4s}
-.v2 .head .v2-lava i:nth-child(3){--c:#EA4343;--w:300px;left:196px;top:-142px;
-  --dy:22px;--dx:-16px;--sc:1.05;--t:15s;--d:-7s}
+.v2 .head .v2-lava i:nth-child(1){--c:#FCC63F;--w:440px;left:-32px;bottom:-212px;
+  --dy:-34px;--sc:1.06;--t:13s}
+.v2 .head .v2-lava i:nth-child(2){--c:#F5822F;--w:350px;left:-124px;bottom:-140px;
+  --dy:-24px;--dx:18px;--sc:1.08;--t:17s;--d:-4s}
+.v2 .head .v2-lava i:nth-child(3){--c:#EA4343;--w:400px;left:156px;top:-196px;
+  --dy:30px;--dx:-20px;--sc:1.05;--t:15s;--d:-7s}
 /* Капли. Длительности намеренно не кратны друг другу: так они сходятся и
    расходятся каждый раз по-новому и рисунок не зацикливается на глаз.
    Жёлтые ходят ниже остальных: заголовок и подпись в шапке белые, и на
    светло-жёлтом они читались бы хуже всего — наверх пускаем оранжевые
    и красные, как и в самом макете. */
-.v2 .head .v2-lava i:nth-child(4){--c:#FCC63F;--w:138px;left:48px;bottom:40px;
-  --dy:-206px;--dx:30px;--sc:.74;--t:14s;--d:-2s}
-.v2 .head .v2-lava i:nth-child(5){--c:#F5822F;--w:112px;left:198px;bottom:18px;
-  --dy:-352px;--dx:-38px;--sc:.7;--t:18s;--d:-9s}
-.v2 .head .v2-lava i:nth-child(6){--c:#EA4343;--w:96px;left:112px;bottom:128px;
-  --dy:-244px;--dx:46px;--sc:.78;--t:11s;--d:-5s}
-.v2 .head .v2-lava i:nth-child(7){--c:#FCC63F;--w:84px;left:262px;bottom:106px;
-  --dy:-196px;--dx:-34px;--sc:.72;--t:16s;--d:-12s}
-.v2 .head .v2-lava i:nth-child(8){--c:#F5822F;--w:76px;left:14px;bottom:188px;
-  --dy:-214px;--dx:38px;--sc:.76;--t:12s;--d:-6s}
-.v2 .head .v2-lava i:nth-child(9){--c:#EA4343;--w:88px;left:284px;bottom:204px;
-  --dy:-188px;--dx:-26px;--sc:.8;--t:19s;--d:-15s}
+.v2 .head .v2-lava i:nth-child(4){--c:#FCC63F;--w:240px;left:-2px;bottom:-10px;
+  --dy:-214px;--dx:34px;--sc:.74;--t:14s;--d:-2s}
+.v2 .head .v2-lava i:nth-child(5){--c:#F5822F;--w:210px;left:150px;bottom:-32px;
+  --dy:-372px;--dx:-44px;--sc:.7;--t:18s;--d:-9s}
+.v2 .head .v2-lava i:nth-child(6){--c:#EA4343;--w:185px;left:68px;bottom:84px;
+  --dy:-256px;--dx:52px;--sc:.78;--t:11s;--d:-5s}
+.v2 .head .v2-lava i:nth-child(7){--c:#FCC63F;--w:170px;left:220px;bottom:62px;
+  --dy:-204px;--dx:-40px;--sc:.72;--t:16s;--d:-12s}
+.v2 .head .v2-lava i:nth-child(8){--c:#F5822F;--w:160px;left:-28px;bottom:146px;
+  --dy:-224px;--dx:44px;--sc:.76;--t:12s;--d:-6s}
+.v2 .head .v2-lava i:nth-child(9){--c:#EA4343;--w:175px;left:240px;bottom:160px;
+  --dy:-196px;--dx:-30px;--sc:.8;--t:19s;--d:-15s}
 
 /* Серпантин в макете появляется только на финише: до него шапка спокойная.
    Сами слои до этого момента не создаются (иначе картинка скачалась бы
